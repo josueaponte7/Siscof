@@ -37,7 +37,7 @@ CREATE TABLE `b_sistema` (
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`usuario_id`),
   KEY `cod_submodulo` (`submodulo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `b_sistema` (
 
 LOCK TABLES `b_sistema` WRITE;
 /*!40000 ALTER TABLE `b_sistema` DISABLE KEYS */;
-INSERT INTO `b_sistema` VALUES (1,'AGREGAR','INSERT INTO s_usuario (id_usuario,usuario,clave,perfil_id,activo,id,fecha_creacion,usuario_creacion)VALUES(\'003\',\'dgfdg\',\'476a2dddd9c534e93184a2a7317f5231a71c4e9930f799b6ce23d53463d5e2cf203b12f54ea5be36b60bc43f020183df459ef7142e4401a747914c131400bab4\',\'2\',\'1\',\'3\',\'2015-04-06 00:09:24\',\'1\');','INSERT',1,'2015-04-06 00:09:24','{\"actividad\":\"AGREGAR\",\"submodulo_id\":\"3\",\"accion\":\"INSERT\",\"col_afec\":1}',3,1),(2,'ELIMINAR','DELETE FROM s_usuario WHERE id =3;','DELETE',1,'2015-04-06 00:09:31','{\"actividad\":\"ELIMINAR\",\"submodulo_id\":\"3\",\"accion\":\"DELETE\",\"col_afec\":1}',3,1),(3,'AGREGAR','INSERT INTO s_usuario (id_usuario,usuario,clave,perfil_id,activo,id,fecha_creacion,usuario_creacion)VALUES(\'003\',\'dgfdg\',\'2530c3121ff28d7a5bceea5f2d07aa9c12d70619ea8bf3df601a3bdfb05ea73e5a489a0f4bfb970d1fbe30470ed2f09bd8566e0c5422e68635ced91c363e9d1f\',\'2\',\'1\',\'3\',\'2015-04-06 00:10:58\',\'1\');','INSERT',1,'2015-04-06 00:10:58','{\"actividad\":\"AGREGAR\",\"submodulo_id\":\"3\",\"accion\":\"INSERT\",\"col_afec\":1}',3,1),(4,'ELIMINAR','DELETE FROM s_usuario WHERE id =3;','DELETE',1,'2015-04-06 00:11:05','{\"actividad\":\"ELIMINAR\",\"submodulo_id\":\"3\",\"accion\":\"DELETE\",\"col_afec\":1}',3,1);
+INSERT INTO `b_sistema` VALUES (1,'AGREGAR','INSERT INTO s_usuario (id_usuario,usuario,clave,perfil_id,activo,id,fecha_creacion,usuario_creacion)VALUES(\'003\',\'dgfdg\',\'476a2dddd9c534e93184a2a7317f5231a71c4e9930f799b6ce23d53463d5e2cf203b12f54ea5be36b60bc43f020183df459ef7142e4401a747914c131400bab4\',\'2\',\'1\',\'3\',\'2015-04-06 00:09:24\',\'1\');','INSERT',1,'2015-04-06 00:09:24','{\"actividad\":\"AGREGAR\",\"submodulo_id\":\"3\",\"accion\":\"INSERT\",\"col_afec\":1}',3,1),(2,'ELIMINAR','DELETE FROM s_usuario WHERE id =3;','DELETE',1,'2015-04-06 00:09:31','{\"actividad\":\"ELIMINAR\",\"submodulo_id\":\"3\",\"accion\":\"DELETE\",\"col_afec\":1}',3,1),(3,'AGREGAR','INSERT INTO s_usuario (id_usuario,usuario,clave,perfil_id,activo,id,fecha_creacion,usuario_creacion)VALUES(\'003\',\'dgfdg\',\'2530c3121ff28d7a5bceea5f2d07aa9c12d70619ea8bf3df601a3bdfb05ea73e5a489a0f4bfb970d1fbe30470ed2f09bd8566e0c5422e68635ced91c363e9d1f\',\'2\',\'1\',\'3\',\'2015-04-06 00:10:58\',\'1\');','INSERT',1,'2015-04-06 00:10:58','{\"actividad\":\"AGREGAR\",\"submodulo_id\":\"3\",\"accion\":\"INSERT\",\"col_afec\":1}',3,1),(4,'ELIMINAR','DELETE FROM s_usuario WHERE id =3;','DELETE',1,'2015-04-06 00:11:05','{\"actividad\":\"ELIMINAR\",\"submodulo_id\":\"3\",\"accion\":\"DELETE\",\"col_afec\":1}',3,1),(5,'MODIFICAR','UPDATE departamento SET nombre_departamento=\'INFORMATICA\',direccion_departamento=\'hfhgfh\' WHERE id =1;','UPDATE',1,'2015-04-07 05:05:31','{\"actividad\":\"MODIFICAR\",\"submodulo_id\":null,\"accion\":\"UPDATE\",\"col_afec\":1}',0,0);
 /*!40000 ALTER TABLE `b_sistema` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +68,7 @@ CREATE TABLE `b_usuario` (
   KEY `id_usuario` (`usuario_id`),
   KEY `cod_submodulo` (`submodulo_id`),
   CONSTRAINT `fk_b_usuario_1` FOREIGN KEY (`usuario_id`) REFERENCES `s_usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ CREATE TABLE `b_usuario` (
 
 LOCK TABLES `b_usuario` WRITE;
 /*!40000 ALTER TABLE `b_usuario` DISABLE KEYS */;
-INSERT INTO `b_usuario` VALUES (1,'REGISTR&Oacute;','2015-04-06 00:09:24','R',3,1),(2,'ELIMIN&Oacute;','2015-04-06 00:09:31','E',3,1),(3,'REGISTR&Oacute;','2015-04-06 00:10:58','R',3,1),(4,'ELIMIN&Oacute;','2015-04-06 00:11:05','E',3,1);
+INSERT INTO `b_usuario` VALUES (1,'REGISTR&Oacute;','2015-04-06 00:09:24','R',3,1),(2,'ELIMIN&Oacute;','2015-04-06 00:09:31','E',3,1),(3,'REGISTR&Oacute;','2015-04-06 00:10:58','R',3,1),(4,'ELIMIN&Oacute;','2015-04-06 00:11:05','E',3,1),(5,'Inici&oacute; Sesi&oacute;','2015-04-07 04:11:58','L',3,2),(6,'Inici&oacute; Sesi&oacute;','2015-04-07 04:43:00','L',3,2),(8,'Inici&oacute; Sesi&oacute;','2015-04-07 05:08:11','L',3,2),(9,'Inici&oacute; Sesi&oacute;','2015-04-07 05:52:13','L',3,2);
 /*!40000 ALTER TABLE `b_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +184,7 @@ CREATE TABLE `departamento` (
 
 LOCK TABLES `departamento` WRITE;
 /*!40000 ALTER TABLE `departamento` DISABLE KEYS */;
-INSERT INTO `departamento` VALUES (1,'001','gf','hfhgfh');
+INSERT INTO `departamento` VALUES (1,'001','INFORMATICA','hfhgfh');
 /*!40000 ALTER TABLE `departamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -729,7 +729,7 @@ CREATE TABLE `s_sesion_activa` (
   `usuario_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `s_sesion_activa_ibfk_2` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -738,7 +738,7 @@ CREATE TABLE `s_sesion_activa` (
 
 LOCK TABLES `s_sesion_activa` WRITE;
 /*!40000 ALTER TABLE `s_sesion_activa` DISABLE KEYS */;
-INSERT INTO `s_sesion_activa` VALUES (175,'e601717f258268032c0d9cb28a4a9a7f62cbe5a9','2015-04-06 00:02:00','::1',1);
+INSERT INTO `s_sesion_activa` VALUES (175,'e601717f258268032c0d9cb28a4a9a7f62cbe5a9','2015-04-06 00:02:00','::1',1),(179,'d9cceaef6c668691e54e65e3ac624671b8af42d9','2015-04-07 05:52:00','::1',2);
 /*!40000 ALTER TABLE `s_sesion_activa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -870,16 +870,18 @@ DROP TABLE IF EXISTS `usuario_f`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usuario_f` (
-  `id_usuario_f` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario_f` varchar(3) COLLATE utf8_bin NOT NULL,
   `nombre` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `apellido` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `id_departamento` int(11) DEFAULT NULL,
-  `activo` tinyint(1) DEFAULT '1',
   `usuario_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id_usuario_f`),
+  `departamento_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`,`id_usuario_f`),
   KEY `id_usuario` (`usuario_id`),
-  KEY `id_departamento` (`id_departamento`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  KEY `id_departamento` (`departamento_id`),
+  CONSTRAINT `fk_usuario_f_1` FOREIGN KEY (`usuario_id`) REFERENCES `s_usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_usuario_f_2` FOREIGN KEY (`departamento_id`) REFERENCES `departamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin KEY_BLOCK_SIZE=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -888,7 +890,7 @@ CREATE TABLE `usuario_f` (
 
 LOCK TABLES `usuario_f` WRITE;
 /*!40000 ALTER TABLE `usuario_f` DISABLE KEYS */;
-INSERT INTO `usuario_f` VALUES (1,'Juan','Alvarez',1,1,3),(2,'Maria','Reyes',2,1,4),(3,'Pedro','Aguirre',1,1,5),(4,'DORIS','MEDINA',2,1,6),(5,'FRANKLIN','AZOCAR',1,1,7),(6,'MILINDA ','SOTO',5,1,8),(7,'ANGEL','GUTIERREZ',4,1,9);
+INSERT INTO `usuario_f` VALUES (1,'001','Josue','Aponte',2,1);
 /*!40000 ALTER TABLE `usuario_f` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -930,4 +932,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-06  9:15:47
+-- Dump completed on 2015-04-07  6:37:45
