@@ -1,0 +1,30 @@
+body{
+    font-size: 13px !important; 
+}
+input[type='text']:not(.select2-input),textarea{
+    text-transform: uppercase;
+}
+textarea{
+    resize:none;
+}
+table.tablas tbody tr td{
+    text-transform: uppercase;
+}
+.panel-heading {
+    background-color: #FFFFFF !important;
+    padding: 10px 15px;
+    border-bottom: 1px solid #E5E5E5 !important;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    color: #428BCA !important;
+}
+
+td.details-control {
+    background: url('../../imagenes/datatable/open.png') no-repeat center center !important;
+    cursor: pointer;
+}
+
+td.details-control-close {
+    background: url('../../imagenes/datatable/close.png') no-repeat center center !important;
+    cursor: pointer;
+}
