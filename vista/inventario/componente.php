@@ -1,20 +1,19 @@
 <?php
-error_reporting(0);
 session_start();
 define('BASEPATH', dirname(__DIR__) . '/');
 define('BASEURL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FILENAME']) - strlen(BASEPATH))));
 
 
 require_once '../../librerias/globales.php';
-require_once '../../modelo/inventario/Componente.php';
-$objmod = new Componente();
-
+require_once '../../modelo/mantenimientos/Items.php';
+$objitems = new Items();
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $_SESSION['cod_modulo'] = $_GET['modulo'];
+    $objitems->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
 }
 
-$img_mod  = _img_dt . _img_dt_mod;
-$img_del  = _img_dt . _img_dt_del;
+$img_mod      = _img_dt . _img_dt_mod;
+$img_del      = _img_dt . _img_dt_del;
 ?>
 
 <!DOCTYPE html>
@@ -23,152 +22,112 @@ $img_del  = _img_dt . _img_dt_del;
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap_theme; ?>"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilos; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2_bootstrap; ?>"/>
-
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_dataTablesbootstrap; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_dataTablesresponsive; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_animate; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilo; ?>"/>
         <script src="<?php echo _ruta_librerias_js . _js_jquery; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_bootstrap; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_dataTable; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_select2; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_select2_es; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_bootstrap_tooltip; ?>" type="text/javascript"></script>
+        <!--<script src="<?php echo _ruta_librerias_js . _js_select2_es; ?>" type="text/javascript"></script>-->
+        <script src="<?php echo _ruta_librerias_js . _js_dataTable; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_dataTableboostrap; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_dataTableresponsive; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_text_counter; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_validarcampos; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_librerias; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_script_js . 'componente.js' ?>" type="text/javascript"></script>
     </head>
     <body>
         <div class="panel panel-default" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
-            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registrar Componente</div>
+            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Incorporar/Desincorporar Bienes</div>
             <div class="panel-body">
-                <table width="742" border="0" align="center">
-                    <tr>
-                        <td width="736" align="center">
-                            <form name="frmcomponente" id="frmcomponente" method="post" enctype="multipart/form-data">
-                                <table width="736" align="center">
-                                    <tr>
-                                        <td width="105" height="40" align="left">Nombre Componente:</td>
-                                         <td width="253">
-                                            <div style="margin-top: 10px" class="form-group">
-        
-                                                <select  style="" name="nombre_componente" id="nombre_componente" class="form-control input-sm select2">
-                                                        <option value="0">Seleccione</option>
-                                                    <?php
-                                                     $resultado = $objmod->getItems();
-                                                    for ($i = 0; $i < count($resultado); $i++) {
-                                                        ?>
-                                                        <option style="font-size: 10px;" value="<?php echo $resultado[$i]['id_items']; ?>"><?php echo $resultado[$i]['nombre']; ?></option>
-                                                    <?php } ?>
-                                                </select>
-                                                <!--<input type="text" class="form-control input-sm" id="nombre_componente" name="nombre_componente" value=""  maxlength="20" />-->
-                                            </div>
-                                        </td>
-<!--                                        <td width="71">
-                                            <img style="cursor: pointer" id="imgsector1" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                        </td>-->
-                                        <td width="116" height="40" align="right"><span style="margin-left: -750px;">Marca Componente:</span></td>
-                                        <td width="237">
-                                            <div style="margin-top: 10px;" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="marca_componente" name="marca_componente" value="" maxlength="20"/>
-                                            </div>
-                                        </td>
-                                        <td width="1">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td width="105" height="40" align="left">Serial Componente:</td>
-                                         <td width="253">
-                                            <div style="margin-top: 10px" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="serial_componente" name="serial_componente" value=""  maxlength="20" />
-                                            </div>
-                                        </td>                                       
-                                        <td width="116" height="40" align="right">Num Bien Componente:</td>
-                                        <td width="237">
-                                            <div style="margin-top: 10px;" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="num_bien_componente" name="num_bien_componente" value=""  maxlength="20"/>
-                                            </div>
-                                        </td>
-                                        <td width="1">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="6" align="right">&nbsp;</td>
-                                    </tr>
-                                    <td colspan="7" align="center"> 
-                                        <div id="botones" style="margin-top: 50px;">
-                                            
-                                            <button type="button" id="guardar" class="btn btn-primary btn-sm">Guardar</button>
-                                            <button type="button" id="limpiar" class="btn btn-primary btn-sm">Limpiar</button>
-                                            <button type="button" id="salir" class="btn btn-primary btn-sm">Salir</button>
-                                        </div>
-                                    </td>
-                                    <tr>
-                                        <td  colspan="6" align="center">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="6" align="center">
-                                            <table style="width:100%" border="0" align="center" cellspacing="1" class="dataTable" id="tabla_componente">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Nombre</th>
-                                                        <th>Marca</th>
-                                                        <th>Serial</th>
-                                                        <th>Numero de Bien</th>
-                                                        <th>Modificar</th>
-                                                        <th>Eliminar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                  <?php
-                                                  
-                                                        $sql = "SELECT 
-                                                                i.id_items,
-                                                                i.nombre,
-                                                                c.marca_componente,
-                                                                c.serial_componente,
-                                                                c.num_bien_componente,
-                                                                c.id_componente
-                                                                FROM componente AS c
-                                                                INNER JOIN items_inventario AS i ON c.id_items=i.id_items;";
-                                                        $result = $objmod->ex_query($sql);
-                                                       
-                                                        $es_array = is_array($result) ? TRUE : FALSE;
-                                                        if ($es_array === TRUE) {
-                                                            for ($i = 0; $i < count($result); $i++) {
-                                                                ?>
-                                                                <tr> 
-                                                                    <td>
-                                                                        <?php echo $result[$i]['id_componente']; ?>
-                                                                    </td>
-                                                                    <td id="<?php echo $result[$i]['id_items']; ?>">
-                                                                        <?php echo $result[$i]['nombre']; ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php echo $result[$i]['marca_componente']; ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php echo $result[$i]['serial_componente']; ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php echo $result[$i]['num_bien_componente']; ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <img class="modificar"  title="Modificar" style="cursor: pointer" src="<?php echo $img_mod ?>" width="18" height="18" alt="Modificar"/>
-                                                                    </td>
-                                                                    <td>
-                                                                        <img class="eliminar"  title="Eliminar" style="cursor: pointer" src="<?php echo $img_del ?>" width="18" height="18" alt="Modificar"/>
-                                                                    </td>
-                                                                </tr>
-                                                                <?php
-                                                            }
-                                                        }
-                                                        ?>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </td>
-                    </tr>
+                <form name="frmusuario" id="frmusuario" method="post" enctype="multipart/form-data">
+                    <div class="row form-inline">
+                        <div class="form-group col-xs-6">
+                            <label>Bien:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <select style="width: 70%"  id="bien"  name="bien"  class="form-control select2 input-sm">
+                                <option value="0">Seleccione</option>
+                                <?php
+                                $result_depar = $objitems->getItems();
+                                for ($i = 0; $i < count($result_depar); $i++) {
+                                    ?>
+                                    <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['nombre_bien'] ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                        </div> 
+                        <div class="form-group col-xs-6">
+                            <label>C&oacute;digo del Bien:&nbsp;</label>
+                            <input type="text" disabled="disabled" style="width: 70%" id="codigo" name="codigo" class="form-control input-sm"  value="" maxlength="22" />
+                        </div> 
+                    </div>
+                    <br/>
+                    <div class="row form-inline">
+                        <div class="form-group col-xs-6">
+                            <label>Serial del Bien:</label>
+                            <input type="text" disabled="disabled" style="width: 70%" id="serial" name="serial" class="form-control input-sm"  value="" maxlength="22" />
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label>Numero Nacional:</label>
+                            <input type="text" disabled="disabled" style="width: 70%" id="numero" name="numero" class="form-control input-sm"  value="" maxlength="22" />
+                        </div>                        
+                    </div>
+                    <br/>
+                    <div class="row form-inline">
+                        <div class="form-group col-xs-6">
+                            <label>Estatus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <select style="width: 70%"  id="incorporado"  name="incorporado"  class="form-control select2 input-sm">
+                                <option value="2">Seleccione</option>
+                                <option value="1">Incorporar</option>
+                                <option value="0">Desincorporar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row form-inline">
+                        <div class="form-group col-xs-12" style="text-align: center">
+                            <button type="button" id="guardar" class="btn btn-primary btn-sm">Guardar</button>
+                            <button type="button" id="limpiar" class="btn btn-primary btn-sm">Limpiar</button>
+                        </div>
+                    </div>
+                </form>
+                <table id="tabla_usuarios" border="0" cellspacing="1"  class="tablas table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive" >
+                    <thead>
+                        <tr class="success">
+                            <th>C&oacute;digo</th>
+                            <th>Bien</th>                            
+                            <th>Serial</th>
+                            <th>N&uacute;mero de Bien Nacional</th>
+                            <th>Estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $result = $objitems->getItems();
+                        for ($i = 0; $i < count($result); $i++) {
+                            $incorporado = '';
+                            if($result[$i]['incorporado'] == 0){
+                                $incorporado = 'Desincorporado';
+                            }else if($result[$i]['incorporado'] == 1){
+                                $incorporado = 'Incorporado';
+                            }
+                            ?>
+                            <tr>
+                                <td><?php echo $result[$i]['codigo_bien']; ?></td>
+                                <td><?php echo $result[$i]['nombre_bien']; ?></td>
+                                <td><?php echo $result[$i]['serial_bien']; ?></td>
+                                <td><?php echo $result[$i]['numero_bien']; ?></td>
+                                <td><?php echo $incorporado; ?></td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </tbody>
                 </table>
             </div>
         </div>

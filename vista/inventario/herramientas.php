@@ -46,7 +46,7 @@ $img_del      = _img_dt . _img_dt_del;
     </head>
     <body>
         <div class="panel panel-default" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
-            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registrar Herramientas</div>
+            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Asignaci&oacute;n de Bienes</div>
             <div class="panel-body">
                 <form name="frmherramienta" id="frmherramienta" method="post" enctype="multipart/form-data">
                     <div class="row form-inline">

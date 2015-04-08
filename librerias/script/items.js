@@ -6,6 +6,7 @@ $(document).ready(function () {
         "sPaginationType": "full_numbers",
         "aLengthMenu": [5, 10, 20, 30, 40, 50],
         "oLanguage": {"sUrl": "../../librerias/js/es.txt"},
+        "order": [[ 1, "asc" ]],
         "aoColumns": [
             {"sClass": "details-control", "sWidth": "2%"},
             {"sClass": "center", "sWidth": "4%"},

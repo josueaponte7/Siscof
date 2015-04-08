@@ -23,18 +23,43 @@ class Items extends Seguridad
     
     public function accion($datos)
     {
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
+        $this->_accion = $datos['accion'];
         $this->_accion = $datos['accion'];
         $this->_datos  = $datos;
         switch ($this->_accion) {
             case 'save':
-                $resultado =  $this->agregar();
+                $resultado = $this->agregar();
             break;
             case 'update':
-                $resultado =  $this->modificar($datos);
+                $resultado = $this->modificar($datos);
             break;
             case 'delete':
-                $resultado =  $this->eliminar($datos);
+                $resultado = $this->eliminar($datos);
             break;
+            case 'buscar_bien':
+                $data      = array(
+                    'tabla'     => 'bien',
+                    'campos'    => "id,codigo_bien,nombre_bien,serial_bien,numero_bien,descripcion_bien,incorporado",
+                    'condicion' => 'id =' . $datos['id']
+                );
+                $result = $this->select($data, FALSE);
+                $resultado['codigo']      = $result[0]['codigo_bien'];
+                $resultado['serial']      = $result[0]['serial_bien'];
+                $resultado['numero']      = $result[0]['numero_bien'];
+                $resultado['incorporado'] = $result[0]['incorporado'];
+
+                break;
+            case 'up_estatus':
+                $dato['id']          = $datos['id'];
+                $dato['incorporado'] = $datos['incorporado'];
+                $dato['accion']      = 'update';
+                $resultado = json_decode($this->modificar($dato));
+
+            break;
+        
         }
         return $resultado;
     }
@@ -66,12 +91,13 @@ class Items extends Seguridad
        $response_data = $this->del();
        return json_encode($response_data);
     }
-    public function getItems()
+    public function getItems($datos=array())
     {
         
         $data   = array(
             'tabla'  => 'bien',
-            'campos' => "id,codigo_bien,nombre_bien,serial_bien,numero_bien,descripcion_bien",
+            'campos' => "id,codigo_bien,nombre_bien,serial_bien,numero_bien,descripcion_bien,incorporado",
+            'ordenar'=>'id DESC'
         );
         $result = $this->select($data, FALSE);
         return $result;
