@@ -29,7 +29,7 @@ class Seguridad extends Bitacora
 
     public function __construct()
     {
-        $this->id_usuario = $_SESSION['id_usuario'];
+        //$this->id_usuario = $_SESSION['id_usuario'];
         
     }
     protected function mensajes($result)

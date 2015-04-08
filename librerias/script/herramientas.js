@@ -18,25 +18,20 @@ $(document).ready(function() {
         ]
     });
 
-    var $frmherramienta         = $('form#frmherramienta');
-    var $nombre_herramienta     = $frmherramienta.find('select#nombre_herramienta');
-    var $marca_herramienta      = $frmherramienta.find('input:text#marca_herramienta');
-    var $serial_herramienta     = $frmherramienta.find('input:text#serial_herramienta');
-    var $num_bien_herramienta   = $frmherramienta.find('input:text#num_bien_herramienta');
-    var $id_usuario_f           = $frmherramienta.find('select#id_usuario_f');
-    var $btn_guardar            = $frmherramienta.find('button#guardar');
+    var $frmherramienta  = $('form#frmherramienta');
+    var $id_departamento = $frmherramienta.find('select#departamento_id');
+    var $usuariof_id     = $frmherramienta.find('select#usuariof_id');
+    var $btn_guardar     = $frmherramienta.find('button#guardar');
     
     var vali_cod  = '1234567890';
     var val_letra = ' abcdefghijklmnopqrstuvwxyzáéíóúñ' + vali_cod;
     var val_letras = ' abcdefghijklmnopqrstuvwxyzáéíóúñ';
     
-    $nombre_herramienta.select2();
-    $id_usuario_f.select2();
     
-    $nombre_herramienta.validar(val_letras);
-    $marca_herramienta.validar(val_letras);
-    $serial_herramienta.validar(val_letra);
-    $num_bien_herramienta.validar(vali_cod);
+    
+    $id_departamento.select2();
+    $usuariof_id.select2();
+
     
     var url = '../../controlador/inventario/herramientas.php';
     $btn_guardar.click(function(){

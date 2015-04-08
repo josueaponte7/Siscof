@@ -29,15 +29,14 @@ class UsuarioF extends Usuario
         $this->id_usuario    = $_SESSION['id_usuario'];
         $this->cod_submodulo = $_SESSION['cod_modulo'];
         $response_data = array();
-        
-        print_r($datos);
-        exit;
+
         unset($datos['r_clave']);
         $this->_accion = $datos['accion'];
         switch ($this->_accion) {
             case 'save':
                 $usuario = $datos['usuario'];
                 $this->where = "usuario='" . $usuario . "'";
+                $this->_table = 's_usuario';
                 $existe = $this->recordExists($this->_table, $this->where);
                
                 if ($existe === TRUE) {
@@ -45,19 +44,60 @@ class UsuarioF extends Usuario
                     $response_data['msg']    = 'El Nombre del Departamente se encuentra registrado en el sistema';
                 }else{
                     
-                    $datos['clave']                   = $this->clave(trim($datos['clave']));
-                    $this->_datos                     = $datos;
+                    $this->autoIncrement($this->_table, 'id');
+                    $datos_user['id']                 = $this->auto_increment;
+                    $datos_user['usuario']            = $datos['usuario'];
+                    $datos_user['id_usuario']         = str_pad($this->auto_increment, 3, "0", STR_PAD_LEFT);
+                    $datos_user['clave']              = $this->clave(trim($datos['clave']));
+                    $datos_user['activo']             = $datos['activo'];
+                    $datos_user['perfil_id']          = $datos['perfil_id'];
+                    $datos_user['accion']             = $datos['accion'];
+                    $this->_datos                     = $datos_user;
                     $this->_datos['fecha_creacion']   = date("Y-m-d H:i:s");
                     $this->_datos['usuario_creacion'] = $this->id_usuario;
-                    $response_data = $this->add();
+                    
+                    $insert = $this->add();
+                    if ($insert['success'] === 'exitoso') {
+                        $this->_table                   = 'usuario_f';
+                        $datos_userf['id']              = $datos['id'];
+                        $datos_userf['id_usuario_f']    = $datos['id_usuario_f'];
+                        $datos_userf['nombre']          = $datos['nombre'];
+                        $datos_userf['apellido']        = $datos['apellido'];
+                        $datos_userf['usuario_id']      = $this->auto_increment;
+                        $datos_userf['departamento_id'] = $datos['departamento_id'];
+                        $datos_userf['accion']          = $datos['accion'];
+                        $this->_datos                   = $datos_userf;
+                        $response_data                  = $this->add();
+                    }
                 }
             break;
             case 'update':
-                $this->_datos                         = $datos;
-                $this->_datos['clave']                = $this->clave(trim($this->_datos['clave']));
-                $this->_datos['fecha_actualizacion']  = date("Y-m-d H:i:s");
-                $this->_datos['usuario_modificacion'] = $this->id_usuario;
-                $response_data                        = $this->mod();
+                
+                $this->_table = 'usuario_f';
+                $id_usuarioF = $this->get($this->_table, 'usuario_id', 'id='.$datos['id']);
+   
+                $this->_table = 's_usuario';
+                
+                $datos_user['id']                   = $id_usuarioF;
+                $datos_user['clave']                = $this->clave(trim($datos['clave']));
+                $datos_user['activo']               = $datos['activo'];
+                $datos_user['perfil_id']            = $datos['perfil_id'];
+                $datos_user['accion']               = $datos['accion'];
+                $datos_user['fecha_actualizacion']  = date("Y-m-d H:i:s");
+                $datos_user['usuario_modificacion'] = $this->id_usuario;
+                $this->_datos                   = $datos_user;
+
+                $update                        = $this->mod();
+                if ($update['success'] === 'exitoso') {
+                    $this->_table = 'usuario_f';
+                    
+                    $datos_userf['id']              = $datos['id'];
+                    $datos_userf['departamento_id'] = $datos['departamento_id'];
+                    $datos_userf['accion']          = $datos['accion'];
+                    $this->_datos                   = $datos_userf;
+
+                    $response_data = $this->mod();
+                }
                 break;
             case 'delete':
                 $this->_datos  = $datos;

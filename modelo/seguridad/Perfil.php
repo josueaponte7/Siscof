@@ -97,7 +97,7 @@ class Perfil extends Seguridad
 
     protected function getPerfiles()
     {
-        $data   = array('tabla' => $this->table, 'campos' => $this->_campos);
+        $data   = array('tabla' => $this->table, 'campos' => $this->_campos,'condicion'=> 'id > 2');
         $result = parent::select($data, FALSE);
         return $result;
     }
@@ -114,6 +114,7 @@ class Perfil extends Seguridad
         if(isset($datos['tabla'])){
             $this->table = $datos['tabla'];
         }
+        
         $result = $this->getPerfiles();
         return $result;
     }

@@ -100,7 +100,7 @@ $_SESSION['perfil'];
                                 <option value="0">Seleccione</option>
                                 <?php
                                 $datos_perfil['tabla']  = 's_perfil';
-                                $datos_perfil['campos'] = 'id,perfil';
+                                $datos_perfil['campos']    = 'id,perfil';
                                 $result_perfil          = $objmod->getPerfil($datos_perfil);
                                 for ($i = 0; $i < count($result_perfil); $i++) {
                                     ?>
@@ -130,11 +130,11 @@ $_SESSION['perfil'];
                             <div class="btn-group" data-toggle="buttons" >
                                 <label id="l_u_activo" class="btn btn-success active btn-sm">
                                     <input  type="radio" name="activo" checked="checked" id="u_activo" value="1">
-                                    Activo
+                                    <span>Activo</span>
                                 </label>
                                 <label id="l_u_inactivo" class="btn btn-default btn-sm">
                                     <input type="radio" name="activo" id="u_inactivo" value="0">
-                                    Inactivo
+                                    <span>Inactivo</span>
                                 </label>
                             </div>
                         </div>
@@ -154,7 +154,8 @@ $_SESSION['perfil'];
                                 <th>&nbsp;</th>
                                 <th>ID</th>
                                 <th>Usuario</th>
-                                <th>Nombres</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
                                 <th>Tipo Usuario</th>
                                 <th>Departamento</th>
                                 <th>Estatus</th>
@@ -174,7 +175,7 @@ $_SESSION['perfil'];
                                     }
                                     ?>
                                     <tr>
-                                        <td>&nbsp;</td>
+                                        <td id="<?php echo $result[$i]['departamento_id']; ?>">&nbsp;</td>
                                         <td>
                                             <?php echo $result[$i]['id_usuario_f']; ?>
                                         </td>
@@ -182,16 +183,18 @@ $_SESSION['perfil'];
                                             <?php echo $result[$i]['usuario']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $result[$i]['nombre'].' ' .$result[$i]['apellido']; ?>
-                                            
+                                            <?php echo $result[$i]['nombre']; ?>
+                                        </td> 
+                                        <td>
+                                            <?php echo $result[$i]['apellido']; ?>
                                         </td> 
                                         <td id="<?php echo $result[$i]['perfil_id']; ?>">
                                             <?php echo $result[$i]['perfil']; ?>
                                         </td>
-                                        <td id="<?php echo $result[$i]['departamento_id']; ?>">
+                                        <td>
                                             <?php echo $result[$i]['nombre_departamento']; ?>
                                         </td>
-                                        <td>
+                                        <td id="<?php echo $result[$i]['activo']; ?>">
                                             <?php echo $estatus; ?>
                                         </td>
 
