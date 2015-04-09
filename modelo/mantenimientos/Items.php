@@ -97,7 +97,7 @@ class Items extends Seguridad
         $data   = array(
             'tabla'  => 'bien',
             'campos' => "id,codigo_bien,nombre_bien,serial_bien,numero_bien,descripcion_bien,incorporado",
-            'ordenar'=>'id DESC'
+            'ordenar'=>'id ASC'
         );
         $result = $this->select($data, FALSE);
         return $result;

@@ -16,13 +16,13 @@ $(document).ready(function() {
     });
 
     $('#bien,#incorporado').select2();
+  
     
-    var rows = TComponentes.fnGetData();
-    rows.each(function (i, obj) {
-        var aPos = TComponentes.fnGetPosition(this);
+    /*$.each(rows, function (i, obj) {
+        var aPos = TComponentes.fnGetPosition(i);
         var oData = TComponentes.fnGetData(aPos);
         console.log(oData[0]);
-    });
+    });*/
     var url = '../../controlador/inventario/componente.php';
     $('#bien').change(function(){
         var valor = $(this).val();
@@ -62,8 +62,15 @@ $(document).ready(function() {
                 }
                 if (respuesta.success === 'exitoso') {
                     window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
-                        var nuevaFila = TComponentes.fnAddData([$('#codigo').va(), bien, $('#serial').val(), $('#numero').val(), incorporadol]);
-  
+                        var rows = TComponentes.fnGetData();
+                        $.each(rows, function (i, row) {
+                            var cod = row[0]
+                            var este = $(this);
+                            if(cod == $('#codigo').val()){
+                                TComponentes.fnUpdate(incorporado, parseInt(i), 4);
+                            }
+                        });
+
                         $('#limpiar').trigger('click');
                     });
                
@@ -71,7 +78,7 @@ $(document).ready(function() {
                     window.parent.apprise('<span style="color:#FF0000;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'});
                 }
             }, 'json');
-        },
+        }
     });
     
     

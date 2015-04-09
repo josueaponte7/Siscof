@@ -1,65 +1,38 @@
-$(document).ready(function() {
+$(document).ready(function () {
     $('input#usuario').focus();
-    $(document).on('keypress', function(e) {
-        if (e.keyCode == 13) {
-            if ($('#usuario').val() === null || $('#usuario').val().length === 0 || /^\s+$/.test($('#usuario').val())) {
-                $('#usuario').focus();
-                return  false;
-            } else if ($('#clave').val() === null || $('#clave').val().length === 0 || /^\s+$/.test($('#clave').val())) {
-                $('#clave').focus();
-                return  false;
-            } else {
-                $.ajax({
-                    url: 'controlador/seguridad/login.php',
-                    type: "POST",
-                    data: $('#frmlogin').serialize(),
-                    dataType: "json",
-                    error: function() {
-                        //alert("AJAX - error()");
-                    },
-                    beforeSend: function() {
-                        //alert("AJAX - beforeSend()");
-                        //$('#cargando').html('<img src="loader.gif"> espere por favor!...').fadeOut(1500);
-                    },
-                    complete: function() {
-                        //alert("AJAX - complete()");
-                    },
-                    success: function(data) {
 
-                        var cod_msg = parseInt(data);
-
-                        $('#usuario').val('');
-                        $('#clave').val('');
-                        if (cod_msg === 14) {
-                            $('#usuario').focus();
-                            $('div#error')
-                                    .css({'color': '#FF0000'})
-                                    .text('Usuario o Clave incorrecta')
-                                    .fadeIn(1000).delay(2000).fadeOut(1000);
-                            
-                        } else if (cod_msg === 12) {
-                            $('#usuario').focus();
-                            $('div#error')
-                                    .css({'color': '#FF0000'})
-                                    .text('Usuario Inactivo')
-                                    .fadeIn(1000).delay(2000).fadeOut(1000);
-                        } else if (cod_msg === 13) {
-                            $('#usuario').focus();
-                            $('div#error')
-                                    .css({'color': '#FF0000'})
-                                    .text('Ocurrio un Error por favor comuniquese con Informatica')
-                                    .fadeIn(1000).delay(2000).fadeOut(1000);
-                        } else if (cod_msg === 21) {
-                            window.location = 'controlador/seguridad/acceso.php';
-                        }
-                    }
-                });
-            }
+    var url = 'controlador/seguridad/login.php';
+     $(document).on('keypress', function (e) {
+         if (e.keyCode == 13) {
+            $.login(url);
         }
     });
-    $('#recuperar').click(function (){
-        $('div#logueo').slideUp(1000);
-        $('div#divrecuperar').slideDown(1000);
 
+    $.extend({
+        login: function (url) {
+            
+            var nombreAnimate = 'animated zoomOut';
+            var finanimated   = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+            var send_data = $('#frmlogin').serialize()+ '&' + $.param({ accion: 'Ingresar'});
+            $.post(url, send_data, function (respuesta) {
+                 var cod_msg = parseInt(respuesta);
+                if (cod_msg === 21) {
+                    
+                    $('#frmlogin').addClass(nombreAnimate,function(){
+                        
+                    }).one(finanimated,
+                    function () {
+                        window.location = 'controlador/seguridad/acceso.php'
+                    });
+                    
+                    //setTimeout(function(){  }, 5000);
+                   
+                } else if (respuesta.existe === 'ok') {
+
+                } else if (respuesta.success === 'error') {
+                    window.parent.apprise('<span style="color:#FF0000;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'});
+                }
+            }, 'json');
+        }
     });
 });

@@ -36,6 +36,7 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
         <link rel="stylesheet" type="text/css" href="librerias/css/maquetacion.css"  />
         <link rel="stylesheet" type="text/css" href="librerias/css/apprise.css"  />
         <link rel="stylesheet" type="text/css" href="librerias/css/basic.css"/>
+        <link rel="stylesheet" type="text/css" href="librerias/css/animate.css"/>
         <script type="text/javascript" src="librerias/js/jquery-1.11.2.min.js"></script>
         <script type="text/javascript" src="librerias/js/apprise.js"></script>
         <script type="text/javascript" src="librerias/js/ddsmoothmenu.js"></script>
@@ -58,24 +59,30 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
             }
             .usuario{
                 font-family:Arial, Helvetica, sans-serif;
-                font-size: 12px;
+                font-size: 13px;
                 position: relative;
                 top:-35px;
-                left: 20px;
+                left: 17%;
                 color: #FFFFFF;
                 font-weight: bold;
 
             }
             iframe {
                 width: 100%;
-                height: 700px;
+                height: 670px;
                 overflow: hidden;
                 border: none;
                 background-color:transparent;
                 display:block;
                 margin: auto;
                 min-height: 500px;
+                position: relative;
                 /*;width: 100%;height: 100%;min-height: 550px;max-height: 900px;*/
+            }
+            #contenedor{
+                -moz-animation-duration: 5s;
+                -webkit-animation-duration: 5s;
+                -o-animation-duration: 5s;
             }
         </style>
         <script type="text/javascript">
@@ -120,9 +127,17 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
                 });
 
                 $("#salir").click(function() {
+                    var nombreAnimate = 'animated fadeOut';
+                    var finanimated   = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
                     apprise('&iquest;Esta seguro que desea cerrar la sesi&oacute;n?', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
                         if (r) {
-                            window.location = 'controlador/seguridad/salir.php';
+                            $('#contenedor').addClass(nombreAnimate,function(){
+                        
+                            }).one(finanimated,
+                            function () {
+                               window.location = 'controlador/seguridad/salir.php';
+                            });
+                            
                         }
                     });
                 });
@@ -175,9 +190,9 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
         </script>
     </head>
     <body >
-        <div id="contenedor" style="border: 1px solid #778;height: auto">
+        <div id="contenedor" class="animated fadeIn" style="border: 1px solid #778;height: auto">
             <div id="cabecera">
-                <img src="imagenes/sistema/header.png" width="960" height="150" alt="header"/>
+                <img src="logos/banner.jpg" width="960" height="150" alt="banner"/>
                 <div class="usuario" style="width:200px;font-family:Arial, Helvetica, sans-serif">Usuario: <?php echo $usuario ?></div>
                 <div id="fecha_hora" class="usuario" style="width:250px;font-family:Arial, Helvetica, sans-serif"></div>
             </div>
@@ -220,7 +235,7 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
                 <iframe align="middle"  id="ifrmcuerpo" name="ifrmcuerpo"  frameborder="0" scrolling="no"></iframe>
             </div>
             <div id="pie">
-                <!--<img src="imagenes/sistema/pie.png" width="962" height="70" alt="pie"/>-->
+                <img src="logos/pie_de_pagina.jpg" width="962" height="70" alt="pie" style="margin-top: -1.5%;"/>
             </div>
         </div>
     </body>

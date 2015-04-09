@@ -53,10 +53,15 @@ $_SESSION['perfil'];
             .panel input[type="text"],.panel select,.panel input[type="password"]{
                 width: 70% !important
             }
+            #contenedor{
+                -moz-animation-duration: 5s;
+                -webkit-animation-duration: 5s;
+                -o-animation-duration: 5s;
+            }
         </style>
     </head>
     <body>
-        <div class="panel panel-default" style="width : 95%;margin: auto;height: auto;position: relative; top:25px;">
+        <div id="contenedor" class="panel panel-default animated slideInDown" style="width : 95%;margin: auto;height: auto;position: relative; top:25px;">
             <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registrar Usuario Final</div>
             <div class="panel-body">
                 <form name="frmusuarioF" id="frmusuarioF" method="post" enctype="multipart/form-data">

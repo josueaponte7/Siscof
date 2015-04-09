@@ -13,17 +13,18 @@
             div#logueo{
                 position:fixed;
                 top:40%;
-                left:50%;
+                left:55%;
                 margin-left:-290px;
                 margin-top:-155px
             }
 
-            table#login{
-                width:580px;
-                height:380px;
-                background-image:url(logo.png); 
+            #login{
+                width:400px;
+                height:400px;
+                background-image:url("logos/entrada_usuario.jpg"); 
                 background-repeat:no-repeat;
                 border: none;
+                margin: auto;
             }
             .tabla {
                 position: absolute;
@@ -67,53 +68,40 @@
                 height: 100%;
                 background-color: #FFFFFF;
             }
-            #frmlogin{
+            #login{
                 -moz-animation-duration: 5s;
                 -webkit-animation-duration: 5s;
                 -o-animation-duration: 5s;
+            }
+            #frmlogin{
+                -moz-animation-duration: 1s;
+                -webkit-animation-duration: 1s;
+                -o-animation-duration: 1s;
+            }
+            .form-control{
+                box-shadow:inherit;
+            }
+            .form-control:focus{
+                box-shadow:inherit;
             }
         </style>
     </head>
     <!--<body style="background-image:url(degradado.jpg);height:200px;">--> 
     <body> 
         <div id="logueo">
-            <form class="animated fadeIn" name="frmlogin" autocomplete="off" id="frmlogin" method="POST" enctype="multipart/form-data">
-                <table width="352"  align="center" cellpadding="0" cellspacing="0" id="login">
-                    <tbody>
-                        <tr>
-                            <td width="423">
-                                <div class="tabla" style="width: 340px;">
-                                    <table  width="255" border="0" style="margin-top: -36px; margin-left: 20px;">
-                                        <tbody>
-                                            <tr style="height: 52px;">
-                                                <td>
-                                                    <input style="border:0;background-color:transparent;width:255px;height: 30px;padding: 5px 10px" type="text" name="usuario" id="usuario" maxlength="20"  value="" />
-                                                </td>
-                                            </tr>
-                                            <tr style="height: 50px;">
-                                                <td>
-                                                    <input style="border:0;background-color:transparent;width:255px;height: 30px;padding: 5px 10px" type="password" name="clave" id="clave" maxlength="20" value="" />
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td  colspan="2" align="left" >
-                                                    <input type="hidden" name="accion" id="accion"  value="Ingresar"/>
-                                                    <!--<img src="iniciar.png" alt="cajas" width="130" height="29" id="ingresar" style="margin-left:40px;cursor:pointer"></td>-->
-                                                    <!--<span id="recuperar" style="font-size: 12px;color: #ffffff;cursor: pointer">Recuperar Contraseña</span>-->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" align="center">
-                                                    <div style="display: none" class="alert alert-danger" id="error" role="alert"></div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <form  name="frmlogin" autocomplete="off" id="frmlogin" method="POST" enctype="multipart/form-data">
+                <div class="animated zoomIn" id="login">
+                    <div  class="row">
+                        <div class="form-group" style="margin-top: 37%;position: relative">
+                            <input type="text" name="usuario" id="usuario" style="border: none; background-color: transparent;width: 75%;margin-left:13%" class="form-control input-lg"   maxlength="33" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" style="margin-top: 8%;position: relative">
+                            <input type="password" name="clave" id="clave" style="border: none; background-color: transparent;width: 75%;margin-left:13%" class="form-control input-lg"  maxlength="33" />
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </body>
