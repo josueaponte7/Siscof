@@ -30,6 +30,9 @@ class Departamento extends Seguridad
     
     public function accion($datos)
     {
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
         $this->_accion = $datos['accion'];
         switch ($this->_accion) {
             case 'save':

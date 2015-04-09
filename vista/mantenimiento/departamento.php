@@ -57,10 +57,15 @@ $img_del = _img_dt . _img_dt_del;
             .charleft{
                 width: 99% !important;
             }
+            #contenedor{
+                -moz-animation-duration: 5s;
+                -webkit-animation-duration: 5s;
+                -o-animation-duration: 5s;
+            }
         </style>
     </head>
     <body>
-        <div class="panel panel-default" style="width : 95%;margin: auto;height: auto;position: relative; top:25px; font-size: 12px;">
+        <div id="contenedor" class="panel panel-default animated slideInDown" style="width : 95%;margin: auto;height: auto;position: relative; top:25px; font-size: 12px;">
             <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registrar Departamento</div>
             <div class="panel-body">
                 <form name="frmdepartamento" id="frmdepartamento" method="post" enctype="multipart/form-data">

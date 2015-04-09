@@ -100,6 +100,7 @@ class UsuarioF extends Usuario
                 }
                 break;
             case 'delete':
+                $this->_table = 's_usuario';
                 $this->_datos  = $datos;
                 $response_data = $this->del();
             break;

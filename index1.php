@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Refresh"  content="5; login.php">
+        <meta http-equiv="Refresh"  content="3; login.php">
 
 
         <style type="text/css">

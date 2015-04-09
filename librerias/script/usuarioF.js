@@ -92,7 +92,7 @@ $(document).ready(function () {
     
     $.fn.tablaimage = function (fila, clase) {
         
-        var data = TUsuariof.fnGetData(fila);
+        var data   = TUsuariof.fnGetData(fila);
         var nNodes = TUsuariof.fnGetNodes();
         var id     = nNodes[fila]['id'];
         
@@ -124,7 +124,7 @@ $(document).ready(function () {
             $('#guardar').text('Modificar');
         } else {
             $('#limpiar').trigger('click');
-            var id   = parseInt(data[0]);
+            var id   = parseInt(data[1]);
             window.parent.apprise('<span style="color:#FF0000;font-weight:bold;text-align: center;display:block">&iquest;Desea Eliminar el registro?</span>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function (r) {
                 if (r) {
                     $.borrar(url, id, fila);
@@ -198,7 +198,7 @@ $(document).ready(function () {
             $.post(url, {id: id, 'accion': 'delete'}, function (respuesta) {
                 if (respuesta.success === 'exitoso') {
                     window.parent.apprise('<span style="color:#059102;font-weight:bold">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
-                        TUsuario.fnDeleteRow(fila);
+                        TUsuariof.fnDeleteRow(fila);
                         $('#limpiar').trigger('click');
                     });
                 }

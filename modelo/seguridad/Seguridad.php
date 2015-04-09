@@ -125,7 +125,10 @@ class Seguridad extends Bitacora
         $clave          = $datos['clave'];
         $this->_clave   = $this->clave($clave);
         // consulta a la base de datos
-        $data = array("tabla" => "s_usuario","campos"=>"id,activo,perfil_id", "condicion" => "BINARY usuario = '" . $this->_usuario . "' AND clave = '" . $this->_clave . "'");
+        $data['tabla']  = "s_usuario";
+        $data['campos'] = "id,activo,perfil_id";
+        $data['condicion'] = "BINARY usuario = '" . $this->_usuario . "' AND clave = '" . $this->_clave . "'";
+
         $result = $this->row($data);
         return $result;
     }
