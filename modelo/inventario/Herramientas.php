@@ -24,7 +24,61 @@ class Herramientas extends Items
     {
         
     }
+    
+    public function accion($datos)
+    {
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
+        $this->_accion = $datos['accion'];
+        $this->_accion = $datos['accion'];
+        $this->_datos  = $datos;
+        switch ($this->_accion) {
+            case 'save':
+                $resultado = $this->agregar();
+            break;
+            case 'update':
+                $resultado = $this->modificar($datos);
+            break;
+            case 'delete':
+                $resultado = $this->eliminar($datos);
+            break;
+            case 'buscar_usuario':
+ 
+                $data      = array(
+                    'tabla'     => 'usuario_f',
+                    'campos'    => "id,concat_ws(' ',nombre, apellido) AS nombre",
+                    'condicion' => 'departamento_id =' . $datos['departamento_id']
+                );
+                $result = $this->select($data, FALSE);
+                $data = '';
+                for ($i = 0; $i < count($result); $i++) {
+                    $data[] = array('id'=>$result[$i]['id'],'nombre'=>$result[$i]['nombre']);
+                    //$data[] = $;
+                }
+              
+                
+                $resultado = json_encode($data);
+                break;
+            case 'up_estatus':
+                $dato['id']          = $datos['id'];
+                $dato['incorporado'] = $datos['incorporado'];
+                $dato['accion']      = 'update';
+                $resultado = json_decode($this->modificar($dato));
 
+            break;
+            case 'update_asignar':
+                $dato['id']       = $datos['id'];
+                $dato['asignado'] = $datos['asignado'];
+                $dato['usuariof_id'] = $datos['usuariof_id'];
+                $dato['accion']   = 'update';
+                $resultado = $this->modificar($dato);
+            break;
+        
+        }
+        return $resultado;
+    }
+    
     public function addHerramientas($datos)
     {
        

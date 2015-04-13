@@ -39,9 +39,16 @@ $img_del      = _img_dt . _img_dt_del;
         <script src="<?php echo _ruta_librerias_js . _js_validarcampos; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_librerias; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_script_js . 'componente.js' ?>" type="text/javascript"></script>
+        <style>
+            #contenedor{
+                -moz-animation-duration: 5s;
+                -webkit-animation-duration: 5s;
+                -o-animation-duration: 5s;
+            }
+        </style>
     </head>
     <body>
-        <div class="panel panel-default" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
+        <div id="contenedor" class="panel panel-default animated slideInDown" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
             <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Incorporar/Desincorporar Bienes</div>
             <div class="panel-body">
                 <form name="frmusuario" id="frmusuario" method="post" enctype="multipart/form-data">
@@ -110,11 +117,13 @@ $img_del      = _img_dt . _img_dt_del;
                         <?php
                         $result = $objitems->getItems();
                         for ($i = 0; $i < count($result); $i++) {
-                            $incorporado = '';
+                            
                             if($result[$i]['incorporado'] == 0){
                                 $incorporado = 'Desincorporado';
                             }else if($result[$i]['incorporado'] == 1){
                                 $incorporado = 'Incorporado';
+                            }else if($result[$i]['incorporado'] == 2){
+                                $incorporado = '';
                             }
                             ?>
                             <tr>

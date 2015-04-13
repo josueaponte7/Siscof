@@ -99,6 +99,8 @@ class Items extends Seguridad
             'campos' => "id,codigo_bien,nombre_bien,serial_bien,numero_bien,descripcion_bien,incorporado",
             'ordenar'=>'id ASC'
         );
+        $data = array_merge($data,$datos);
+
         $result = $this->select($data, FALSE);
         return $result;
     }

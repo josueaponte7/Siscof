@@ -235,7 +235,7 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
                 <iframe align="middle"  id="ifrmcuerpo" name="ifrmcuerpo"  frameborder="0" scrolling="no"></iframe>
             </div>
             <div id="pie">
-                <img src="logos/pie_de_pagina.jpg" width="962" height="70" alt="pie" style="margin-top: -1.5%;"/>
+                <img src="logos/pie_de_pagina.jpg" width="962" height="70" alt="pie"/>
             </div>
         </div>
     </body>

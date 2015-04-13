@@ -24,14 +24,21 @@ $(document).ready(function() {
         console.log(oData[0]);
     });*/
     var url = '../../controlador/inventario/componente.php';
-    $('#bien').change(function(){
+    $('#bien').change(function () {
+
         var valor = $(this).val();
-        $.post(url,{'id':valor,'accion':'buscar_bien'},function (data){
-            $('#codigo').val(data.codigo);
-            $('#serial').val(data.serial);
-            $('#numero').val(data.numero);
-            $('#incorporado').select2('val',data.incorporado);
-        },'json');
+        if (valor > 0) {
+            $.post(url, {'id': valor, 'accion': 'buscar_bien'}, function (data) {
+                $('#codigo').val(data.codigo);
+                $('#serial').val(data.serial);
+                $('#numero').val(data.numero);
+                $("#incorporado").select2("enable", true).select2("val", data.incorporado);
+                if (data.incorporado == '2') {
+                    $("#incorporado").select2("enable", false).select2("val", 1);
+                }
+
+            }, 'json');
+        }
     });
     
     
@@ -52,7 +59,8 @@ $(document).ready(function() {
             var img_del       = ' <img class="eliminar"  title="Eliminar" style="cursor: pointer" src="../../imagenes/datatable/eliminar.png " width="18" height="18" alt="Modificar"/>'
             var valor         = $('#bien').find('option').filter(':selected').val();
             var estatus       = $('#incorporado').find('option').filter(':selected').val();
-            var data_send     = $('form').serialize() + '&' + $.param({'id':valor,'estatus':estatus,accion: 'up_estatus'});
+            var data_send     = $('form').serialize() + '&' + $.param({'id':valor,'incorporado':estatus,accion: 'up_estatus'});
+            //$("#incorporado").select2("enable", true);
             $.post(url, data_send, function (respuesta) {
                 var bien  = $('#bien').find('option').filter(':selected').text();
                 var incor = $('#incorporado').find('option').filter(':selected').val();
@@ -70,7 +78,7 @@ $(document).ready(function() {
                                 TComponentes.fnUpdate(incorporado, parseInt(i), 4);
                             }
                         });
-
+                        $("#incorporado").select2("val", 0);
                         $('#limpiar').trigger('click');
                     });
                

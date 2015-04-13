@@ -22,7 +22,31 @@ class Fallas extends Seguridad
     {
         
     }
-
+    
+    public function accion($datos)
+    {
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
+        $this->_accion = $datos['accion'];
+        $this->_accion = $datos['accion'];
+        $this->_datos  = $datos;
+        switch ($this->_accion) {
+            
+            case 'bien':
+                $data      = array(
+                    'tabla'     => 'bien AS b, usuario_f AS uf',
+                    'campos'    => "b.id,b.nombre_bien",
+                    'condicion' => 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id']
+                );
+                $resultado = $this->select($data, 'ASSOC');
+                
+            break;
+        
+        }
+        return $resultado;
+    }
+    
     public function addFallas($datos)
     {
         
