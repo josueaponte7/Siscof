@@ -36,12 +36,26 @@ $(document).ready(function () {
     var url = '../../controlador/fallas/fallas.php';
     $departamento_id.change(function (){
         var valor = $(this).val();
+        $bien_id.select2('val', 0);
+        $bien_id.find('option:gt(0)').remove().end();
+        $('#num_falla').val('');
+        $('#usuariof').val('');
+        $('#usuariof_id').val('');
         if(valor > 0){
            $.buscar(url,valor,'bien'); 
         }
-        
     });
     
+    
+    $bien_id.change(function (){
+        var valor = $(this).val();
+        $('#num_falla').val('');
+        $('#usuariof').val('');
+        $('#usuariof_id').val('');
+        if(valor > 0){
+           $.usuario(url,valor,'usuario'); 
+        }
+    });
     
     $btn_guardar.click(function(){
         
@@ -113,14 +127,22 @@ $(document).ready(function () {
             }, 'json');
         },        
         buscar: function (url,id,accion) {
-            $bien_id.find('option:gt(0)').remove().end();
             $.post(url, {id: id, 'accion': accion}, function (respuesta) {
                 var option = "";
                 $.each(respuesta, function(i, obj) {
                     option += "<option value=" + obj.id + ">" + obj.nombre_bien + "</option>";
                 });
                 $bien_id.append(option);
-            }, 'json');
+            }, "json");
+        },
+        usuario: function (url,id,accion) {
+            $('#usuariof').val('');
+            $('#usuariof_id').val('');
+            $.post(url, {id: id, 'accion': accion}, function (respuesta) {
+                $('#num_falla').val(respuesta.num_falla);
+                $('#usuariof').val(respuesta.nombres);
+                $('#usuariof_id').val(respuesta.id);
+            }, "json");
         }
     });
     

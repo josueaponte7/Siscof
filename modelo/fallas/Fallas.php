@@ -39,10 +39,25 @@ class Fallas extends Seguridad
                     'campos'    => "b.id,b.nombre_bien",
                     'condicion' => 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id']
                 );
-                $resultado = $this->select($data, 'ASSOC');
-                
+                $result = $this->select($data, 'ASSOC');
+                $resultado = array();
+                for ($i = 0; $i < count($result); $i++) {
+                    $resultado[] = array('id'=>$result[$i]['id'],'nombre_bien'=>$result[$i]['nombre_bien']);
+                }
+
             break;
-        
+            case 'usuario':
+                $data      = array(
+                    'tabla'     => 'bien AS b, usuario_f AS uf',
+                    'campos'    => "uf.id,CONCAT_WS(' ', uf.nombre, uf.apellido) AS nombres, CONCAT(CONCAT(DATE_FORMAT(CURRENT_DATE(),'%m%y'),b.codigo_bien),(SELECT LPAD(cod_falla+1,2,'0') FROM fallas WHERE bien_id=".$datos['id']." ORDER BY num_falla DESC LIMIT 1)) AS num_falla",
+                    'condicion' => 'b.usuariof_id=uf.id AND b.id=' . $datos['id']
+                );
+                
+                $result = $this->select($data, 'ASSOC');
+                $resultado['id']      = $result[0]['id'];
+                $resultado['nombres'] = $result[0]['nombres'];
+                $resultado['num_falla'] = $result[0]['num_falla'];
+                break;
         }
         return $resultado;
     }

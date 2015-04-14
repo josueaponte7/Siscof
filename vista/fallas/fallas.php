@@ -104,7 +104,7 @@ $img_del = _img_dt . _img_dt_del;
                         <div class="form-group col-xs-6">
                             <label>Usuario:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <input type="hidden"  id="usuariof_id" name="usuariof_id" value="" />
-                            <input type="text" disabled="disabled" style="width: 70%;font-weight: bold;background-color:#FFFFFF " class="form-control input-sm" id="usuariof" name="usuariof" value="" maxlength="22" />
+                            <input type="text" disabled="disabled" style="width: 70%;background-color:#FFFFFF " class="form-control input-sm" id="usuariof" name="usuariof" value="" maxlength="22" />
                         </div> 
                         <div class="form-group col-xs-6">
                             <label>Estatus Falla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
