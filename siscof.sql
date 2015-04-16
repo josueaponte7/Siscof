@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `siscof` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `siscof`;
--- MySQL dump 10.13  Distrib 5.5.42, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.15  Distrib 10.0.17-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: siscof
+-- Host: 127.0.0.1    Database: siscof
 -- ------------------------------------------------------
--- Server version	5.5.42-1
+-- Server version	10.0.17-MariaDB-1~wheezy-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -288,10 +288,15 @@ CREATE TABLE `fallas` (
   `problema` text COLLATE utf8_bin NOT NULL,
   `id_estatus` int(11) DEFAULT NULL,
   `bien_id` int(11) DEFAULT NULL,
+<<<<<<< HEAD
   `usuario_fa_id` int(11) DEFAULT NULL,
   `usuario_re_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+=======
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -727,7 +732,11 @@ CREATE TABLE `s_sesion_activa` (
   `usuario_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `s_sesion_activa_ibfk_2` (`usuario_id`)
+<<<<<<< HEAD
 ) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8;
+=======
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -736,7 +745,11 @@ CREATE TABLE `s_sesion_activa` (
 
 LOCK TABLES `s_sesion_activa` WRITE;
 /*!40000 ALTER TABLE `s_sesion_activa` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `s_sesion_activa` VALUES (175,'e601717f258268032c0d9cb28a4a9a7f62cbe5a9','2015-04-06 00:02:00','::1',1),(192,'8406bf3e0bc35ff9a974d5121ec50aad92662be8','2015-04-15 15:07:00','::1',2);
+=======
+INSERT INTO `s_sesion_activa` VALUES (175,'e601717f258268032c0d9cb28a4a9a7f62cbe5a9','2015-04-06 00:02:00','::1',1),(177,'06a0351cc6e96df46ec44562052d6fc32ffec7b2','2015-04-14 15:49:00','::1',2);
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40000 ALTER TABLE `s_sesion_activa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -773,7 +786,11 @@ CREATE TABLE `s_sub_modulo` (
 
 LOCK TABLES `s_sub_modulo` WRITE;
 /*!40000 ALTER TABLE `s_sub_modulo` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `s_sub_modulo` VALUES (1,'Módulo',1,0,'vista/seguridad/modulo.php',NULL,NULL,1,NULL,NULL),(2,'Perfil de Usuario',1,1,'vista/seguridad/perfiles.php',NULL,NULL,1,NULL,NULL),(3,'Usuario',1,2,'vista/seguridad/usuario.php',NULL,'2014-03-29 14:50:38',1,NULL,NULL),(4,'Bitacora de Usuario',1,0,NULL,NULL,NULL,2,NULL,NULL),(5,'Bitacora del Sistema',1,1,NULL,NULL,NULL,2,NULL,NULL),(6,'Bien',1,0,'vista/inventario/incor_desin_bien.php','2014-03-29 14:32:44','2014-11-04 17:22:45',3,1,NULL),(17,'Registro',1,0,'vista/fallas/fallas.php','2014-10-23 21:39:35','2014-11-04 10:22:00',8,1,NULL),(19,'Asignar Soporte',1,1,'vista/fallas/asignar.php','2014-11-04 16:59:04','2014-11-04 17:01:38',8,1,NULL),(20,'Soportes Asignados',1,2,'vista/fallas/soporte.php','2014-11-04 17:01:11','2014-11-04 17:01:11',8,1,NULL),(21,'Inventario',1,8,'vista/reportes/inventario.php','2014-11-04 17:06:20','2014-12-01 10:18:38',7,1,NULL),(22,'Técnico',1,9,'vista/reportes/tecnicos.php','2014-11-04 17:07:54','2014-12-01 10:18:45',7,1,NULL),(23,'Estatus',1,10,'vista/reportes/estatus.php','2014-11-04 17:09:08','2014-12-01 10:18:55',7,1,NULL),(24,'Departamento',1,6,'vista/reportes/departamento.php','2014-11-04 17:09:53','2014-12-01 10:17:35',7,1,NULL),(25,'Fecha',1,11,'vista/reportes/fecha.php','2014-11-04 17:10:41','2014-12-01 10:19:03',7,1,NULL),(26,'Estatus de Fallas',1,12,'vista/reportes/estatus_fallas.php','2014-11-04 17:15:51','2014-12-01 10:19:12',7,1,NULL),(27,'Asignar Bienes',1,1,'vista/inventario/bien.php','2014-11-04 17:23:27','2014-11-04 17:23:27',3,1,NULL),(28,'Repuesto',0,2,'vista/inventario/repuesto.php','2014-11-04 17:24:02','2014-11-04 17:24:02',3,1,NULL),(29,'Consumible',0,3,'vista/inventario/consumible.php','2014-11-04 17:24:51','2014-11-04 17:24:51',3,1,NULL),(30,'Equipos',0,4,'vista/inventario/equipos.php','2014-11-04 17:25:52','2014-11-04 17:25:52',3,1,NULL),(31,'Departamento',1,0,'vista/mantenimiento/departamento.php','2014-11-04 17:28:52','2014-11-04 17:28:52',6,1,NULL),(32,'Usuario',1,1,'vista/mantenimiento/usuarioF.php','2014-11-04 17:29:25','2014-11-04 17:29:25',6,1,NULL),(33,'Herramienta',1,0,'vista/reportes/herramienta.php','2014-12-01 10:02:49','2014-12-01 10:05:21',7,1,NULL),(34,'Componentes',1,1,'vista/reportes/componente.php','2014-12-01 10:03:40','2014-12-01 10:05:49',7,1,NULL),(35,'Repuestos',1,2,'vista/reportes/repuesto.php','2014-12-01 10:04:30','2014-12-01 10:13:44',7,1,NULL),(36,'Consumibles',1,3,'vista/reportes/consumible.php','2014-12-01 10:15:48','2014-12-01 11:52:28',7,1,NULL),(37,'Equipos',1,4,'vista/reportes/equipo.php','2014-12-01 10:16:23','2014-12-01 10:39:08',7,1,NULL),(38,'Fallas',1,5,'vista/reportes/fallas.php','2014-12-01 10:17:14','2014-12-01 10:39:18',7,1,NULL),(39,'Usuarios',1,7,'vista/reportes/usuario.php','2014-12-01 10:18:17','2014-12-01 10:18:17',7,1,NULL),(40,'Cargar Items',1,2,'vista/mantenimiento/items.php','2014-12-07 11:18:58','2014-12-07 11:18:58',6,1,NULL),(41,'Resolver Falla',1,3,'vista/fallas/resolver.php','2014-12-09 03:51:42','2014-12-09 03:51:42',8,NULL,NULL);
+=======
+INSERT INTO `s_sub_modulo` VALUES (1,'Módulo',1,0,'vista/seguridad/modulo.php',NULL,NULL,1,NULL,NULL),(2,'Perfil de Usuario',1,1,'vista/seguridad/perfiles.php',NULL,NULL,1,NULL,NULL),(3,'Usuario',1,2,'vista/seguridad/usuario.php',NULL,'2014-03-29 14:50:38',1,NULL,NULL),(4,'Bitacora de Usuario',1,0,NULL,NULL,NULL,2,NULL,NULL),(5,'Bitacora del Sistema',1,1,NULL,NULL,NULL,2,NULL,NULL),(6,'Asignación Bien',1,0,'vista/inventario/incor_desin_bien.php','2014-03-29 14:32:44','2014-11-04 17:22:45',3,1,NULL),(17,'Registro',1,0,'vista/fallas/fallas.php','2014-10-23 21:39:35','2014-11-04 10:22:00',8,1,NULL),(19,'Asignar Soporte',1,1,'vista/fallas/asignar.php','2014-11-04 16:59:04','2014-11-04 17:01:38',8,1,NULL),(20,'Soportes Asignados',1,2,'vista/fallas/soporte.php','2014-11-04 17:01:11','2014-11-04 17:01:11',8,1,NULL),(21,'Inventario',1,8,'vista/reportes/inventario.php','2014-11-04 17:06:20','2014-12-01 10:18:38',7,1,NULL),(22,'Técnico',1,9,'vista/reportes/tecnicos.php','2014-11-04 17:07:54','2014-12-01 10:18:45',7,1,NULL),(23,'Estatus',1,10,'vista/reportes/estatus.php','2014-11-04 17:09:08','2014-12-01 10:18:55',7,1,NULL),(24,'Departamento',1,6,'vista/reportes/departamento.php','2014-11-04 17:09:53','2014-12-01 10:17:35',7,1,NULL),(25,'Fecha',1,11,'vista/reportes/fecha.php','2014-11-04 17:10:41','2014-12-01 10:19:03',7,1,NULL),(26,'Estatus de Fallas',1,12,'vista/reportes/estatus_fallas.php','2014-11-04 17:15:51','2014-12-01 10:19:12',7,1,NULL),(27,'Bienes',1,1,'vista/inventario/bien.php','2014-11-04 17:23:27','2014-11-04 17:23:27',3,1,NULL),(28,'Repuesto',0,2,'vista/inventario/repuesto.php','2014-11-04 17:24:02','2014-11-04 17:24:02',3,1,NULL),(29,'Consumible',0,3,'vista/inventario/consumible.php','2014-11-04 17:24:51','2014-11-04 17:24:51',3,1,NULL),(30,'Equipos',0,4,'vista/inventario/equipos.php','2014-11-04 17:25:52','2014-11-04 17:25:52',3,1,NULL),(31,'Departamento',1,0,'vista/mantenimiento/departamento.php','2014-11-04 17:28:52','2014-11-04 17:28:52',6,1,NULL),(32,'Usuario',1,1,'vista/mantenimiento/usuarioF.php','2014-11-04 17:29:25','2014-11-04 17:29:25',6,1,NULL),(33,'Herramienta',1,0,'vista/reportes/herramienta.php','2014-12-01 10:02:49','2014-12-01 10:05:21',7,1,NULL),(34,'Componentes',1,1,'vista/reportes/componente.php','2014-12-01 10:03:40','2014-12-01 10:05:49',7,1,NULL),(35,'Repuestos',1,2,'vista/reportes/repuesto.php','2014-12-01 10:04:30','2014-12-01 10:13:44',7,1,NULL),(36,'Consumibles',1,3,'vista/reportes/consumible.php','2014-12-01 10:15:48','2014-12-01 11:52:28',7,1,NULL),(37,'Equipos',1,4,'vista/reportes/equipo.php','2014-12-01 10:16:23','2014-12-01 10:39:08',7,1,NULL),(38,'Fallas',1,5,'vista/reportes/fallas.php','2014-12-01 10:17:14','2014-12-01 10:39:18',7,1,NULL),(39,'Usuarios',1,7,'vista/reportes/usuario.php','2014-12-01 10:18:17','2014-12-01 10:18:17',7,1,NULL),(40,'Cargar Items',1,2,'vista/mantenimiento/items.php','2014-12-07 11:18:58','2014-12-07 11:18:58',6,1,NULL),(41,'Resolver Falla',1,3,'vista/fallas/resolver.php','2014-12-09 03:51:42','2014-12-09 03:51:42',8,NULL,NULL);
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40000 ALTER TABLE `s_sub_modulo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -800,7 +817,7 @@ CREATE TABLE `s_usuario` (
   KEY `codigo_perfil` (`perfil_id`),
   KEY `id` (`id`),
   CONSTRAINT `fk_s_perfil_s_usuario` FOREIGN KEY (`perfil_id`) REFERENCES `s_perfil` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -809,7 +826,11 @@ CREATE TABLE `s_usuario` (
 
 LOCK TABLES `s_usuario` WRITE;
 /*!40000 ALTER TABLE `s_usuario` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `s_usuario` VALUES (1,'001','admin','4a76b7b08622a914d44b92c834e7ad2fab4491c83614f0d75c4bad059244fd67f9a46c60a0b19c0d6aa6331c5d593514cb9738ada2b7408b9c07294546fba871',1,1,NULL,'2015-04-08 04:51:49',2,NULL,4),(2,'002','administrador','393eaf591875db81230faf554dccac8e926545eaa6b21db972a9ca01c478d9670e1b91e5661a6c287f8f3225ade6e44b29dd3649f0ee5b5bdc4123e5d43fdb66',1,1,NULL,'2015-04-05 23:30:08',1,NULL,2),(3,'003','josue','4a76b7b08622a914d44b92c834e7ad2fab4491c83614f0d75c4bad059244fd67f9a46c60a0b19c0d6aa6331c5d593514cb9738ada2b7408b9c07294546fba871',1,0,'2015-04-08 04:19:55','2015-04-08 05:51:09',2,2,3),(4,'004','juan','78537b0c2988baba80d67d988e01d237157700adafbc28b3913aa61917435afa4b399266015edf4a741d26f0703756b78611c71079b2132b11339045bc152fc3',1,0,'2015-04-14 19:52:39',NULL,NULL,2,3),(5,'005','maria','4a76b7b08622a914d44b92c834e7ad2fab4491c83614f0d75c4bad059244fd67f9a46c60a0b19c0d6aa6331c5d593514cb9738ada2b7408b9c07294546fba871',1,0,'2015-04-14 19:53:23',NULL,NULL,2,4);
+=======
+INSERT INTO `s_usuario` VALUES (1,'001','admin','4a76b7b08622a914d44b92c834e7ad2fab4491c83614f0d75c4bad059244fd67f9a46c60a0b19c0d6aa6331c5d593514cb9738ada2b7408b9c07294546fba871',1,1,NULL,'2015-04-08 04:51:49',2,NULL,4),(2,'002','administrador','393eaf591875db81230faf554dccac8e926545eaa6b21db972a9ca01c478d9670e1b91e5661a6c287f8f3225ade6e44b29dd3649f0ee5b5bdc4123e5d43fdb66',1,1,NULL,'2015-04-05 23:30:08',1,NULL,2),(3,'003','josue','4a76b7b08622a914d44b92c834e7ad2fab4491c83614f0d75c4bad059244fd67f9a46c60a0b19c0d6aa6331c5d593514cb9738ada2b7408b9c07294546fba871',1,0,'2015-04-08 04:19:55','2015-04-08 05:51:09',2,2,3);
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40000 ALTER TABLE `s_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -879,7 +900,7 @@ CREATE TABLE `usuario_f` (
   KEY `id_departamento` (`departamento_id`),
   CONSTRAINT `fk_usuario_f_1` FOREIGN KEY (`usuario_id`) REFERENCES `s_usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_usuario_f_2` FOREIGN KEY (`departamento_id`) REFERENCES `departamento` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin KEY_BLOCK_SIZE=1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin KEY_BLOCK_SIZE=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -888,7 +909,11 @@ CREATE TABLE `usuario_f` (
 
 LOCK TABLES `usuario_f` WRITE;
 /*!40000 ALTER TABLE `usuario_f` DISABLE KEYS */;
+<<<<<<< HEAD
 INSERT INTO `usuario_f` VALUES (1,'001','Josue','Aponte',3,1),(2,'002','Juan','Manga',4,1),(3,'003','Maria','Barreto',5,2);
+=======
+INSERT INTO `usuario_f` VALUES (1,'001','Josue','Aponte',3,1);
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
 /*!40000 ALTER TABLE `usuario_f` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -930,4 +955,8 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+<<<<<<< HEAD
 -- Dump completed on 2015-04-16  6:41:56
+=======
+-- Dump completed on 2015-04-14 16:30:39
+>>>>>>> 78866346d0843f576ff2e28f389b423ba92ed047
