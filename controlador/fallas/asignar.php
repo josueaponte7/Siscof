@@ -10,16 +10,7 @@ if (!isset($_POST['accion'])) {
     require_once '../../modelo/fallas/AsignarFalla.php';
     $obj = new AsignarFalla();
 
-    if (isset($_POST['id_falla'])) {
-        $datos['id_falla'] = $_POST['id_falla'];
-    }
-    if (isset($_POST['tecnico'])) {
-        $datos['id_usuario'] = $_POST['tecnico'];
-    }
-    switch ($accion) {
-        case 'Asignar':
-            $resultado = $obj->asignarFallas($datos);
-            echo json_encode($resultado);
-        break;
-    }
+    $resultado = $obj->accion($_POST);
+    echo json_encode($resultado);
+
 }

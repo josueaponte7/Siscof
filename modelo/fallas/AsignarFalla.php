@@ -21,6 +21,46 @@ class AsignarFalla extends Fallas
     {
         
     }
+    
+    public function accion($datos)
+    {
+        session_start();
+        $this->id_usuario = $_SESSION['id_usuario'];
+        $this->_accion    = $datos['accion'];
+        $this->_datos     = $datos;
+        switch ($this->_accion) {
+            case 'asignar':
+                
+                $this->_table        = 'fallas_asignada';
+                $this->autoIncrement($this->_table);
+                $data['id']          = $this->auto_increment;
+                $data['num_falla']   = $datos['num_falla'];
+                $data['fecha']       = date("Y-m-d");
+                $data['usuariof_id'] = $datos['usuariof_id'];
+                $data['accion']      = $datos['accion'];
+                $this->_datos        = $data;
+                $response_data       = $this->add();
+                if($response_data['success'] == 'exitoso'){
+                    
+                    $this->_table = 'fallas';
+                    
+                    
+                    $where = 'num_falla ="'.$datos['num_falla'].'"';
+
+                    $id = $this->get($this->_table, 'id', $where);
+                    
+                    $dato['id'] = $id;
+                    $dato['id_estatus'] = 2;
+                    $dato['accion'] = 'update';
+                    $this->_datos = $dato;
+                    $response_data = $this->mod();
+                }
+                
+                break;
+        }
+        return $response_data;
+    }
+    
     public function asignarFallas($datos)
     {
         

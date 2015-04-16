@@ -40,7 +40,7 @@ class Conexion
     {
         // Activar los errores para mostrarlos por pantallas
 
-        $this->_conn = new mysqli(self::$_server, self::$_user, self::$_password, $this->bd);
+        $this->_conn = @new mysqli(self::$_server, self::$_user, self::$_password, $this->bd);
         if ((int) $this->_conn->connect_errno > 0) {
             echo utf8_decode("<div style='color:#FF0000;text-align:center;margin:0 auto'>" . $this->_conn->connect_error . "</div>");
             exit(utf8_decode("<div style='color:#FF0000;text-align:center;margin:0 auto'>Ocurri&oacute; un Error Comuniquese con Inform&aacute;tica</div>"));

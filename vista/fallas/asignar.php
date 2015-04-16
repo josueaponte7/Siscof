@@ -5,16 +5,18 @@ define('BASEURL', substr($_SERVER['PHP_SELF'], 0, - (strlen($_SERVER['SCRIPT_FIL
 
 require_once '../../librerias/globales.php';
 require_once '../../modelo/fallas/AsignarFalla.php';
+require_once '../../modelo/mantenimientos/UsuarioF.php';
 
-$objmod = new AsignarFalla();
+$objmod  = new AsignarFalla();
+$objuser = new UsuarioF();
 
 if (isset($_GET['modulo'])) {
     $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
 }
 $usuario    = $_SESSION['usuario'];
 $id_usuario = $_SESSION['id_usuario'];
-$where = "";
-if($id_usuario > 2){
+$where      = "";
+if ($id_usuario > 2) {
     $where = "AND su.id_usuario=$id_usuario";
 }
 $sql    = "SELECT cod_falla FROM fallas WHERE fecha = CURRENT_DATE AND  id_usuario_f = $id_usuario ORDER BY fecha DESC LIMIT 1 ";
@@ -41,15 +43,20 @@ $img_acep = _img_dt . _img_dt_acep;
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap_theme; ?>"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilos; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2_bootstrap; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_dataTablesbootstrap; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_dataTablesresponsive; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_animate; ?>"/>
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilo; ?>"/>
 
         <script src="<?php echo _ruta_librerias_js . _js_jquery; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_bootstrap; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_dataTable; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_select2; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_select2_es; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_dataTable; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_dataTableboostrap; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_dataTableresponsive; ?>" type="text/javascript"></script>
+        <script src="<?php echo _ruta_librerias_js . _js_text_counter; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_validarcampos; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_librerias; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_script_js . 'asignar.js' ?>" type="text/javascript"></script>
@@ -63,119 +70,131 @@ $img_acep = _img_dt . _img_dt_acep;
                 text-align:center !important;
                 padding: 2px !important;
             }
+            #contenedor{
+                -moz-animation-duration: 5s;
+                -webkit-animation-duration: 5s;
+                -o-animation-duration: 5s;
+            }
         </style>
     </head>
     <body>
-        <div class="panel panel-default" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
+        <div id="contenedor" class="panel panel-default animated slideInDown" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
             <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Asignar Fallas</div>
             <div class="panel-body">
-                <table style="width:100%" border="0" align="center">
-
-                    <tr>
-                        <td class="fila">
-                            <fieldset>
-                                <legend>
-                                    Fallas por Asignar
-                                </legend>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <div  class="fila">
-                                <table  border="0" cellspacing="1" id="tabla_fallas" class="dataTable" style="margin: auto;width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Número Falla</th>
-                                        <th>Departamento</th>
-                                        <th>Estatus</th>
-                                        <th>Asignar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    $sql = "SELECT 
-                                            f.id_falla,
-                                            f.num_falla,
-                                            d.nombre_departamento,
-                                            e.estatus,
-                                            su.usuario
-                                            FROM
-                                            fallas AS f 
-                                            INNER JOIN departamento AS d ON f.id_departamento = d.id_departamento 
-                                            INNER JOIN estatus_fallas AS e ON f.id_estatus = e.id_estatus 
-                                            INNER JOIN s_usuario AS su ON f.id_usuario=su.id_usuario
-                                            WHERE f.id_estatus = 1
-                                            ORDER BY num_falla DESC";
-                                    $result   = $objmod->ex_query($sql);
-                                    $es_array = is_array($result) ? TRUE : FALSE;
-                                    if ($es_array === TRUE) {
-                                        for ($i = 0; $i < count($result); $i++) {
-                                            ?>
-                                            <tr>  
-                                                <td>
-                                                    <?php echo $result[$i]['usuario']; ?>
-                                                </td>
-                                                <td id="<?php echo $result[$i]['id_falla']; ?>">
-                                                    <?php echo $result[$i]['num_falla']; ?>
-                                                </td> 
-                                                <td>
-                                                    <?php echo $result[$i]['nombre_departamento']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $result[$i]['estatus']; ?>
-                                                </td>                                                
-                                                <td>
-                                                    <img class="modificar"  title="ASignar" style="cursor: pointer" src="<?php echo $img_acep ?>" width="18" height="18" alt="Asignar"/>
-                                                </td>                                                
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
+                <div id="div_asignar" class="row" style="margin:auto;width:95%">
+                    <fieldset>
+                        <legend>
+                            Fallas por Asignar
+                        </legend>
+                    </fieldset>
+                    <input type="hidden" name="fila" value="" id="fila"/>
+                    <input type="hidden" name="usuario" value="" id="usuario"/>
+                    <input type="hidden" name="departamento" value="" id="departamento"/>
+                    <table  border="0" cellspacing="1" id="tabla_fallas" class="tablas table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive">
+                        <thead>
+                            <tr class="success">
+                                <th>Usuario</th>
+                                <th>Número Falla</th>
+                                <th>Departamento</th>
+                                <th>Estatus</th>
+                                <th>Asignar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql      = "SELECT 
+                                            CONCAT(uf.nombre,' ', uf.apellido) AS nombres,f.num_falla,d.nombre_departamento,ef.estatus
+                                         FROM fallas AS f
+                                         INNER JOIN usuario_f AS uf ON f.usuario_fa_id=uf.id
+                                         INNER JOIN  departamento AS d ON uf.departamento_id=d.id
+                                         INNER JOIN  estatus_fallas ef on f.id_estatus=ef.id
+                                         WHERE f.id_estatus = 1";
+                            $result   = $objmod->ex_query($sql);
+                            $es_array = is_array($result) ? TRUE : FALSE;
+                            if ($es_array === TRUE) {
+                                for ($i = 0; $i < count($result); $i++) {
                                     ?>
-                                </tbody>
-                            </table>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td class="fila">
-                            <fieldset>
-                                <legend>
-                                    Fallas Asignadas
-                                </legend>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div  class="fila">
-                                <table  border="0" cellspacing="1" id="tabla_fallas_asig" class="dataTable" style="margin: auto;width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Asignado</th>
-                                        <th>Número Falla</th>
-                                        <th>Departamento</th>
-                                        <th>Estatus</th>
+                                    <tr>  
+                                        <td>
+                                            <?php echo $result[$i]['nombres']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $result[$i]['num_falla']; ?>
+                                        </td> 
+                                        <td>
+                                            <?php echo $result[$i]['nombre_departamento']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $result[$i]['estatus']; ?>
+                                        </td>                                                
+                                        <td>
+                                            <img class="modificar"  title="ASignar" style="cursor: pointer" src="<?php echo $img_acep ?>" width="18" height="18" alt="Asignar"/>
+                                        </td>                                                
                                     </tr>
-                                </thead>
-                                <tbody>
-                                        <?php
-                                        $sql = "SELECT 
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <div id="div_formulario" style="display: none">
+                    <form id="formasignar">
+                        
+                        <div class="row form-inline">
+                            <div class="form-group col-xs-6">
+                                <label>Usuario:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <input type="text" disabled="disabled" style="width: 70%;background-color:#FFFFFF;color:#FF0000 " class="form-control input-sm" id="num_falla" name="num_falla" value="" maxlength="22" />
+                            </div> 
+                            <div class="form-group col-xs-6">
+                                <select style="width: 70%"  id="usuariof_id"  name="usuariof_id"  class="form-control select2 input-sm">
+                                    <option value="0">Seleccione</option>
+                                    <?php
+                                    $datos['tabla']     = 's_usuario AS su,s_perfil AS sp,usuario_f AS uf';
+                                    $datos['campos']    = 'uf.id,uf.id_usuario_f,uf.nombre,uf.apellido';
+                                    $datos['condicion'] = 'su.perfil_id=sp.id AND su.id=uf.usuario_id AND su.perfil_id=3';
+                                    $result_depar       = $objuser->getUsuarioF($datos);
+                                    for ($i = 0; $i < count($result_depar); $i++) {
+                                        ?>
+                                        <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['nombre'] ?></option>
+                                    <?php }
+                                    ?>
+                                </select>
+                            </div> 
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="row form-inline">
+                            <div class="form-group col-xs-12" style="text-align:center;">
+                                <button type="button" id="asignar" class="btn btn-primary btn-sm">Asignar</button>
+                                <button type="button" id="cancelar" class="btn btn-primary btn-sm">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br/>
+                <br/>
+                <div class="row" style="margin:auto;width:95%">
+                    <fieldset>
+                        <legend>
+                            Fallas Asignadas
+                        </legend>
+                    </fieldset>
+                   
+                    <table  border="0" cellspacing="1" id="tabla_fallas_asig" class="tablas table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive">
+                        <thead>
+                            <tr class="success">
+                                <th>Usuario</th>
+                                <th>Asignado</th>
+                                <th>Número Falla</th>
+                                <th>Departamento</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql      = "SELECT 
                                                     f.num_falla,
                                                     d.nombre_departamento,
                                                     e.estatus,
@@ -203,135 +222,36 @@ $img_acep = _img_dt . _img_dt_acep;
                                                     INNER JOIN departamento AS d  ON f.id_departamento = d.id_departamento 
                                                     INNER JOIN estatus_fallas AS e ON f.id_estatus = e.id_estatus 
                                                   WHERE f.id_estatus = 2 
-                                                  ORDER BY num_falla DESC ;";
-                                        $result   = $objmod->ex_query($sql);
-                                        $es_array = is_array($result) ? TRUE : FALSE;
-                                        if ($es_array === TRUE) {
-                                            for ($i = 0; $i < count($result); $i++) {
-                                                ?>
-                                            <tr> 
-                                                <td>
+                                                  ORDER BY num_falla DESC;";
+                            $result   = $objmod->ex_query($sql);
+                            $es_array = is_array($result) ? TRUE : FALSE;
+                            if ($es_array === TRUE) {
+                                for ($i = 0; $i < count($result); $i++) {
+                                    ?>
+                                    <tr> 
+                                        <td>
                                             <?php echo $result[$i]['usuario']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $result[$i]['usuario_asig']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $result[$i]['num_falla']; ?>
-                                                </td> 
-                                                <td>
-                                                    <?php echo $result[$i]['nombre_departamento']; ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $result[$i]['estatus']; ?>
-                                                </td>                                              
-                                            </tr>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-                                </tbody>
-                            </table>
-                            </div>
-                        </td>
-                    </tr>
-                  
-                    <tr>
-                        <td>
-                            <div id="div_falla" style="display: none">
-                                <form  name="frmfallas" id="frmfallas" method="post" enctype="multipart/form-data">
-    <!--                                <img style="cursor: pointer" id="imgmunicipio" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>-->
-                                    <table width="750" align="center">
-                                        <tr>
-                                            <td width="98" height="58" align="left">Datos Usuario:</td>
-                                            <td width="219">
-                                                <div id="div_usuario" style="margin-top: 10px" class="form-group">
-
-                                                    <input type="text"  class="form-control input-sm" id="datos_usuario" name="datos_usuario" style="background-color: #FFFFFF" disabled="disabled" value="" maxlength="22" />
-                                                </div>
-                                            </td>
-                                            <td width="70">&nbsp;</td>
-                                            <td width="70" height="58" align="left">N&uacute;mero Falla:</td>
-                                            <td width="206">
-                                                <div id="div_numfalla" style="margin-top: 10px" class="form-group">
-                                                    <input type="hidden" id="id_falla" name="id_falla" value=""  />
-                                                    <input type="text"  class="form-control input-sm" id="num_falla" name="num_falla" disabled="disabled" style="color: #FF0000;background-color: #FFFFFF" value="" maxlength="22" />
-                                                </div>
-                                            </td>
-    <!--                                        <td width="17">
-                                                <img style="cursor: pointer" id="imgsector" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                            </td>-->
-                                        </tr>
-                                        <tr>
-                                            <td width="98" height="58" align="left">Tecnico:</td>
-                                            <td width="219">
-                                                <div id="div_deparamento" style="margin-top: 10px" class="form-group">
-                                                    <select name="tecnico" class="form-control input-sm select2" id="tecnico">
-                                                        <option value="0">Seleccione</option>
-                                                        <?php
-                                                        $sql    = " SELECT 
-                                                                        su.id_usuario,
-                                                                        uf.nombre,
-                                                                        uf.apellido
-                                                                    FROM
-                                                                    usuario_f AS uf 
-                                                                    INNER JOIN s_usuario AS su ON uf.id_usuario = su.id_usuario 
-                                                                    INNER JOIN s_perfil AS sp  ON su.codigo_perfil = sp.codigo_perfil 
-                                                                    WHERE sp.perfil = 'Informatico'";
-                                                        $result = $objmod->ex_query($sql);
-                                                        for ($i = 0; $i < count($result); $i++) {
-                                                            ?>
-                                                            <option style="font-size: 10px;" value="<?php echo $result[$i]['id_usuario']; ?>"><?php echo $result[$i]['nombre'] . ' ' . $result[$i]['apellido']; ?></option>
-                                                            <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
-                                            </td>
-                                            <td width="70">&nbsp;</td>
-                                            <td width="70" height="58" align="left">Estatus:</td>
-                                            <td width="206">
-                                                <div id="div_nombre" style="margin-top: 10px" class="form-group">
-                                                    <input type="text"  class="form-control input-sm" id="estatus" name="estatus" disabled="disabled" value="NO ASIGNADO" style="background-color: #FFFFFF"  maxlength="22" />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td width="98" height="58" align="left">Departamento:</td>
-                                            <td  width="219">
-                                                <div id="div_usuario" style="margin-top: 10px" class="form-group">
-                                                    <input type="text"  class="form-control input-sm" id="departamento" name="departamento" style="background-color: #FFFFFF" disabled="disabled" value="" maxlength="22" />
-                                                </div>
-                                            </td>
-                                            <td width="70">&nbsp;</td>
-                                            <td width="70">&nbsp;</td>
-                                            <td width="70">&nbsp;</td>
-                                        </tr>
-                                        <tr>
-                                            <td width="98" height="49" align="left">Problema:</td>
-                                            <td colspan="4">
-                                                <div id="div_direccion" class="form-group">
-                                                    <textarea class="form-control input-sm" id="problema" name="problema" rows="2" cols="95"></textarea>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td  colspan="5" align="right">&nbsp;</td>
-                                        </tr>
-                                        <td colspan="5" align="center"> 
-                                            <div id="botones" style="margin-top: 50px;">  
-                                                <input type="hidden" name="fila" id="fila" value="" />
-                                                <button type="button" id="asignar" class="btn btn-primary btn-sm">Asignar</button>
-                                                <button type="button" id="limpiar" class="btn btn-primary btn-sm">Limpiar</button>
-                                                <button type="button" id="salir" class="btn btn-primary btn-sm">Salir</button>
-                                            </div>
                                         </td>
-                                    </table>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                                        <td>
+                                            <?php echo $result[$i]['usuario_asig']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $result[$i]['num_falla']; ?>
+                                        </td> 
+                                        <td>
+                                            <?php echo $result[$i]['nombre_departamento']; ?>
+                                        </td>
+                                        <td>
+                                            <?php echo $result[$i]['estatus']; ?>
+                                        </td>                                              
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table> 
+                </div>
             </div>
         </div>
     </body>

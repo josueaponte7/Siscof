@@ -176,15 +176,16 @@ class UsuarioF extends Usuario
         return $result;
     }
     
-     public function getUsuarioF()
+     public function getUsuarioF($datos=array())
     {
         $data  = array(
                     'tabla'     => 's_usuario AS su,s_perfil AS sp,usuario_f AS uf,departamento AS dp ',
-                    'campos'    => "uf.id_usuario_f,su.usuario,uf.nombre,uf.apellido,su.perfil_id, sp.perfil,uf.departamento_id,dp.nombre_departamento,su.activo",
+                    'campos'    => "uf.id,uf.id_usuario_f,su.usuario,uf.nombre,uf.apellido,su.perfil_id, sp.perfil,uf.departamento_id,dp.nombre_departamento,su.activo",
                     'condicion' => 'su.perfil_id=sp.id AND su.id=uf.usuario_id AND uf.departamento_id=dp.id',
                     'order by'  => 'uf.id'
                     );
-        $result = $this->select($data, FALSE);
+        $dat = array_merge($data,$datos);
+        $result = $this->select($dat, FALSE);
         return $result;
     }
 
