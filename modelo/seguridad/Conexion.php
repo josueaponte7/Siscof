@@ -220,7 +220,7 @@ class Conexion
                 'limite'    => 200
             );
             $options            = array_merge($default, $options);
-            $sql                = "SELECT {$options['campos']} FROM {$options['tabla']} WHERE {$options['condicion']} ORDER BY {$options['ordenar']} LIMIT {$options['limite']}";
+            $sql                = "SELECT {$options['campos']} FROM {$options['tabla']} WHERE {$options['condicion']} ORDER BY {$options['ordenar']} LIMIT {$options['limite']};";
             $this->_state_query = $this->_conn->query($sql);
             if ($this->_state_conn && $this->_state_query && $this->_state_query->num_rows > 0) {
                 $total = $this->_state_query->num_rows;

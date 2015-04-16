@@ -108,7 +108,6 @@ $img_del      = _img_dt . _img_dt_del;
                     <br/>
                     <br/>
                     <div class="row" style="text-align:center;">
-                        <input type="hidden" name="id" value="" id="id"/>
                         <button type="button" id="guardar" class="btn btn-primary btn-sm">Guardar</button>
                         <button type="button" id="limpiar" class="btn btn-primary btn-sm">Limpiar</button>
                     </div>
@@ -119,20 +118,20 @@ $img_del      = _img_dt . _img_dt_del;
                     <table  id="tabla_registrar" border="0" cellspacing="1" class="tablas table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive">
                         <thead>
                             <tr class="success">
-                                
+                                <th>Cod Bien</th>
+                                <th>Bien</th>
                                 <th>Departamento</th>
                                 <th>Usuario</th>
-                                <th>Bien</th>
                                 <th>Acci&oacute;n</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
-                                $datos['tabla']     = 'bien AS b, usuario_f AS u, departamento AS d';
-                                $datos['campos'] = "d.nombre_departamento,CONCAT_WS(' ',u.nombre,u.apellido) AS nombre, b.nombre_bien,b.asignado";
-                                $datos['condicion'] = 'b.usuariof_id=u.id AND u.departamento_id=d.id';
-                                $datos['ordenar'] = 'b.id';
-                                $resultado_bien = $objmod->getItems($datos);
+                            $datos['tabla']     = 'bien AS b, usuario_f AS u, departamento AS d';
+                            $datos['campos']    = "d.nombre_departamento,CONCAT_WS(' ',u.nombre,u.apellido) AS nombre,b.codigo_bien, b.nombre_bien,b.asignado";
+                            $datos['condicion'] = 'b.usuariof_id=u.id AND u.departamento_id=d.id';
+                            $datos['ordenar']   = 'b.id';
+                            $resultado_bien = $objmod->getItems($datos);
                                 $es_array = is_array($resultado_bien) ? TRUE : FALSE;
                                 if ($es_array === TRUE) {
                                 for ($i = 0; $i < count($resultado_bien); $i++) {
@@ -141,6 +140,9 @@ $img_del      = _img_dt . _img_dt_del;
                                          $asignado = 'Reasignado';
                                      }
                                     ?>
+                                        <td>
+                                            <?php echo $resultado_bien[$i]['codigo_bien']; ?>
+                                        </td>
                                         <td>
                                             <?php echo $resultado_bien[$i]['nombre_departamento']; ?>
                                         </td>

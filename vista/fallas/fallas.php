@@ -16,9 +16,8 @@ if (isset($_GET['modulo'])) {
 }
 $usuario    = $_SESSION['usuario'];
 $id_usuario = $_SESSION['id_usuario'];
-
-$img_mod = _img_dt . _img_dt_mod;
-$img_del = _img_dt . _img_dt_del;
+$img_mod      = _img_dt . _img_dt_mod;
+$img_del      = _img_dt . _img_dt_del;
 ?>
 <!DOCTYPE html>
 <html>
@@ -126,6 +125,63 @@ $img_del = _img_dt . _img_dt_del;
                         </div>
                     </div>
                 </form>
+                <br/>
+                <br/>
+                <div style="margin:auto;width:95%">
+                    <input type="hidden" name="fila" value="" id="fila"/>
+                    <table  id="tabla_registrar" border="0" cellspacing="1" class="tablas table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive">
+                        <thead>
+                            <tr class="success">
+                                <th>&nbsp;</th>
+                                <th>Num Falla</th>
+                                <th>Problema</th>
+                                <th>Cod Bien</th>
+                                <th>Bien</th>
+                                <th>Usuario</th>
+                                <th>Fecha</th>
+                                <th>Estatus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $resultado_bien     = $objmod->getFallas();
+                            $es_array           = is_array($resultado_bien) ? TRUE : FALSE;
+                            if ($es_array === TRUE) {
+                                for ($i = 0; $i < count($resultado_bien); $i++) {
+ 
+                                    ?>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['num_falla']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['problema']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['codigo_bien']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['nombre_bien']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['nombres']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['fecha']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $resultado_bien[$i]['estatus']; ?>
+                                </td>                                                                  
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </body>

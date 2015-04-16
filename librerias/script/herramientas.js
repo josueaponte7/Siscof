@@ -7,13 +7,14 @@ $(document).ready(function() {
         "aLengthMenu": [5, 10, 20, 30, 40, 50],
         "oLanguage": {"sUrl": "../../librerias/js/es.txt"},
         "aoColumns": [
+        {"sClass": "center", "sWidth": "15%"},
         {"sClass": "center", "sWidth": "20%"},
         {"sClass": "center", "sWidth": "15%"},
         {"sClass": "center", "sWidth": "20%"},
         {"sClass": "center", "sWidth": "20%"}
         ]
     });
-
+    
     var $frmherramienta  = $('form#frmherramienta');
     var $id_departamento = $frmherramienta.find('select#departamento_id');
     var $usuariof_id     = $frmherramienta.find('select#usuariof_id');
@@ -51,11 +52,12 @@ $(document).ready(function() {
     
     $.extend({
         update: function (url) {
-            var id = $('#bien_id').find('option').filter(':selected').val();
-            var depar = $id_departamento.find('option').filter(':selected').text();
-            var usua = $usuariof_id.find('option').filter(':selected').text();
-            var bien = $bien_id.find('option').filter(':selected').text();
-            var asig = $asignado.find('option').filter(':selected').val();
+            var id       = $('#bien_id').find('option').filter(':selected').val();
+            var depar    = $id_departamento.find('option').filter(':selected').text();
+            var usua     = $usuariof_id.find('option').filter(':selected').text();
+            var bien     = $bien_id.find('option').filter(':selected').text();
+            var asig     = $asignado.find('option').filter(':selected').val();
+            var bien_id  = $bien_id.find('option').filter(':selected').val();
             var asignado = 'Asignado';
             if(asig == 2){
                 asignado = 'Reasignado';
@@ -64,7 +66,24 @@ $(document).ready(function() {
             $.post(url, data_send, function (respuesta) {
                 if (respuesta.success === 'exitoso') {
                     window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
-                        var nuevaFila = THerramientas.fnAddData([depar, usua, bien, asignado]);
+                        var cod_bien = $.lpad(bien_id,3);
+                        if(asig == 1){
+                            var nuevaFila = THerramientas.fnAddData([cod_bien,depar, usua, bien, asignado]);
+                        }else{
+                          var rows = THerramientas.fnGetData();
+                          
+                        $.each(rows, function (i, row) {
+                            var cod = row[0]
+                            var este = $(this);
+                            if(cod == cod_bien){
+                                THerramientas.fnUpdate(depar, i, 1);
+                                THerramientas.fnUpdate(usua, i, 2);
+                                THerramientas.fnUpdate(asignado, i, 4);
+                            }
+                        });  
+                        }
+                        $('select').select2('val',0);
+                        $usuariof_id.find('option:gt(0)').remove().end();
                     });
                 }
             }, 'json');
@@ -73,4 +92,11 @@ $(document).ready(function() {
     
 });
 
-
+$.lpad = function(i,l,s) {
+	var o = i.toString();
+	if (!s) { s = '0'; }
+	while (o.length < l) {
+		o = s + o;
+	}
+	return o;
+};
