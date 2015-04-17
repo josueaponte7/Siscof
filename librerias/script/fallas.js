@@ -16,6 +16,7 @@ $(document).ready(function () {
             {"sClass": "center", "sWidth": "25%"}
         ]
     });   
+    //console.log(location.href)
     var $frmfallas         = $('form#frmfallas');
     var $num_falla         = $frmfallas.find('input:text#num_falla');
     var $departamento_id   = $frmfallas.find('select#departamento_id');

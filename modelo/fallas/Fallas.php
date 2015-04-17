@@ -50,11 +50,16 @@ class Fallas extends Seguridad
                 $response_data         = $this->add();
                 break;
             case 'bien':
-                $data      = array(
+                
+                $data['tabla'] = "bien AS b, usuario_f AS uf";
+                $data['campos'] = "b.id,CONCAT(b.codigo_bien,' (',b.nombre_bien,')') AS nombre_bien";
+                $data['condicion'] = 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id'];
+                
+                /*$data      = array(
                     'tabla'     => 'bien AS b, usuario_f AS uf',
-                    'campos'    => "b.id,b.nombre_bien",
+                    'campos'    => "b.id,CONCAT(b.codigo_bien,' ',b.nombre_bien) AS nombre_bien",
                     'condicion' => 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id']
-                );
+                );*/
                 $result = $this->select($data, 'ASSOC');
                 $resultado = array();
                 for ($i = 0; $i < count($result); $i++) {

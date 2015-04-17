@@ -152,12 +152,12 @@ $img_acep = _img_dt . _img_dt_acep;
                                     <option value="0">Seleccione</option>
                                     <?php
                                     $datos['tabla']     = 's_usuario AS su,s_perfil AS sp,usuario_f AS uf';
-                                    $datos['campos']    = 'uf.id,uf.id_usuario_f,uf.nombre,uf.apellido';
+                                    $datos['campos']    = "uf.id,uf.id_usuario_f,CONCAT(uf.nombre,' ',uf.apellido) AS nombres";
                                     $datos['condicion'] = 'su.perfil_id=sp.id AND su.id=uf.usuario_id AND su.perfil_id=3';
                                     $result_depar       = $objuser->getUsuarioF($datos);
                                     for ($i = 0; $i < count($result_depar); $i++) {
                                         ?>
-                                        <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['nombre'] ?></option>
+                                        <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['nombres'] ?></option>
                                     <?php }
                                     ?>
                                 </select>
@@ -194,35 +194,17 @@ $img_acep = _img_dt . _img_dt_acep;
                         </thead>
                         <tbody>
                             <?php
-                            $sql      = "SELECT 
-                                                    f.num_falla,
-                                                    d.nombre_departamento,
-                                                    e.estatus,
-                                                    (
-                                                    SELECT 
-                                                      su.usuario 
-                                                    FROM
-                                                      s_usuario AS su 
-                                                      INNER JOIN usuario_f AS uf 
-                                                        ON su.id_usuario = uf.id_usuario 
-                                                    WHERE uf.id_usuario_f = f.id_usuario_f
-                                                    ) AS usuario,
-                                                    (
-                                                    SELECT DISTINCT 
-                                                      CONCAT(uf.nombre,' ',uf.apellido) 
-                                                    FROM
-                                                      s_usuario AS su 
-                                                      INNER JOIN usuario_f AS uf ON su.id_usuario = uf.id_usuario 
-                                                      INNER JOIN fallas_asignada AS fa ON uf.id_usuario_f = fa.id_usuario_f 
-                                                      INNER JOIN fallas AS fn ON fa.id_falla = fn.id_falla 
-                                                    WHERE fn.id_estatus = 2
-                                                    ) AS usuario_asig 
-                                                  FROM
-                                                    fallas AS f 
-                                                    INNER JOIN departamento AS d  ON f.id_departamento = d.id_departamento 
-                                                    INNER JOIN estatus_fallas AS e ON f.id_estatus = e.id_estatus 
-                                                  WHERE f.id_estatus = 2 
-                                                  ORDER BY num_falla DESC;";
+                            $sql = "SELECT
+                                        (SELECT CONCAT(nombre,' ',apellido) FROM usuario_f  WHERE id=f.usuario_fa_id) AS usuario_falla,
+                                        (SELECT CONCAT(nombre,' ',apellido) FROM usuario_f WHERE id=fa.usuariof_id) As usuario_asignado,
+                                        fa.num_falla,
+                                        d.nombre_departamento,
+                                        ef.estatus
+                                        FROM fallas_asignada AS fa
+                                        INNER JOIN fallas AS f ON fa.num_falla=f.num_falla
+                                        INNER JOIN usuario_f AS uf ON f.usuario_fa_id=uf.id
+                                        INNER JOIN departamento AS d on uf.departamento_id=d.id
+                                        INNER JOIN estatus_fallas AS ef ON f.id_estatus=ef.id;";
                             $result   = $objmod->ex_query($sql);
                             $es_array = is_array($result) ? TRUE : FALSE;
                             if ($es_array === TRUE) {
@@ -230,10 +212,10 @@ $img_acep = _img_dt . _img_dt_acep;
                                     ?>
                                     <tr> 
                                         <td>
-                                            <?php echo $result[$i]['usuario']; ?>
+                                            <?php echo $result[$i]['usuario_falla']; ?>
                                         </td>
                                         <td>
-                                            <?php echo $result[$i]['usuario_asig']; ?>
+                                            <?php echo $result[$i]['usuario_asignado']; ?>
                                         </td>
                                         <td>
                                             <?php echo $result[$i]['num_falla']; ?>
