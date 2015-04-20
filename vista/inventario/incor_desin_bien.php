@@ -54,14 +54,14 @@ $img_del      = _img_dt . _img_dt_del;
                 <form name="frmusuario" id="frmusuario" method="post" enctype="multipart/form-data">
                     <div class="row form-inline">
                         <div class="form-group col-xs-6">
-                            <label>Bien:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label>Numero de Bien:</label>
                             <select style="width: 70%"  id="bien"  name="bien"  class="form-control select2 input-sm">
                                 <option value="0">Seleccione</option>
                                 <?php
                                 $result_depar = $objitems->getItems();
                                 for ($i = 0; $i < count($result_depar); $i++) {
                                     ?>
-                                    <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['nombre_bien'] ?></option>
+                                    <option  value="<?php echo $result_depar[$i]['id'] ?>"><?php echo $result_depar[$i]['numero_bien'] ?></option>
                                     <?php
                                 }
                                 ?>
@@ -75,18 +75,18 @@ $img_del      = _img_dt . _img_dt_del;
                     <br/>
                     <div class="row form-inline">
                         <div class="form-group col-xs-6">
-                            <label>Serial del Bien:</label>
+                            <label>Serial del Bien:&nbsp;&nbsp;</label>
                             <input type="text" disabled="disabled" style="width: 70%" id="serial" name="serial" class="form-control input-sm"  value="" maxlength="22" />
                         </div>
                         <div class="form-group col-xs-6">
-                            <label>Numero Nacional:</label>
+                            <label>Nombre Bien:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <input type="text" disabled="disabled" style="width: 70%" id="numero" name="numero" class="form-control input-sm"  value="" maxlength="22" />
                         </div>                        
                     </div>
                     <br/>
                     <div class="row form-inline">
                         <div class="form-group col-xs-6">
-                            <label>Estatus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label>Estatus:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <select style="width: 70%"  id="incorporado"  name="incorporado"  class="form-control select2 input-sm">
                                 <option value="2">Seleccione</option>
                                 <option value="1">Incorporar</option>

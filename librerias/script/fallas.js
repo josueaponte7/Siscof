@@ -99,7 +99,7 @@ $(document).ready(function () {
             $.post(url, {id: id, 'accion': accion}, function (respuesta) {
                 var option = "";
                 $.each(respuesta, function(i, obj) {
-                    option += "<option value=" + obj.id + ">" + obj.nombre_bien + "</option>";
+                    option += "<option value=" + obj.id + ">" + obj.numero_bien + "</option>";
                 });
                 $bien_id.append(option);
             }, "json");

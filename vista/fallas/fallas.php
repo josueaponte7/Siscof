@@ -72,7 +72,7 @@ $img_del      = _img_dt . _img_dt_del;
                             <input type="text" disabled="disabled" style="width: 70%;color: #FF0000;font-weight: bold;background-color:#FFFFFF " value="<?php echo $usuario; ?>" class="form-control input-sm" id="usuario" name="usuario" value="" maxlength="22" />
                         </div> 
                         <div class="form-group col-xs-6">
-                            <label>Num Falla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label>Num Falla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <input type="text" disabled="disabled" style="width: 70%;color: #FF0000;font-weight: bold;background-color:#FFFFFF " class="form-control input-sm" id="num_falla" name="num_falla" value=""  />
                         </div> 
                     </div>
@@ -92,7 +92,7 @@ $img_del      = _img_dt . _img_dt_del;
                             </select>
                         </div> 
                         <div class="form-group col-xs-6">
-                            <label>Nombre del Bien:</label>
+                            <label>N&uacute;mero de Bien:</label>
                             <select style="width: 70%"  id="bien_id"  name="bien_id"  class="form-control select2 input-sm">
                                 <option value="0">Seleccione</option>
                             </select>
@@ -106,7 +106,7 @@ $img_del      = _img_dt . _img_dt_del;
                             <input type="text" disabled="disabled" style="width: 70%;background-color:#FFFFFF " class="form-control input-sm" id="usuariof" name="usuariof" value="" maxlength="22" />
                         </div> 
                         <div class="form-group col-xs-6">
-                            <label>Estatus Falla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <label>Estatus Falla:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <input type="text" disabled="disabled" style="width: 70%;color: #FF0000;font-weight: bold;background-color:#FFFFFF;color: #FF0000 " class="form-control input-sm" id="estatus" name="estatus" value="NO ASIGNADO"  />
                         </div> 
                     </div>

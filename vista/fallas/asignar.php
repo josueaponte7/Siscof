@@ -144,10 +144,11 @@ $img_acep = _img_dt . _img_dt_acep;
                         
                         <div class="row form-inline">
                             <div class="form-group col-xs-6">
-                                <label>Usuario:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                <label>N&uacute;mero de Falla:</label>
                                 <input type="text" disabled="disabled" style="width: 70%;background-color:#FFFFFF;color:#FF0000 " class="form-control input-sm" id="num_falla" name="num_falla" value="" maxlength="22" />
                             </div> 
                             <div class="form-group col-xs-6">
+                                <label>T&eacute;nico a Asignar:</label>
                                 <select style="width: 70%"  id="usuariof_id"  name="usuariof_id"  class="form-control select2 input-sm">
                                     <option value="0">Seleccione</option>
                                     <?php

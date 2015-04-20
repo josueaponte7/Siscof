@@ -31,7 +31,7 @@ $(document).ready(function() {
             $.post(url, {'id': valor, 'accion': 'buscar_bien'}, function (data) {
                 $('#codigo').val(data.codigo);
                 $('#serial').val(data.serial);
-                $('#numero').val(data.numero);
+                $('#numero').val(data.nombre);
                 $("#incorporado").select2("enable", true).select2("val", data.incorporado);
                 if (data.incorporado == '2') {
                     $("#incorporado").select2("enable", false).select2("val", 1);

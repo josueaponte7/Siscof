@@ -27,6 +27,14 @@ $(document).ready(function () {
     var $descripcion_bien = $frmregistrar.find('textarea#descripcion_bien');
     var $btn_guardar = $frmregistrar.find('button#guardar');
     var $id = $frmregistrar.find('#id');
+    
+    var numero       = '0123456789';
+    var letra        = ' abcdefghijklmnñopqrstuvwxyzáéíóúü';
+    var alphanumeric = letra+numero+'/-';
+    $numero_bien.validar(numero);
+    $nombre_bien.validar(letra);
+    $serial_bien.validar(alphanumeric);
+    $descripcion_bien.validar(letra+numero);
 
     $('table#tabla_registrar').on('mouseenter', 'img.modificar', function () {
         $(this).tooltip('show');

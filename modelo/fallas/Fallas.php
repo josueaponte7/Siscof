@@ -25,9 +25,9 @@ class Fallas extends Seguridad
     
     public function accion($datos)
     {
+        
         session_start();
         $this->id_usuario    = $_SESSION['id_usuario'];
-        $this->cod_submodulo = $_SESSION['cod_modulo'];
         $this->_accion = $datos['accion'];
         $this->_accion = $datos['accion'];
         $this->_datos  = $datos;
@@ -48,22 +48,17 @@ class Fallas extends Seguridad
                 $data['accion']        = $datos['accion'];
                 $this->_datos          = $data;
                 $response_data         = $this->add();
-                break;
+            break;
             case 'bien':
                 
                 $data['tabla'] = "bien AS b, usuario_f AS uf";
-                $data['campos'] = "b.id,CONCAT(b.codigo_bien,' (',b.nombre_bien,')') AS nombre_bien";
+                $data['campos'] = "b.id,numero_bien,CONCAT(b.codigo_bien,' (',b.nombre_bien,')') AS nombre_bien";
                 $data['condicion'] = 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id'];
-                
-                /*$data      = array(
-                    'tabla'     => 'bien AS b, usuario_f AS uf',
-                    'campos'    => "b.id,CONCAT(b.codigo_bien,' ',b.nombre_bien) AS nombre_bien",
-                    'condicion' => 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id']
-                );*/
+
                 $result = $this->select($data, 'ASSOC');
                 $resultado = array();
                 for ($i = 0; $i < count($result); $i++) {
-                    $response_data[] = array('id'=>$result[$i]['id'],'nombre_bien'=>$result[$i]['nombre_bien']);
+                    $response_data[] = array('id'=>$result[$i]['id'],'numero_bien'=>$result[$i]['numero_bien'],'nombre_bien'=>$result[$i]['nombre_bien']);
                 }
 
             break;
@@ -79,42 +74,42 @@ class Fallas extends Seguridad
                 $response_data['nombres']   = $result[0]['nombres'];
                 $response_data['num_falla'] = $result[0]['num_falla'];
             break;
+            case 'procesar':
+                $this->_table = 'fallas';
+                $num_falla = $datos['num_falla'];
+                $id = $this->get($this->_table, 'id', 'num_falla='.$num_falla);
+                
+                $dato['id']         = $id;
+                $dato['id_estatus'] = 3;
+                $dato['accion']     = 'update';
+                $this->_datos       = $dato;
+                $response_data      = $this->mod();
+            break;
+            case 'cerrar':
+                
+                $this->_table        = 'fallas_resuelta';
+                $this->autoIncrement($this->_table);
+                
+                $dato['id']          = $this->auto_increment;
+                $dato['num_falla']   = $datos['num_falla'];
+                $dato['descripcion'] = $datos['descripcion'];
+                $dato['usuario_id']  = $datos['usuario_id'];
+                $dato['fecha']       = date("Y-m-d");
+                $dato['accion']      = 'save';
+                $this->_datos        = $dato;
+                $this->add();
+                /*$this->_table = 'fallas';
+                $num_falla = $datos['num_falla'];
+                $id = $this->get($this->_table, 'id', 'num_falla='.$num_falla);
+                
+                $dato['id']         = $id;
+                $dato['id_estatus'] = 3;
+                $dato['accion']     = 'update';
+                $this->_datos       = $dato;
+                $response_data      = $this->mod();*/
+            break;
         }
         return $response_data;
-    }
-    
-    public function addFallas($datos)
-    {
-        
-        try {
-            $problema            = $datos['problema'];
-            $nombre_departamento = $datos['id_departamento'];
-            
-            $exi_ced = $this->recordExists("fallas", "problema='" . $problema . "' AND id_departamento = $nombre_departamento");
-            if ($exi_ced === TRUE) {
-                 $this->_cod_msg   = 15;
-                $this->_mensaje   = '<span style="color:#FF0000">La C&oacute;digo se registrado en el sistema</span>';
-            } else {
-
-                $this->autoIncrement('fallas', 'id_falla');
-                $ultimo = $this->auto_increment;
-                
-                $datos['id_falla']   = $ultimo; 
-                $datos['id_estatus'] = 1; 
-                $datos['fecha']      = date('Y-m-d'); 
-                $insert = $this->insert('fallas', $datos);
-                if ($insert === TRUE) {
-                    $this->_cod_msg = 21;
-                    $this->_mensaje = "El Registro ha sido Guardado Exitosamente";
-                } else {
-                    $this->_cod_msg = 16;
-                    $this->_mensaje = '<span style="color:#FF0000">Ocurrio un error comuniquese con informatica</span>';
-                }
-            }
-            throw new Exception($this->_mensaje, $this->_cod_msg);
-        } catch (Exception $e) {
-            return array('error_codmensaje' => $e->getCode(), 'error_mensaje' => $e->getMessage());
-        }
     }
     public function getFallas($datos=array())
     {
@@ -127,6 +122,14 @@ class Fallas extends Seguridad
                     );
         $dat = array_merge($data,$datos);
         $result = $this->select($dat, FALSE);
+        return $result;
+    }
+    public function getEstatusFallas($datos=array())
+    {
+        $data['tabla']  = "estatus_fallas";
+        $data['campos'] = "id,estatus";
+        $dat = array_merge($data,$datos);
+        $result = $this->select($dat, 'ASSOC');
         return $result;
     }
 

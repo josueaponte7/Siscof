@@ -420,8 +420,8 @@ class Conexion
                 $this->auto_increment = (int) $row[0] + 1;*/
                 
                 //$this->_sql = "INSERT INTO $table ($this->_id,$campos)VALUES($this->auto_increment,$valores);";
-                $this->_sql = "INSERT INTO $table ($campos)VALUES($valores);";
-                $this->_state_query = $this->_conn->query($this->_sql);
+                echo $this->_sql = "INSERT INTO $table ($campos)VALUES($valores);";
+                exit;$this->_state_query = $this->_conn->query($this->_sql);
                 
                 $resul       = $this->_conn->errno;
                 //$resul_error = $this->_conn->error;

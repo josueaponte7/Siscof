@@ -49,6 +49,7 @@ class Items extends Seguridad
                 $resultado['codigo']      = $result[0]['codigo_bien'];
                 $resultado['serial']      = $result[0]['serial_bien'];
                 $resultado['numero']      = $result[0]['numero_bien'];
+                $resultado['nombre']      = $result[0]['nombre_bien'];
                 $resultado['incorporado'] = $result[0]['incorporado'];
 
                 break;

@@ -49,7 +49,7 @@ $img_del  = _img_dt . _img_dt_del;
                         </div>
                         <div class="form-group col-xs-6">
                             <label>Nombre del Bien:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <input type="text" style="width: 65%;" id="nombre_bien" name="nombre_bien" maxlength="50" class="form-control input-sm"/> 
+                            <input type="text" style="width: 65%;" id="nombre_bien" name="nombre_bien" maxlength="45" class="form-control input-sm"/> 
                         </div>                        
                     </div>
                     <br/>
@@ -58,11 +58,11 @@ $img_del  = _img_dt . _img_dt_del;
                     <div class="form-inline">
                         <div class="form-group col-xs-6">
                             <label>N&deg; de Serial:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                            <input type="text" style="width: 65%;" id="serial_bien" name="serial_bien" maxlength="50" class="form-control input-sm" >                           
+                            <input type="text" style="width: 65%;" id="serial_bien" name="serial_bien" maxlength="20" class="form-control input-sm" >                           
                         </div>
                         <div class="form-group col-xs-6">
                             <label>N&deg; de Bien Nacional:</label>
-                            <input type="text" style="width: 65%;" id="numero_bien" name="numero_bien" class="form-control input-sm" /> 
+                            <input type="text" style="width: 65%;" id="numero_bien" name="numero_bien" class="form-control input-sm" maxlength="10" /> 
                         </div>                        
                     </div>
                     <br/>

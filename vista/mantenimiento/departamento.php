@@ -76,7 +76,7 @@ $img_del = _img_dt . _img_dt_del;
                         </div>
                         <div class="form-group col-xs-8">
                             <label>Nombre Departamento:</label>
-                            <input type="text"  style="width: 74%;" class="form-control input-sm" id="nombre_departamento" name="nombre_departamento" value="" maxlength="22" />
+                            <input type="text"  style="width: 74%;" class="form-control input-sm" id="nombre_departamento" name="nombre_departamento" value="" maxlength="100" />
                         </div>                        
                     </div>
                     <br/>

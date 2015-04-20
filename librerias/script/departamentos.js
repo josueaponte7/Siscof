@@ -40,7 +40,7 @@ $(document).ready(function () {
     var $id                     = $frmdepartamento.find('#id');
 
     $codigo_departamento.codigo({otable:TDepartamento}); 
-
+    
     
     var options = {
         'maxCharacterSize': 90,
@@ -50,14 +50,12 @@ $(document).ready(function () {
         'displayFormat': '#input/#max'
     };
     
+    var letra = ' abcdefghijklmnñopqrstuvwxyzáéíóúü';
+    
     $direccion_departamento.textareaCount(options);
-
-    var vali_cod = '1234567890';
-    var val_letra = ' abcdefghijklmnopqrstuvwxyzáéíóúñ' + vali_cod;
-
-    $codigo_departamento.validar(vali_cod);
-    $nombre_departamento.validar(val_letra);
-    $direccion_departamento.validar(val_letra);
+    $nombre_departamento.validar(letra);
+    
+    
     var url = '../../controlador/mantenimiento/departamento.php';
     $btn_guardar.click(function () {
 
