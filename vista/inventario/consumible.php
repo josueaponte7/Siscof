@@ -10,7 +10,7 @@ require_once '../../modelo/inventario/Consumible.php';
 $objmod = new Consumible();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 
 $img_mod = _img_dt . _img_dt_mod;

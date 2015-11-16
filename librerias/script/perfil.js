@@ -1,6 +1,16 @@
+$.fn.extend({
+    pirmer_mayuscula: function (options) {
+        this.each(function () {
+            $(this).val($(this).val().charAt(0).toUpperCase() + $(this).val().slice(1))
+        });
+        return this;
+    }
+});
+
+
 $(document).ready(function() {
 
-    var TPefil = $('#tabla_perfil.dataTable').dataTable({
+    var TPerfil = $('#tabla_perfil').dataTable({
         "iDisplayLength": 5,
         "iDisplayStart": 0,
         "sPaginationType": "full_numbers",
@@ -14,7 +24,6 @@ $(document).ready(function() {
     });
 
     var $frmperfil    = $('#frmperfil');
-    var $div_perfil   = $frmperfil.find('div#div_perfil');
     var $perfil       = $frmperfil.find($('input:text#perfil'));
     var $btnaccion    = $frmperfil.find($('input:button#btnaccion'));
     var $btnlimpiar   = $frmperfil.find($('input:button#btnlimpiar'));
@@ -36,64 +45,58 @@ $(document).ready(function() {
     // Aciones Agregar/Modificar
     $btnaccion.on('click', function() {
 
-        $('#accion').remove();
-        $('#codigo_perfil').remove();
         if ($perfil.val() === null || $perfil.val().length === 0 || /^\s+$/.test($perfil.val())) {
-            $div_perfil.addClass('has-error');
+            $perfil.parent('div').addClass('has-error');
             $perfil.focus();
         } else {
-            var accion = $(this).val();
-            var $accion = '<input type="hidden" id="accion"  value="' + accion + '" name="accion">';
-            $($accion).appendTo($frmperfil);
             if ($(this).val() === 'Guardar') {
 
                 var accion = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
                 accion += '&nbsp;&nbsp;<img class="eliminar"  title="Eliminar"  style="cursor: pointer" src="../../imagenes/datatable/eliminar.png"  width="18" height="18" alt="Eliminar" />';
                 
-                var codigo = 1;
-                var TotalRow = TPefil.fnGetData().length;
+                var id = 1;
+                var TotalRow = TPerfil.fnGetData().length;
                 if(TotalRow > 0){
-                    var lastRow   = TPefil.fnGetData(TotalRow-1);
-                    var codigo    = parseInt(lastRow[0])+1;
+                    var nNodes = TPerfil.fnGetNodes();
+                    var ultimo_id = nNodes[TotalRow - 1]['id'];
+                    id = parseInt(ultimo_id) + 1;
                 }
-                var $codigo_perfil = '<input type="hidden" id="codigo_perfil"  value="' + codigo + '" name="codigo_perfil">';
-                $($codigo_perfil).prependTo($frmperfil);
-                
-                $.post(urlperfil, $frmperfil.serialize(), function(respuesta) {
-                    var cod_msg = parseInt(respuesta.error_codmensaje);
-                    var mensaje = respuesta.error_mensaje;
-                    if (cod_msg === 15) {
-                        window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
-                            $div_perfil.addClass('has-error');
-                            $perfil.focus();
+                $perfil.val($perfil.val().charAt(0).toUpperCase() + $perfil.val().slice(1));
+                var data_send     = $frmperfil.serialize() + '&' + $.param({id:id,accion: 'save'});
+                $.post(urlperfil, data_send, function(response) {
+                    var mensaje = response.msg;
+                    if (response.existe === 'ok') {
+                        window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function () {
+                            $perfil.parent('div').addClass('has-error');
+                            $perfil.focus().select();
                         });
+                    } else if (response.success === 'exitoso') {
 
-                    } else if (cod_msg === 21) {
-                        window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
-                            var codigo = $("#tabla_perfil tr:last").find('td:eq(0)').text();
-                            codigo = parseInt(codigo) + 1;
-                            TPefil.fnAddData([codigo, MaysPrimera($perfil.val()), accion]);
-                            $('input[type="text"]').val('');
+                        window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'}, function () {
+                            var nuevaFila = TPerfil.fnAddData([response.id, $perfil.val(), accion]);
+                            var oSettings = TPerfil.fnSettings();
+                            var nTr = oSettings.aoData[ nuevaFila[0] ].nTr;
+                            nTr.setAttribute('id', response.id);
+                            $perfil.val('')
                         });
-
                     }
                 }, 'json');
 
             } else {
-                window.parent.apprise('<div style="margin:auto">&iquest;Desea Modificar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
+                window.parent.apprise('<div class="msj-danger">&iquest;Desea Modificar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
                     if (r) {
-                        $.post(urlperfil, $frmperfil.serialize(), function(respuesta) {
-                            var cod_msg = parseInt(respuesta.error_codmensaje);
-                            var mensaje = respuesta.error_mensaje;
-                            window.parent.apprise(mensaje, {'textOk': 'Aceptar'});
-                            if (cod_msg === 22) {
-
-                                var fila = $("#fila").val();
-
-                                var tr_fila = $("#tabla_perfil tbody").children('tr').eq(fila).children('td');
-                                tr_fila.eq(1).html($perfil.val());
-                                $('input[type="text"]').val('');
-                                $btnaccion.val('Guardar');
+                        var id = $('#id').val();
+                        $perfil.val($perfil.val().charAt(0).toUpperCase() + $perfil.val().slice(1));
+                        var data_send = $frmperfil.serialize() + '&' + $.param({id: id, accion: 'update'});
+                        $.post(urlperfil, data_send, function (respuesta) {
+                            if (respuesta.success === 'exitoso') {
+                                window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
+                                    var fila = $('#fila').val();
+                                    TPerfil.fnUpdate($perfil.val(), parseInt(fila), 1);
+                                    $perfil.val('')
+                                    $('#fila,#id').remove();
+                                });
+                                $('#id').remove();
                             }
                         }, 'json');
                     }
@@ -107,19 +110,23 @@ $(document).ready(function() {
     // Click en la imagen modificar
     $tabla_perfil.on('click', 'img.modificar', function() {
         $('span.error_val').fadeOut();
-        $('#accion').remove();
-        $('#codigo_perfil').remove();
-        var $padre        = $(this).parents('tr');
-        var fila          = $padre.index();
-        var codigo_perfil = $padre.children('td:eq(0)').text();
-        var perfil        = $padre.children('td:eq(1)').text();
+        $('#fila,#id').remove();
 
-        var $codigo_perfil = ' <input type="hidden" id="codigo_perfil" name="codigo_perfil" value="' + codigo_perfil + '" />';
-        var $fila = '<input type="hidden" id="fila"  value="' + fila + '" name="fila">';
+        var padre = this.parentNode.parentNode
+        var aPos   = TPerfil.fnGetPosition(padre);
+        
+        var nNodes = TPerfil.fnGetNodes();
+        var oData  = TPerfil.fnGetData(aPos);
+        var id     = nNodes[aPos]['id'];
+
+        
+        var $fila = '<input id="fila" type="hidden" value="'+aPos+'" name="fila">';
+            var $id = '<input id="id" type="hidden" value="' + id + '" name="id">';
+            $('#tabla_perfil').append($fila);
+            $('#tabla_perfil').append($id);
 
         $($fila).prependTo($btnaccion);
-        $($codigo_perfil).prependTo($frmperfil);
-        $perfil.val(perfil);
+        $perfil.val(oData[1]);
         $btnaccion.val('Modificar');
     });
     // Fin
@@ -128,19 +135,20 @@ $(document).ready(function() {
     $tabla_perfil.on('click', 'img.eliminar', function() {
         $('input[type="text"]').val('');
         $btnaccion.val('Guardar');
-        var padre = $(this).closest('tr');
-        var codigo_perfil = padre.children('td:eq(0)').html();
-        var nRow = padre[0];
-        window.parent.apprise('&iquest;Desea Eliminar el Registro?', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
+        var padre = this.parentNode.parentNode
+        window.parent.apprise('<span style="color:#FF0000;font-weight:bold;text-align: center;display:block">&iquest;Desea Eliminar el registro?</span>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function (r) {
             if (r) {
-                $.post(urlperfil, {codigo_perfil: codigo_perfil, accion: 'Eliminar'}, function(data) {
-
-                    var cod_msg = parseInt(data.error_codmensaje);
-                    var mensaje = data.error_mensaje;
-
-                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'});
-                    if (cod_msg === 23) {
-                        TPefil.fnDeleteRow(nRow);
+                
+                
+                var aPos   = TPerfil.fnGetPosition(padre);
+                var nNodes = TPerfil.fnGetNodes();
+                var id     = nNodes[aPos]['id'];
+                
+                $.post(urlperfil, {id: id, accion: 'delete'}, function (response) {
+                    if (response.success === 'exitoso') {
+                        window.parent.apprise('<span style="color:#059102;font-weight:bold">' + response.msg + '</span>', {'textOk': 'Aceptar'}, function () {
+                            TPerfil.fnDeleteRow(aPos);
+                        });
                     }
                 }, 'json');
             } else {
@@ -152,16 +160,18 @@ $(document).ready(function() {
     // Click en la imagen las primeras columnas
     $tabla_perfil.find('tr').on('click', 'td:lt(2)', function() {
 
-        $('#cod').remove();
-        $('#hperfil').remove();
-        var fila        = $(this).index();
-        var padre       = $(this).closest('tr');
-        var cod_perfil  = padre.children('td:eq(0)').text();
-        var perfil      = padre.children('td:eq(1)').text();
-        var $cod_perfil = ' <input type="hidden" id="cod_perfil" name="cod_perfil" value="' + cod_perfil + '" />';
-        $($cod_perfil).prependTo($frmperfil);
+        $('#id').remove();
+        var padre = this.parentNode
+        var aPos   = TPerfil.fnGetPosition(padre);
+        var oData  = TPerfil.fnGetData(aPos);
+        var nNodes = TPerfil.fnGetNodes();
+        var id     = nNodes[aPos]['id'];
 
-        $btnlistar.removeAttr("disabled");
+        var perfil      = oData[1];
+        var $id = ' <input type="hidden" id="id" name="id" value="' + id + '" />';
+        $($id).prependTo($btnaccion);
+
+        $btnlistar.css("display",'inline');
         $perfil.attr('disabled', 'disabled').val(perfil);
         $btnaccion.attr('disabled', 'disabled').val('Guardar');
         $btnlimpiar.val('Restablecer');
@@ -172,10 +182,10 @@ $(document).ready(function() {
         var mod_dis = '../../imagenes/datatable/modificar_disabled.png';
         var eli_dis = '../../imagenes/datatable/eliminar_disabled.png';
 
-        $('table#tabla_perfil tbody tr td img.modificar_disabled').attr({'src': mod, 'title': 'Modificar'}).css({'cursor': 'pointer'}).addClass('modificar');
-        $('table#tabla_perfil tbody tr td img.eliminar_disabled').attr({'src': eli, 'title': 'Eliminar'}).css({'cursor': 'pointer'}).addClass('eliminar');
-        padre.children('td:eq(2)').find('img.modificar').attr({'src':mod_dis}).removeAttr('class style title').addClass('modificar_disabled');
-        padre.children('td:eq(2)').find('img.eliminar').attr({'src':eli_dis}).removeAttr('class style title').addClass('eliminar_disabled');
+//        $('table#tabla_perfil tbody tr td img.modificar_disabled').attr({'src': mod, 'title': 'Modificar'}).css({'cursor': 'pointer'}).addClass('modificar');
+//        $('table#tabla_perfil tbody tr td img.eliminar_disabled').attr({'src': eli, 'title': 'Eliminar'}).css({'cursor': 'pointer'}).addClass('eliminar');
+//        padre.children('td:eq(2)').find('img.modificar').attr({'src':mod_dis}).removeAttr('class style title').addClass('modificar_disabled');
+//        padre.children('td:eq(2)').find('img.eliminar').attr({'src':eli_dis}).removeAttr('class style title').addClass('eliminar_disabled');
 
     });
 
@@ -210,7 +220,7 @@ $(document).ready(function() {
     $modulo.select2();
     $sub_modulo.select2();
 
-    var TPrivilegios = $('table#tabla_privilegios.dataTable').dataTable({
+    var TPrivilegios = $('table#tabla_privilegios').dataTable({
         "iDisplayLength": 5,
         "iDisplayStart": 0,
         "sPaginationType": "full_numbers",
@@ -230,72 +240,58 @@ $(document).ready(function() {
 
 
     $btnlistar.on('click', function() {
+        var id = $('#id').val();
+        
         $('div#divperfil').slideUp(3000);
         $('div#privilegios').slideDown(3000).css('display', 'block');
         $('table#tabla_privilegios.dataTable tr th:eq(0)').css('width','30% !important');
         $('table#tabla_privilegios.dataTable tr th:eq(1)').css('width','70% !important');
-        var cod_perfil = $('#cod_perfil').val();
+        
 
         $nom_perfil.text($perfil.val());
         
         var nodos = TPrivilegios.fnGetNodes();
-        $("div.btn-group > label", nodos).removeClass('btn-success active');
-        $("div.btn-group > label", nodos).addClass('btn-primary');
-        $('div.btn-group > label > span', nodos).text('NO');
-        $("div.btn-group > label:not([id^='lbl_ac'])", nodos).addClass('btn-primary disabled');
-        $("div.btn-group > label > input:checkbox",nodos).prop('checked', false);
+        
+        $("#tabla_privilegios input:checkbox",nodos).prop('disabled', true);
+        
+        $("#tabla_privilegios input:checkbox",nodos).prop('checked', false);
 
-        $.post(urlperfil, {cod_perfil: cod_perfil, accion: 'BuscarPrivilegios'}, function(respuesta) {
-            var datos = respuesta.split(",");
-            
+        $.post(urlperfil, {id: id, accion: 'BuscarPrivilegios'}, function(response) {
+             $.each(response, function (i, item) {
+                var id = parseInt(item.submodulo_id);
+                $('#ac_' + id, nodos).prop('disabled', false);
+                $('#ac_' + id, nodos).prop("checked", true);
+                
+                
+                $('#add_' + id, nodos).prop('disabled', 0);
+                $('#up_' + id, nodos).prop('disabled', 0);
+                $('#del_' + id, nodos).prop('disabled', 0);
+                $('#con_' + id, nodos).prop('disabled', 0);
+                $('#imp_' + id, nodos).prop('disabled', 0);
 
-            for (var i= 0;i < datos.length;i++){ 
-                var activos = datos[i].split(';');
+                $('#add_' + id, nodos).prop("checked", 0);
+                $('#up_' + id, nodos).prop('checked', 0);
+                $('#del_' + id, nodos).prop('checked', 0);
+                $('#con_' + id, nodos).prop('checked', 0);
+                $('#imp_' + id, nodos).prop('checked', 0);
                 
-                var class_acdi = 'active';
-                if(cod_perfil == 1 && activos[0] <= 5 ){
-                    class_acdi = 'disabled';
-                }else if(cod_perfil > 1){
-                    $('#lbl_ac_1,#lbl_ac_2,#lbl_ac_3,#lbl_ac_4,#lbl_ac_5', nodos).addClass('disabled');
+                if(item.agregar == 1){
+                    $('#add_'+id,nodos).prop( "checked", item.agregar);
                 }
-                
-                $('label#lbl_ac_' + activos[0], nodos).addClass('btn-success ' + class_acdi);
-                $('span#sp_ac_' + activos[0], nodos).text('SI');
-                $('label#lbl_add_' + activos[0], nodos).removeClass('disabled');
-                $('label#lbl_up_' + activos[0], nodos).removeClass('disabled');
-                $('label#lbl_del_' + activos[0], nodos).removeClass('disabled');
-                $('label#lbl_cons_' + activos[0], nodos).removeClass('disabled');
-                $('label#lbl_imp_' + activos[0], nodos).removeClass('disabled');
-                $("input:checkbox#ac_" + activos[0],nodos).prop('checked', true);
-                       
-                
-                if(activos[1]==1){
-                    $('label#lbl_add_' + activos[0], nodos).removeClass('btn-primary').addClass('btn-success '+ class_acdi);
-                    $('span#sp_add_' + activos[0], nodos).text('SI');
-                    $("input:checkbox#add_"+ activos[0],nodos).prop('checked', true);
+                if(item.modificar == 1){
+                    $('#up_'+id,nodos).prop( "checked", item.modificar);
                 }
-                if(activos[2] == 1){
-                    $('label#lbl_up_' + activos[0], nodos).removeClass('btn-primary').addClass('btn-success '+ class_acdi);
-                    $('span#sp_up_' + activos[0], nodos).text('SI');
-                    $("input:checkbox#up_"+ activos[0],nodos).prop('checked', true);
+                if(item.eliminar == 1){
+                    $('#del_'+id,nodos).prop( "checked", item.eliminar);
                 }
-                if(activos[3] == 1){
-                    $('label#lbl_del_' + activos[0], nodos).removeClass('btn-primary').addClass('btn-success '+ class_acdi);
-                    $('span#sp_del_' + activos[0], nodos).text('SI');
-                    $("input:checkbox#del_"+ activos[0],nodos).prop('checked', true);
+                if(item.consultar == 1){
+                    $('#con_'+id,nodos).prop( "checked", item.consultar);
                 }
-                if(activos[4] == 1){
-                    $('label#lbl_cons_' + activos[0], nodos).removeClass('btn-primary').addClass('btn-success '+ class_acdi);
-                    $('span#sp_con_' + activos[0], nodos).text('SI');
-                    $("input:checkbox#con_"+ activos[0],nodos).prop('checked', true);
+                if(item.imprimir == 1){
+                    $('#imp_'+id,nodos).prop( "checked", item.imprimir);
                 }
-                if(activos[5] == 1){
-                    $('label#lbl_imp_' + activos[0], nodos).removeClass('btn-primary').addClass('btn-success '+ class_acdi);
-                    $('span#sp_imp_' + activos[0], nodos).text('SI');
-                    $("input:checkbox#imp_"+ activos[0],nodos).prop('checked', true);
-                }
-            }
-        });
+             });
+        },'json');
     });
 
 
@@ -325,30 +321,20 @@ $(document).ready(function() {
 
     $('input:checkbox').change(function() {
         
-        var padre1 = $(this).closest('tr');
-        var index = $(this).closest('td').index();
-        var padre = $(this).closest('label');
-        var $span = $(this).next('span');
+        var padre = $(this).closest('tr');
         var clase = $(this).attr('class');
         var nodos = TPrivilegios.fnGetNodes();
-        var padr = padre1.find("td:gt(2)",nodos);
+        var padr = padre.find("td:gt(2)",nodos);
+         
         if ($(this).is(':checked') == true) {
             if (clase == 'activar') {
-                padr.find('label').removeClass('disabled active');
+                padr.find('input:checkbox').prop('disabled',false);
             }
-            padre.removeClass('btn-primary');
-            padre.addClass('btn-success');
-            $span.html('SI');
         } else {
             if (clase == 'activar') {
-                padr.find('label').removeClass('btn-success active');
-                padr.find('label').addClass('btn-primary disabled');
-                padr.find('span').text('NO');
-                padr.find("input:checkbox").prop('checked', false);
+                padr.find('input:checkbox').prop('disabled',true);
+                padr.find('input:checkbox').prop('checked',false);
             }
-            padre.removeClass('btn-success');
-            padre.addClass('btn-primary');
-            $span.text('NO');
         }
     });
 

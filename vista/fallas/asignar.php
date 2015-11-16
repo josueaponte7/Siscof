@@ -11,7 +11,7 @@ $objmod  = new AsignarFalla();
 $objuser = new UsuarioF();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 $usuario    = $_SESSION['usuario'];
 $id_usuario = $_SESSION['id_usuario'];

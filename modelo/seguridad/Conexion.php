@@ -143,7 +143,6 @@ class Conexion
 
     public function ex_query($sql)
     {
-
         $resultado          = FALSE;
         $this->_open_conn();
         $this->_state_query = $this->_conn->query($sql);
@@ -380,7 +379,9 @@ class Conexion
             $sql                = "SELECT 1 FROM $table WHERE $where";
             $this->_open_conn();
             $this->_state_query = $this->_conn->query($sql);
+            $this->_state_query->num_rows;
             if ($this->_state_conn && $this->_state_query && $this->_state_query->num_rows > 0) {
+                
                 $this->_state_query->free();
                 $resultado = TRUE;
             }
@@ -420,8 +421,8 @@ class Conexion
                 $this->auto_increment = (int) $row[0] + 1;*/
                 
                 //$this->_sql = "INSERT INTO $table ($this->_id,$campos)VALUES($this->auto_increment,$valores);";
-                echo $this->_sql = "INSERT INTO $table ($campos)VALUES($valores);";
-                exit;$this->_state_query = $this->_conn->query($this->_sql);
+                $this->_sql = "INSERT INTO $table ($campos)VALUES($valores);";
+                $this->_state_query = $this->_conn->query($this->_sql);
                 
                 $resul       = $this->_conn->errno;
                 //$resul_error = $this->_conn->error;

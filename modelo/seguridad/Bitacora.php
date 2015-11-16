@@ -42,15 +42,15 @@ class Bitacora extends Conexion
             $registro = array('actividad'=>$this->actividad,'submodulo_id'=>$this->cod_submodulo,'accion'=>$sentencia,'col_afec'=>$this->_rows_affected);
             $regis = json_encode($registro);
             $data = array(
-                            'usuario_id'=>$this->id_usuario,
-                            'actividad'=>  $this->actividad,
-                            'submodulo_id'=>$this->cod_submodulo,
-                            'sql_query'=>$this->_sql,
-                            'accion'=>$sentencia,
-                            'columnas_afectadas'=>$this->_rows_affected,
-                            'fecha_hora'=>$fecha,
-                            'registros'=>$regis
-                         );
+                'usuario_id' => $this->id_usuario,
+                'actividad' => $this->actividad,
+                'submodulo_id' => $this->cod_submodulo,
+                'sql_query' => $this->_sql,
+                'accion' => $sentencia,
+                'columnas_afectadas' => $this->_rows_affected,
+                'fecha_hora' => $fecha,
+                'registros' => $regis
+            );
             
             $resultado   = parent::insert('b_sistema', $data);
             if ($resultado['success']  == 'ok') {
@@ -63,11 +63,11 @@ class Bitacora extends Conexion
     protected function bitacoraUsuario()
     {
         $this->id_usuario = $_SESSION['id_usuario'];
-        $search    = array("AGREGAR", "MODIFICAR", "ELIMINAR");
+        $search = array("AGREGAR", "MODIFICAR", "ELIMINAR");
         $remplazar = array("REGISTR&Oacute;", "MODIFIC&Oacute;", "ELIMIN&Oacute;");
         $this->actividad = str_replace($search, $remplazar, $this->actividad);
-        $data_usuario = array('usuario_id'=>$this->id_usuario,'prefijo'=>$this->prefijo,'actividad'=>  $this->actividad,'fecha' => date("Y-m-d H:i:s"),'submodulo_id'=>  $this->cod_submodulo);
-        $resultado   = parent::insert('b_usuario', $data_usuario);
+        $data_usuario = array('usuario_id' => $this->id_usuario, 'prefijo' => $this->prefijo, 'actividad' => $this->actividad, 'fecha' => date("Y-m-d H:i:s"), 'submodulo_id' => $this->cod_submodulo);
+        $resultado = parent::insert('b_usuario', $data_usuario);
         return $resultado;
         
     }

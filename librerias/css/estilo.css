@@ -1,9 +1,9 @@
 body{
     font-size: 13px !important; 
 }
-input[type='text']:not(.select2-input),textarea{
+/*input[type='text']:not(.select2-input),textarea{
     text-transform: uppercase;
-}
+}*/
 textarea{
     resize:none;
 }
@@ -27,4 +27,11 @@ td.details-control {
 td.details-control-close {
     background: url('../../imagenes/datatable/close.png') no-repeat center center !important;
     cursor: pointer;
+}
+
+.tooltip-inner {text-align: left;max-width: 650px !important;}
+.tooltip-inner span.requerido{text-transform: uppercase;color: #FF0000 !important;}
+.tooltip-inner span.alerta{color: #E9FF00 !important;  }
+.mayusculas{
+    text-transform: uppercase;
 }

@@ -42,7 +42,6 @@ define("_js_text_counter", "jquery.textareaCounter.js");
 
 //archivos css
 define("_css_estilo", "estilo.css");
-define("_css_estilos", "estilos.css");
 define("_css_boostrap", "bootstrap.css");
 define("_css_boostrap_theme", "bootstrap-theme.css");
 define("_css_boostrap_datepicker", "bootstrap-datepicker.css");

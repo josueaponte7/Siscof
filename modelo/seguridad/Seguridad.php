@@ -65,8 +65,8 @@ class Seguridad extends Bitacora
     
     protected function add()
     {
-        $this->_accion = $this->_datos['accion'];
-        unset($this->_datos['accion']);
+        $this->_accion = 'save';
+
         $resultados  = parent::insert($this->_table, $this->_datos);
         if($resultados['success'] == 'ok'){
             $resultado = $this->mensajes($resultados);
@@ -78,9 +78,8 @@ class Seguridad extends Bitacora
     protected function mod()
     {
         
-        $this->_accion = $this->_datos['accion'];
+        $this->_accion = 'update';
         $this->where = 'id ='.$this->_datos['id'];
-        unset($this->_datos['accion']);
         unset($this->_datos['id']);
         $resultados  = parent::update($this->_table, $this->_datos,  $this->where);
 
@@ -93,10 +92,8 @@ class Seguridad extends Bitacora
     
     protected function del()
     {
-        $this->_accion = $this->_datos['accion'];
+        $this->_accion = 'delete';
         $this->where = 'id ='.$this->_datos['id'];
-        unset($this->_datos['accion']);
-        unset($this->_datos['id']);
         $resultados   = parent::delete($this->_table, $this->where);
         if ($resultados['delete'] == 'ok') {
             $resultado = $this->mensajes($resultados);
@@ -211,11 +208,13 @@ class Seguridad extends Bitacora
     public function url($url,$modulo)
     {
         date_default_timezone_set('America/Caracas');
-        $dividir_ruta         = explode("Siscof/", $url);
-        $ruta                 = $dividir_ruta[1];
+        $buscar               = '/';
+        $pos                  = stripos($url, $buscar, 1);
+        $ruta                 = substr($url, $pos + 1);
+        echo $ruta;
         $_SESSION['url']      = $ruta;
         $_SESSION['s_modulo'] = $modulo;
-        $_SESSION['start']      = strtotime(date("Y-m-d H:i"));
+        $_SESSION['start']    = strtotime(date("Y-m-d H:i"));
     }
     public function formateaBD($fecha) {
         $fechaesp = preg_split("/[\-\/]/", $fecha);
@@ -230,5 +229,6 @@ class Seguridad extends Bitacora
         $interval  = abs($datetime2 - $datetime1);
         $minutes   = round($interval / 3600);
         return $minutes;
-    }
+    }  
+
 }

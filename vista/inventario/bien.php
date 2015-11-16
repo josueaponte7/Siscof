@@ -13,7 +13,7 @@ $objdep = new Departamento();
 $objmod = new Items();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
     $_SESSION['cod_modulo'] = $_GET['modulo'];
 }
 
@@ -85,12 +85,12 @@ $img_del      = _img_dt . _img_dt_del;
                                 <option value="0">Seleccione</option>
                                 <?php
                                 $datos['tabla']     = 'bien';
-                                $datos['campos']    = 'id,nombre_bien';
+                                $datos['campos']    = 'id,nombre_bien,codigo_bien';
                                 $datos['condicion'] = 'incorporado=1 AND asignado>=0';
                                 $resultado_bien = $objmod->getItems($datos);
                                 for ($i = 0; $i < count($resultado_bien); $i++) {
                                     ?>
-                                    <option  value="<?php echo $resultado_bien[$i]['id'] ?>"><?php echo $resultado_bien[$i]['nombre_bien'] ?></option>
+                                    <option  value="<?php echo $resultado_bien[$i]['id'] ?>"><?php echo $resultado_bien[$i]['codigo_bien'] ?></option>
                                 <?php 
                                 }
                                 ?>

@@ -8,7 +8,7 @@ require_once '../../modelo/mantenimientos/Sector.php';
 $objmod = new Sector();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 $result_mun = $objmod->getMunicipio();
 $img_mod    = _img_dt . _img_dt_mod;

@@ -9,7 +9,7 @@ require_once '../../modelo/mantenimientos/Items.php';
 $objitems = new Items();
 if (isset($_GET['modulo'])) {
     $_SESSION['cod_modulo'] = $_GET['modulo'];
-    $objitems->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objitems->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 
 $img_mod      = _img_dt . _img_dt_mod;

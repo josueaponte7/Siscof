@@ -10,7 +10,7 @@ $objmod = new Equipos();
 $odjdep = new Departamento();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 $objmod->autoIncrement('equipos', 'id_equipos');
 $id_equipos = $objmod->auto_increment;

@@ -22,7 +22,7 @@ $img_del            = _img_dt . _img_dt_del;
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_boostrap_theme; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_dataTablesbootstrap; ?>"/>
@@ -30,13 +30,12 @@ $img_del            = _img_dt . _img_dt_del;
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_animate; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2; ?>"/>
         <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_select2_bootstrap; ?>"/>
-        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilos; ?>"/>
-        
+        <link rel="stylesheet" type="text/css" href="<?php echo _ruta_librerias_css . _css_estilo; ?>"/>
+
         <script src="<?php echo _ruta_librerias_js . _js_jquery; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_bootstrap; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_bootstrap_tooltip; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_select2; ?>" type="text/javascript"></script>
-        <script src="<?php echo _ruta_librerias_js . _js_select2_es; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_dataTable; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_dataTableboostrap; ?>" type="text/javascript"></script>
         <script src="<?php echo _ruta_librerias_js . _js_dataTableresponsive; ?>" type="text/javascript"></script>
@@ -55,246 +54,196 @@ $img_del            = _img_dt . _img_dt_del;
         </style>
     </head>
     <body>
+        <input type="hidden" id="id" name="id"/>
         <!-- Inicio Modulo -->
-        <div class="panel panel-default" id="divmodulo" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
+        <div class="panel panel-default" id="divmodulo" style="display: block; width : 90%;margin: auto;height: auto;position: relative; top:25px;">
             <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registro de Modulo</div>
             <div class="panel-body">
-                <table width="679" border="0" align="center">
-                    <tr>
-                        <td align="center">
-                            <form name="frmmodulo" id="frmmodulo" method="post" enctype="multipart/form-data">
-                                <table width="546" align="center">
-                                    <tr>
-                                        <td width="73" height="40">Modulo:</td>
-                                        <td width="405">
-                                            <div id="div_modulo" style="margin-top: 10px" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="modulo" name="modulo" value="" maxlength="20" />
-                                            </div>
+                <form name="frmmodulo" id="frmmodulo" method="post" enctype="multipart/form-data">
+                    
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label for="Modulo" class="col-sm-1 control-label">Modulo:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control " id="modulo" name="modulo" value="" maxlength="20" placeholder="Modulo"/>
+                            </div>
+                            <img  style="cursor: pointer;margin-top: 1%;margin-left: -1%" id="img_modulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="mod_posicion" class="col-sm-1 control-label">Posici&oacute;n</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control " id="mod_posicion" name="mod_posicion" value="" maxlength="2" placeholder="Posici&oacute;n"/>
+                            </div>
+                            <img style="cursor: pointer;margin-top: 1%;margin-left: -1%" id="img_posicion" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="mod_posicion" class="col-sm-1 control-label">Estatus</label>
+                            <div style="margin-left: 0.3%" class="btn-group col-sm-5" data-toggle="buttons" >
+                                <label id="l_mod_activo" class="btn btn-success active btn-sm">
+                                    <input  type="radio" name="mod_estatus" checked="checked" id="mod_activo" value="1">
+                                    Activo
+                                </label>
+                                <label id="l_mod_inactivo" class="btn btn-default btn-sm">
+                                    <input type="radio" name="mod_estatus" id="mod_inactivo" value="0">
+                                    Inactivo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6" style="text-align: center">
+                                <input class="btn btn-primary btn-sm" id="btnaccion" name="btnaccion" type="button" value="Guardar" />
+                                <input style="display: none" class="btn btn-danger btn-sm" id="btnlistar" name="btnlistar" type="button" value="Sub Modulos"/>
+                                <input class="btn btn-default btn-sm" id="btnlimpiar" name="btnlimpiar" type="button" value="Limpiar" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
 
-                                        </td>
-                                        <td width="52">
-                                            <img  style="cursor: pointer" id="img_modulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td height="40">Posici&oacute;n Men&uacute;:</td>
-                                        <td>
-                                            <div id="div_modposicion" class="form-group" style="margin-top: 10px">
-                                                <input type="text" class="form-control input-sm" id="mod_posicion" name="mod_posicion" value="" maxlength="20" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <img style="cursor: pointer" id="img_posicion" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td height="40" align="left">Estatus:</td>
-                                        <td>
-                                            <div class="btn-group" data-toggle="buttons" >
-                                                <label id="l_mod_activo" class="btn btn-success active btn-sm">
-                                                    <input  type="radio" name="mod_estatus" checked="checked" id="mod_activo" value="1">
-                                                    Activo
-                                                </label>
-                                                <label id="l_mod_inactivo" class="btn btn-default btn-sm">
-                                                    <input type="radio" name="mod_estatus" id="mod_inactivo" value="0">
-                                                    Inactivo
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td height="40" align="left">&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="3" align="center">
-                                            <div id="div_mensaje" class="" style="padding: 5px;display: none;width: 300px;height:30px;"></div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="3" align="center">
-                                            <div id="botones">
-                                                 <input type="hidden" name="accion" value="save" id="accion"/>
-                                                 <input type="hidden" name="id" value="" id="id"/>
-                                                 <input type="hidden" name="fila" value="" id="fila"/>
-                                                <input class="btn btn-primary btn-sm" id="btnaccion" name="btnaccion" type="button" value="Guardar" />
-                                                <input style="display: none" class="btn btn-danger btn-sm" id="btnlistar" name="btnlistar" type="button" value="Sub Modulos"/>
-                                                <input class="btn btn-default btn-sm" id="btnlimpiar" name="btnlimpiar" type="button" value="Limpiar" />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <!-- DataTable-->
-                        <td align="center">
-                            <table style="width:100%;" border="0" align="center" cellspacing="1" class="table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive" id="tabla_modulo" >
-                                <thead>
-                                    <tr>
-                                        <th width="58">Codigo</th>
-                                        <th width="64">Modulo</th>
-                                        <th width="64">Posici&oacute;n Men&uacute;</th>
-                                        <th width="64">Estatus</th>
-                                        <th width="81">Acción</th>
-                                    </tr>
-                                </thead>
+                <div style="width: 90%;margin: auto">
+                    <table style="width:100%;" border="0" align="center" cellspacing="1" class="tbl-modulos table table-bordered table-striped table-hover table-condensed dt-responsive table-responsive" id="tabla_modulo" >
+                        <thead>
+                            <tr>
+                                <th width="58">Codigo</th>
+                                <th width="64">Modulo</th>
+                                <th width="64">Posici&oacute;n Men&uacute;</th>
+                                <th width="64">Estatus</th>
+                                <th width="81">Acción</th>
+                            </tr>
+                        </thead>
 
-                                <tbody>
+                        <tbody>
 
-                                    <?php
-                                    for ($i = 0; $i < count($resul_mod); $i++) {
-                                        $estatus = 'Inactivo';
-                                        if ($resul_mod[$i]['activo'] == 1) {
-                                            $estatus = 'Activo';
+                            <?php
+                            for ($i = 0; $i < count($resul_mod); $i++) {
+                                $estatus = 'Inactivo';
+                                if ($resul_mod[$i]['activo'] == 1) {
+                                    $estatus = 'Activo';
+                                }
+                                ?>
+                                <tr id="<?php echo $resul_mod[$i]['id']; ?>">
+                                    <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $resul_mod[$i]['id']; ?></td>
+                                    <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $resul_mod[$i]['modulo']; ?></td>
+                                    <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro" ><?php echo $resul_mod[$i]['posicion']; ?></td>
+                                    <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $estatus; ?></td>
+                                    <td>
+                                        <img class="modificar" style="cursor: pointer" src="<?php echo $img_mod ?>" width="18" height="18" alt="Modificar"/>                                  
+                                        &nbsp;
+                                        <?php
+                                        if ($resul_mod[$i]['id'] > 2) {
+                                            ?>
+                                            <img class="eliminar"  title="Eliminar" style="cursor: pointer" src="<?php echo $img_del ?>" width="18" height="18"  alt="Eliminar"/>
+                                            <?php
                                         }
                                         ?>
-                                        <tr id="<?php echo $resul_mod[$i]['id']; ?>">
-                                            <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $resul_mod[$i]['id']; ?></td>
-                                            <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $resul_mod[$i]['modulo']; ?></td>
-                                            <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro" ><?php echo $resul_mod[$i]['posicion']; ?></td>
-                                            <td data-original-title="Click para ver los Sub Modulos"  data-container="body" data-toggle="tooltip" data-placement="top" class="registro"><?php echo $estatus; ?></td>
-                                            <td>
-                                                <img class="modificar" style="cursor: pointer" src="<?php echo $img_mod ?>" width="18" height="18" alt="Modificar"/>                                  
-                                                &nbsp;
-                                                <?php
-                                                if ($resul_mod[$i]['id'] > 2) {
-                                                    ?>
-                                                    <img class="eliminar"  title="Eliminar" style="cursor: pointer" src="<?php echo $img_del ?>" width="18" height="18"  alt="Eliminar"/>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </td>
-                                        </tr>
-                                        <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr><!-- DataTable-->
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       
+    <!-- Fin Modulo-->
+
+    <!-- Inicio Sub Modulos -->
+
+    <div class="panel panel-default" id="divsubmodulo" style="width : 90%;margin: auto;height: auto;position: relative; top:25px; display: none">
+        <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registro de SubModulo</div>
+        <div class="panel-body">
+            <form class="form-inline" id="frmsubmodulo">
+                <div class="form-inline col-sm-12">
+                    <div class="col-sm-6 form-group ">                    
+                        <label for="modulo_id">Modulo</label>
+                        <select  style="width: 73%" name="modulo_id" id="modulo_id" class="form-control select2">
+                            <option value="0">Seleccione</option>
+                            <?php
+                            for ($i = 0; $i < count($resul_mod); $i++) {
+                                ?>
+                                <option style="font-size: 10px;" value="<?php echo $resul_mod[$i]['id']; ?>"><?php echo $resul_mod[$i]['modulo']; ?></option>
+                            <?php } ?>
+                        </select>                   
+                        <img style="cursor: pointer" id="img_nommodulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="submodulo">Sub Modulo</label>
+                        <input type="text" style="width: 73%" class="form-control input-sm" id="submodulo" name="submodulo"   value="" maxlength="50" />
+                        <img style="cursor: pointer" id="img_submodulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="form-inline col-sm-12">
+                    <div class="col-sm-6 form-group">
+                        <label for="submodulo">Posici&oacute;n</label>
+                        <input type="text" style="width: 73%" class="form-control input-sm" id="sbm_posicion" name="sbm_posicion" value="" maxlength="20" />
+                        <img style="cursor: pointer" id="img_submodulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                    </div>
+
+                    <div class="col-sm-6 form-group">
+                        <label for="ruta">Ruta:</label>
+                        <input type="text" style="width: 73%" class="form-control input-sm" id="ruta" name="ruta" maxlength="50"  value="" />
+                        <img style="cursor: pointer" id="img_ruta" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="form-inline col-sm-12">
+                    <div class="col-sm-6 form-group ">       
+                        <label for="submodulo">Estatus</label>
+                        <div class="btn-group" data-toggle="buttons" >
+                            <label id="l_sbmod_activo" class="btn btn-success active btn-sm">
+                                <input  type="radio" name="sbmod_estatus" checked="checked" id="sbmod_activo" value="1">
+                                Activo 
+                            </label>
+                            <label id="l_sbmod_inactivo" class="btn btn-default btn-sm">
+                                <input type="radio" name="sbmod_estatus" id="sbmod_inactivo" value="0">
+                                Inactivo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div class="form-inline col-sm-12">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6" style="text-align: center">
+                        <input class="btn btn-primary btn-sm" id="btnaccionsub"   name="btnaccionsub"   type="button" value="Guardar" />
+                        <input class="btn btn-default btn-sm" id="btnlimpiarsub"  name="btnlimpiarsub"  type="button" value="Limpiar" />
+                        <input class="btn btn-danger btn-sm"  id="btnrestablecer"  name="btnrestablecer" type="button" value="Restablecer" />                          
+                    </div>
+                </div>
+            </form>
+            <br/>
+            <br/>
+            <br/>
+            <div style="width: 100%;margin: auto" class="form-inline col-sm-12">
+                <table style="width:100%;" border="0" align="center" cellspacing="1" class="table tbl-modulos table-bordered table-striped table-hover table-condensed dt-responsive table-responsive" id="tabla_submodulo" >
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Codigo</th>
+                            <th>Modulo</th>
+                            <th>SubModulo</th>
+                            <th>Posici&oacute;n</th>
+                            <th>Estatus</th>
+                            <th>Acci&oacute;n</th>
+                            <th>Ruta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
                 </table>
             </div>
         </div>
-        <!-- Fin Modulo-->
-        
-        <!-- Inicio Sub Modulos -->
-
-        <div class="panel panel-default" id="divsubmodulo" style="width : 90%;margin: auto;height: auto;position: relative; top:25px; display: none">
-            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Registro de SubModulo</div>
-            <div class="panel-body">
-                <table width="679" border="0" align="center">
-                    <tr>
-                        <td align="center">
-                            <form name="frmsubmodulo" id="frmsubmodulo" method="post" enctype="multipart/form-data">
-                                <table width="675" align="center">
-                                    <tr>
-                                        <td width="54" height="40">Modulo:</td>
-                                        <td width="229">
-                                            <select  style="" name="nommodulo" id="nommodulo" class="form-control select2">
-                                                <option value="0">Seleccione</option>
-                                                <?php
-                                                for ($i = 0; $i < count($resul_mod); $i++) {
-                                                    ?>
-                                                    <option style="font-size: 10px;" value="<?php echo $resul_mod[$i]['cod_modulo']; ?>"><?php echo $resul_mod[$i]['modulo']; ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </td>
-                                        <td width="59">
-                                            <img style="cursor: pointer" id="img_nommodulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                        </td>
-                                        <td width="75" height="40">SubModulo:</td>
-                                        <td width="215">
-                                            <div id="div_submodulo" style="margin-top: 10px" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="submodulo" name="submodulo"   value="" maxlength="50" />
-                                            </div>
-                                        </td>
-                                        <td width="15">
-                                            <img style="cursor: pointer" id="img_submodulo" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td height="40" align="left">Estatus:</td>
-                                        <td>
-                                            <div class="btn-group" data-toggle="buttons" >
-                                                <label id="l_sbmod_activo" class="btn btn-success active btn-sm">
-                                                    <input  type="radio" name="sbmod_estatus" checked="checked" id="sbmod_activo" value="1">
-                                                    Activo 
-                                                </label>
-                                                <label id="l_sbmod_inactivo" class="btn btn-default btn-sm">
-                                                    <input type="radio" name="sbmod_estatus" id="sbmod_inactivo" value="0">
-                                                   Inactivo
-                                                </label>
-                                            </div>
-                                        </td>
-                                      <td>&nbsp;</td>
-                                        <td height="40">Posici&oacute;n Men&uacute;:</td>
-                                        <td>
-                                            <div id="div_posicion" class="form-group" style="margin-top: 10px">
-                                                <input type="text" class="form-control input-sm" id="sbm_posicion" name="sbm_posicion" value="" maxlength="20" />
-                                            </div>
-                                        </td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td height="40">Ruta:</td>
-                                        <td>
-                                            <div id="div_ruta" style="margin-top: 10px" class="form-group">
-                                                <input type="text" class="form-control input-sm" id="ruta" name="ruta" maxlength="50"  value="" />
-                                            </div></td>
-                                        <td>
-                                            <img style="cursor: pointer" id="img_ruta" src="../../imagenes/img_info.png" width="15" height="15" alt="img_info"/></td>
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="6" align="right">&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td  colspan="6" align="center">
-                                            <div id="botones">
-                                                <input class="btn btn-primary btn-sm" id="btnaccionsub"   name="btnaccionsub"   type="button" value="Guardar" />
-                                                <input class="btn btn-default btn-sm" id="btnlimpiarsub"  name="btnlimpiarsub"  type="button" value="Limpiar" />
-                                                <input class="btn btn-danger btn-sm"  id="btnrestablecer"  name="btnrestablecer" type="button" value="Restablecer" />                          
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center">
-                            <table style="width:100%;" border="0" align="center" cellspacing="1" class="dataTable" id="tabla_submodulo" >
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Modulo</th>
-                                        <th>SubModulo</th>
-                                        <th>Posici&oacute;n</th>
-                                        <th>Estatus</th>
-                                        <th>Acci&oacute;n</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>                
-                    <tr>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <!-- Fin SubModulo -->
+    </div>
+    <!-- Fin SubModulo -->
     </body>
 </html>

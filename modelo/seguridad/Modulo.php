@@ -11,11 +11,70 @@ class Modulo extends Seguridad
     protected $_perfil_id;
     private   $_menu = FALSE;
     private   $_campos = '*';
+    protected $_table = 's_modulo';
     public function __construct()
     {
         $this->table = 's_modulo';
     }
-    
+
+    public function accion($datos)
+    {
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
+        
+
+        $this->_accion = $datos['accion'];
+        $response_data = array();
+        switch ($this->_accion) {
+            case 'save':
+       
+                $keys   = array('id','modulo','posicion','activo',);
+                $values = array($datos['id'],$datos['modulo'],$datos['mod_posicion'],$datos['mod_estatus']);
+                
+               
+                extract($datos, EXTR_PREFIX_SAME,"wddx");
+
+                array_push($keys, 'usuario_creacion','fecha_creacion');
+                array_push($values, $this->id_usuario,date('Y-m-d H:i:s '));
+                
+                $dato = array_combine($keys,$values);
+
+                
+                $this->_datos = $dato;
+
+                $existe            = $this->recordExists($this->_table, "modulo='" . $modulo . "'");
+                $existe_ps         = $this->recordExists($this->_table, "posicion='" . $mod_posicion . "'");
+                if ($existe === TRUE) {
+                    $response_data['existe'] = 'ok';
+                    $response_data['msg']    = '<span style="color:#FF0000">El Nombre del M&oacute;dulo se encuentra registrado en el sistema</span>';
+                }else if($existe_ps === TRUE){
+                    $response_data['existe_pos'] = 'ok';
+                    $response_data['msg']    = '<span style="color:#FF0000">La posici&oacute;n se encuentra registrada</span>';
+                } else {
+                    $this->_datos  = $dato;
+                    $response_data = $this->add();
+                }
+            break;
+            case 'update':                
+                $keys   = array('id','modulo','posicion','activo',);
+                $values = array($datos['id'],$datos['modulo'],$datos['mod_posicion'],$datos['mod_estatus']);
+                
+                array_push($keys, 'usuario_modificacion','fecha_actualizacion');
+                array_push($values, $this->id_usuario,date('Y-m-d H:i:s '));
+                $dato = array_combine($keys,$values);
+                
+                $this->_datos = $dato;
+                $response_data = $this->mod();
+            break;
+            case 'delete':
+                $this->_datos = $datos;
+                $response_data = $this->del();
+            break;
+        }
+        return $response_data;
+    }
+
     private function _addModulo()
     {
         $resultado   = parent::add();

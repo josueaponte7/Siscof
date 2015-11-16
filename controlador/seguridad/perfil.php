@@ -2,14 +2,18 @@
 
 define('BASEPATH', '');
 
-require_once '../../modelo/seguridad/Perfil.php';
-$obj_perfil = new Perfil();
+
 
 if (!isset($_POST['accion'])) {
     exit("<div style='color:#FF0000;text-align:center;margin:0 auto'>Acceso Denegado</div>");
 } else {
-
-    $accion = addslashes($_POST['accion']);
+    
+    require_once '../../modelo/seguridad/Perfil.php';
+    $obj_perfil = new Perfil();
+    $resultado  = $obj_perfil->accion($_POST);
+    echo json_encode($resultado);
+    
+    /*$accion = addslashes($_POST['accion']);
     
     if (isset($_POST['codigo_perfil'])) {
         $data['codigo_perfil'] = addslashes($_POST["codigo_perfil"]);
@@ -57,14 +61,14 @@ if (!isset($_POST['accion'])) {
             if ($resultado != 0) {
                 for ($j = 0; $j < count($resultado); $j++) {
                     $datos .= $resultado[$j]['cod_submodulo'].';'.$resultado[$j]['agregar'].';'.$resultado[$j]['modificar'].';'.$resultado[$j]['eliminar'].';'.$resultado[$j]['consultar'].';'.$resultado[$j]['imprimir'].',';
-                    /*$datos[] = array(
+                    $datos[] = array(
                         'cod_submodulo' => $resultado[$j]['cod_submodulo'],
                         'agregar'       => $resultado[$j]['agregar'],
                         'modificar'     => $resultado[$j]['modificar'],
                         'eliminar'      => $resultado[$j]['eliminar'],
                         'consultar'     => $resultado[$j]['consultar'],
                         'imprimir'      => $resultado[$j]['imprimir']
-                    );*/
+                    );
                 }
                 $datos = substr($datos, 0,-1);
                 echo $datos;
@@ -76,5 +80,5 @@ if (!isset($_POST['accion'])) {
             $resultado = $obj_perfil->addPrivilegios($data);
             echo json_encode($resultado);
         break;
-    }
+    }*/
 }

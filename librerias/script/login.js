@@ -31,6 +31,10 @@ $(document).ready(function () {
 
                 } else if (respuesta.success === 'error') {
                     window.parent.apprise('<span style="color:#FF0000;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'});
+                } else if (cod_msg == 13) {
+                    window.parent.apprise('<span style="color:#FF0000;font-weight:bold">Usuario o Clave Incorrecta</span>', {'textOk': 'Aceptar'}, function () {
+
+                    });
                 }
             }, 'json');
         }

@@ -34,6 +34,7 @@ class Departamento extends Seguridad
         $this->id_usuario    = $_SESSION['id_usuario'];
         $this->cod_submodulo = $_SESSION['cod_modulo'];
         $this->_accion = $datos['accion'];
+        $response_data = '';
         switch ($this->_accion) {
             case 'save':
                 $nombre_departamento = $datos['nombre_departamento'];

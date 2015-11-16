@@ -13,10 +13,10 @@
 	"sInfoThousands":  ",",
 	"sLoadingRecords": "Cargando...",
 	"oPaginate": {
-		"sFirst":    "Primero",
-        "sPrevious": "Anterior",
-		"sNext":     "Siguiente",
-		"sLast":     "&Uacute;ltimo"
+		"sFirst":    "<<",
+        "sPrevious": "<",
+		"sNext":     ">",
+		"sLast":     ">>"
 	},
 	"oAria": {
 		"sSortAscending":  ": Activar para ordenar la columna de manera ascendente",

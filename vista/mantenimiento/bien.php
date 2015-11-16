@@ -9,7 +9,7 @@ require_once '../../modelo/mantenimientos/Items.php';
 $objmod = new Items();
 
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
     $_SESSION['cod_modulo'] = $_GET['modulo'];
 }
 

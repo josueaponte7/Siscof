@@ -16,7 +16,8 @@ if ($tiempo_session > 5) {
     header('location:../../controlador/seguridad/salir.php');
 }
 if (isset($_GET['modulo'])) {
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
     $_SESSION['cod_modulo'] = $_GET['modulo'];
 }
 

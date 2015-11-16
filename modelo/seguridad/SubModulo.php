@@ -12,97 +12,96 @@ class SubModulo extends Modulo
     private $_where = FALSE;
     private $_ac_sql = FALSE;
     protected $_sql;
+    //protected $_table = 's_modulo';
     public function __construct()
     {
-        $this->table = 's_sub_modulo';
+        $this->_table = 's_sub_modulo';
     }
     
-    private function _addSubModulo()
+    
+    public function accion($datos)
     {
-        $this->bitacora = TRUE;
-        $resultado   = parent::add();
-        return $resultado;
-    }
+        session_start();
+        $this->id_usuario    = $_SESSION['id_usuario'];
+        $this->cod_submodulo = $_SESSION['cod_modulo'];
+        $seguridad['usuario_creacion'] = $this->id_usuario;
+        $seguridad['fecha_creacion'] = date('Y-m-d H:i:s ');
 
-    public function addSubModulo($datos)
-    {   
-
-        $where_mod   = "sub_modulo='" . $datos['sub_modulo'] . "' AND cod_modulo=".$datos['cod_modulo']."";
-        $where_pos   = "cod_modulo='". $datos['cod_modulo'] ."' AND posicion='" . $datos['posicion'] . "'";
-
-        $exis_mod = parent::recordExists($this->table,$where_mod);
-        $exis_pos = parent::recordExists($this->table,$where_pos);
-        try {
-            if ($exis_mod === TRUE) {
-               $this->_cod_msg = 15;
-               $this->_mensaje = "<span style='color:#FF0000'>El Nombre del Sub Modulo ya existe</span>";
-            }else if($exis_pos === TRUE){
-               $this->_cod_msg = 16;
-               $this->_mensaje = "<span style='color:#FF0000'>La Posici&oacute;n del Sub Moduo en el Men&uacute; ya existe</span>";
-            }else{
-               
-                $this->a_datos = $datos;
-                $this->camp_auto = 'cod_submodulo';
-                $this->increment = TRUE;
-
-                $resultado = $this->_addSubModulo(); 
-                if($resultado === TRUE){
-                    $this->_cod_msg = 21;
-                    $this->_mensaje = "El Registro ha sido Guardado Exitosamente";
+        $this->_accion = $datos['accion'];
+        $response_data = '';
+        switch ($this->_accion) {
+            case 'save':
+                
+                $keys   = array('sub_modulo','posicion','ruta','activo','modulo_id');
+                $values = array($datos['submodulo'],$datos['sbm_posicion'],$datos['ruta'],$datos['sbmod_estatus'],$datos['modulo_id']);
+                
+                $dato_r = array_combine($keys,$values);
+                $dato = array_merge($dato_r, $seguridad);
+                
+                
+                $modulo            = $dato['sub_modulo'];
+                $posicion          = $dato['posicion'];
+                $existe            = $this->recordExists($this->_table, "modulo='" . $modulo . "'");
+                $existe_ps         = $this->recordExists($this->_table, "posicion='" . $posicion . "'");
+                if ($existe === TRUE) {
+                    $response_data['existe'] = 'ok';
+                    $response_data['msg']    = '<span style="color:#FF0000">El Nombre del Sub M&oacute;dulo se encuentra registrado en el sistema</span>';
+                }else if($existe_ps === TRUE){
+                    $response_data['existe_pos'] = 'ok';
+                    $response_data['msg']    = '<span style="color:#FF0000">La posici&oacute;n se encuentra registrada</span>';
+                } else {
+                    $this->_datos  = $dato;
+                    $response_data = $this->add();
                 }
-            }
-            throw new Exception($this->_mensaje, $this->_cod_msg);
-        } catch (Exception $e) {
-           return array('error_codmensaje' => $e->getCode(), 'error_mensaje' => $e->getMessage());
+            break;
+            case 'update':
+                $keys   = array('id','sub_modulo','posicion','ruta','activo','modulo_id');
+                $values = array($datos['id'], $datos['submodulo'],$datos['sbm_posicion'],$datos['ruta'],$datos['sbmod_estatus'],$datos['modulo_id']);
+                
+                $dato_r = array_combine($keys,$values);
+                $dato = array_merge($dato_r, $seguridad);
+                
+                $this->_datos = $dato;
+                $response_data = $this->mod();
+            break;
+            case 'delete':
+                $this->_datos = $datos;
+                $response_data = $this->del();
+            break;
+            case 'BuscarSubModulos':
+   
+                $data['menu']   = 0;
+                $data['campos'] = 'id,sub_modulo,posicion,activo,ruta,modulo_id';
+                $this->_where   = 'modulo_id=' . $datos['id_mod'];
+                $resultado      = $this->getSubModulo($data);
+
+                $es_array  = is_array($resultado) ? TRUE : FALSE;
+                
+                $es_int    = is_int($resultado) ? 1 : 0;
+                if ($es_array === FALSE && $es_int == 1) {
+                    $response_data['existe'] = 'no';
+                } else {
+                    
+                    $datos_responses = array();
+
+                    for ($j = 0; $j < count($resultado) - 1; $j++) {
+                        $values = array();
+                        $keys = array();
+                        while (list($key,$value) = each($resultado[$j])) {
+                            array_push($values, $value);
+                            array_push($keys, $key);
+                        }
+                        $arreglo_datos = array_combine($keys, $values);
+                        array_push($datos_responses, $arreglo_datos);
+                    }
+                    $response_data = $datos_responses;
+                }
+            break;
         }
-    }
-    
-    private function _editSubModulo()
-    {
-        $resultado   = parent::mod();
-        return $resultado;
-    }
-    
-    public function editSubModulo($datos)
-    {
-        
-        try {
-            $cod_submodulo = array_shift($datos);
-            $this->where   = "cod_submodulo=$cod_submodulo";
-            $this->a_datos = $datos;
-            $resultado     = $this->_editSubModulo();
-            if ($resultado === TRUE || $resultado > 0) {
-                $this->_cod_msg   = 22;
-                $this->_mensaje   = "El Registro ha sido Modificado Exitosamente";
-            }
-            throw new Exception($this->_mensaje, $this->_cod_msg);
-        } catch (Exception $e) {
-            return array('error_codmensaje' => $e->getCode(), 'error_mensaje' => $e->getMessage());
-        }
+        return $response_data;
     }
 
-    private function _delSubModulo()
-    {
-        $resultado   = parent::del();
-        return $resultado;
-    }
-    public function delSubModulo($data)
-    {
-        
-        try {
-            $this->where   = "cod_submodulo=".$data['cod_submodulo'];
-            $this->r_affec = TRUE;
-            $resultado = $this->_delSubModulo();
-            if ($resultado === TRUE || $resultado > 0) {
-                $this->_cod_msg   = 23;
-                $this->_mensaje   = "El Registro ha sido Eliminado Exitosamente";
-            }
-            throw new Exception($this->_mensaje, $this->_cod_msg);
-        } catch (Exception $e) {
-            return array('error_codmensaje' => $e->getCode(), 'error_mensaje' => $e->getMessage());
-        }
-    }
-    
+
     protected function getSubModulos()
     {
         
@@ -118,10 +117,11 @@ class SubModulo extends Modulo
         }
         
         if($this->_ac_sql == TRUE){
+            
             $result = parent::ex_query($this->_sql);
         } else {
-            $result = parent::select($data, FALSE);
-            parent::autoIncrement($this->table, 'cod_submodulo');
+            $result = parent::select($data,'ASSOC');
+            parent::autoIncrement($this->_table, 'cod_submodulo');
         }
         if($result === 0){
             return $this->auto_increment;
@@ -132,7 +132,6 @@ class SubModulo extends Modulo
     }
     public function getSubModulo($datos)
     {   
-
         $default       = array('campos' => '*');
         $options       = array_merge($default, $datos);
         $this->_campos = $options['campos'];

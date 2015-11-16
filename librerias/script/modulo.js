@@ -1,6 +1,30 @@
-$(document).ready(function() {
+$.fn.extend({
+    ids: function (options) {
+        var defaults = {
+            otable: ''
+        };
 
-    $('input[type="text"], textarea').on({
+        var settings = $.extend(defaults, options);
+        var id = 1;
+        if (settings.otable != '') {
+            var TotalRow = settings.otable.fnGetData().length;
+            if (TotalRow > 0) {
+                var nNodes = settings.otable.fnGetNodes();
+                var ultimo_id = nNodes[TotalRow - 1]['id'];
+                id = parseInt(ultimo_id) + 1;
+            }
+        }
+        this.each(function () {
+            //var ids_inpu = '<input id="id" type="hidden" value="'+id+'" name="id">';
+            //$(this).append(ids_inpu);
+            $('#id').val(id)
+        });
+        return this;
+    }
+});
+$(document).ready(function() {
+    
+     $('input[type="text"], textarea').on({
         keypress: function() {
             $(this).parent('div').removeClass('has-error');
             $(this).parent('div').find('span').css('display','none');
@@ -23,7 +47,7 @@ $(document).ready(function() {
     });
 
     var $formulario      = $('form#frmmodulo');
-    var $div_modulo      = $formulario.find('div#div_modulo');
+  
     var $modulo          = $formulario.find('input:text#modulo');
     var $div_modposicion = $formulario.find('div#div_modposicion');
     var $mod_posicion    = $formulario.find('input:text#mod_posicion');
@@ -32,26 +56,15 @@ $(document).ready(function() {
     var $btnlistar       = $formulario.find('input:button#btnlistar');
     var $tabla_modulo    = $('#tabla_modulo');
     
-    var TotalRow = TModulo.fnGetData().length;
-    $('#id').val(1);
-    if (TotalRow > 0) {
-        var nNodes = TModulo.fnGetNodes();
-        var ultimo_id = nNodes[TotalRow - 1]['id'];
-        var id = parseInt(ultimo_id) + 1;
-        $('#id').val(id);
-
-    }
-    
-    
-    $('#img_modulo').tooltip({
+     $('#img_modulo').tooltip({
         html: true,
-        placement: 'right',
+        placement: 'top',
         title: '<span class="requerido">Requerido</span><br/>El Modulo no debe estar en <span class="alerta">blanco</span>'
     });
 
     $('#img_posicion').tooltip({
         html: true,
-        placement: 'right',
+        placement: 'top',
         title: '<span class="requerido">Requerido</span><br/>La Posici&oacute;n no debe estar en <span class="alerta">blanco</span> deber ser <span class="alerta">N&uacute;merico</span>'
     });
 
@@ -71,14 +84,251 @@ $(document).ready(function() {
         trigger: 'hover',
         placement: function (pop, ele) {
             if ($(ele).parent().is('td:last-child')) {
-                return 'left'
+                return 'left';
             } else {
-                return 'top'
+                return 'top';
             }
         }
     });
+    
+    $.extend({
+        save: function (url, formulario,tipo,codigo,otable) {
+            var TotalRow = otable.fnGetData().length;
+            var id = 1;
+            if (TotalRow > 0) {
+                var nNodes = otable.fnGetNodes();
+                var ultimo_id = nNodes[TotalRow - 1]['id'];
+                id = parseInt(ultimo_id) + 1;
+            }
+            var data_send     = formulario.serialize() + '&' + $.param({id:id,accion: 'save'});
+            $.post(url, data_send, function (data) {
+                var cod_msg = parseInt(data.cod_msg);
+                var mensaje = data.msg;
+                var accion = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
+                accion += '&nbsp;&nbsp;<img class="eliminar"  title="Eliminar"  style="cursor: pointer" src="../../imagenes/datatable/eliminar.png"  width="18" height="18" alt="Eliminar" />';
 
-    //$('.registro').tooltip();
+                if (data.success === 'exitoso') {
+                   
+                    window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'}, function () {
+                        
+                        if (tipo == 'modulo') {
+                            var estatus = $("input[name='mod_estatus']:checked")[0].nextSibling.nodeValue;
+                            var nuevaFila = otable.fnAddData([codigo, $modulo.val(), $mod_posicion.val(), estatus, accion]);
+
+                            var id = data.id;
+                            var oSettings = otable.fnSettings();
+                            var nTr = oSettings.aoData[ nuevaFila[0] ].nTr;
+                            nTr.setAttribute('id', id);
+                            //$('#id').remove();
+                            
+                            formulario.ids({otable:TModulo}); 
+                            
+                            var option = "<option value=" + codigo + ">" + $modulo.val() + "</option>";
+                            $('select#nommodulo').append(option);
+
+                            $("div").removeClass('has-error');
+                            $("div").find('span').css('display', 'none');
+                            $('input:radio').attr('checked', false);
+                            formulario.find('input:text').val('');
+                            $('#l_mod_activo').addClass('btn-success active');
+                            $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
+                            $('input:radio#mod_activo').prop('checked', true);
+                        }else{
+                            var estatus = $("input[name='sbmod_estatus']:checked")[0].nextSibling.nodeValue;
+                            var id = data.id;
+                            var modulo_id = $('#modulo_id').find('option').filter(':selected').val();
+                            var modulo    = $('#modulo_id').find('option').filter(':selected').text();
+                            var nuevaFila = otable.fnAddData(['',id, modulo,$sub_modulo.val(), $sbmposicion.val(), estatus, accion,$ruta.val()]);
+
+                            
+                            var oSettings = otable.fnSettings();
+                            var nTr = oSettings.aoData[ nuevaFila[0] ].nTr;
+                            nTr.setAttribute('id', id);
+                            $('td', nTr)[2].setAttribute('id', modulo_id);
+                            
+                            formulario.find('input:text').val('');
+                            formulario.find('input:radio').attr('checked', false);
+                            $('#l_sbmod_activo').addClass('btn-success active');
+                            $('#l_sbmod_inactivo').removeClass('btn-danger active').addClass('btn-default');
+                            $('input:radio#sbmod_activo').prop('checked', true);
+                        }
+                    });
+
+                } else if (data.existe === 'ok') {
+                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function () {
+                        $modulo.parent('div').addClass('has-error');
+                        $modulo.focus().select();
+                    });
+                } else if (data.existe_pos === 'ok') {
+                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function () {
+                        $mod_posicion.parent('div').addClass('has-error');
+                        $mod_posicion.focus().select();
+                    });
+
+                } else if (cod_msg === 16) {
+                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function () {
+                        $div_modposicion.addClass('has-error');
+                        $mod_posicion.focus().select();
+                    });
+
+                }
+            }, 'json');
+        },
+        update: function (url,formulario,tipo,otable) {
+            var id = $('#id').val();
+            var data_send = formulario.serialize() + '&' + $.param({id :id, accion: 'update'});
+            $.post(url, data_send, function (respuesta) {
+                if (respuesta.success === 'exitoso') {
+                    window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
+                        var fila = $('#fila').val();
+                        
+                        if (tipo == 'modulo') {
+                            var estatus = $("input[name='mod_estatus']:checked")[0].nextSibling.nodeValue;
+                            
+                            var cod_modulo = $('#cod_modulo').val();
+                            $("select#nommodulo option[value='" + cod_modulo + "']").text($modulo.val());
+
+                            otable.fnUpdate($modulo.val(), parseInt(fila), 1);
+                            otable.fnUpdate($mod_posicion.val(), parseInt(fila), 2);
+                            otable.fnUpdate(estatus, parseInt(fila), 3);
+                            //$('#limpiar').trigger('click');
+                            $("div").removeClass('has-error');
+                            $("div").find('span').css('display', 'none');
+                            formulario.find('input:radio').attr('checked', false);
+                            formulario.find('input:text').val('');
+                            $('#l_mod_activo').addClass('btn-success active');
+                            $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
+                            formulario.find('input:radio#sbmod_activo').prop('checked', true);
+                            $btnaccion.val('Guardar');
+                            formulario.ids({otable:otable}); 
+                        }else{
+                            
+                            var modulo_id = $('#modulo_id').find('option').filter(':selected').val();
+                            var nNodes = otable.fnGetNodes();
+                            var oData  = otable.fnGetData(fila);
+                            var ids = $('#tabla_submodulo tbody tr').eq(fila).find('td').eq(2).attr('id');
+                            var estatus = $("input[name='mod_estatus']:checked")[0].nextSibling.nodeValue;
+                            if(modulo_id != ids){
+                                otable.fnDeleteRow(fila);
+                            } else {
+                                
+                                var estatus = $("input[name='sbmod_estatus']:checked")[0].nextSibling.nodeValue;
+                                var modulo    = $('#modulo_id').find('option').filter(':selected').text();
+                                
+                                otable.fnUpdate(modulo, parseInt(fila), 2);
+                                otable.fnUpdate($sub_modulo.val(), parseInt(fila), 3);
+                                otable.fnUpdate($sbmposicion.val(), parseInt(fila), 4);
+                                otable.fnUpdate(estatus, parseInt(fila), 5);
+                                otable.fnUpdate($ruta.val(), parseInt(fila), 7);
+                            }
+                            
+                            
+                            
+                            formulario.find('input:radio').attr('checked', false);
+                            formulario.find('input:text').val('');
+                            formulario.find('input:radio').attr('checked', false);
+                            $('#l_sbmod_activo').addClass('btn-success active');
+                            $('#l_sbmod_inactivo').removeClass('btn-danger active').addClass('btn-default');
+                            $('input:radio#sbmod_activo').prop('checked', true);
+                            $nommodulo.select2('val',ids);
+                            $btnaccionsub.val('Guardar');
+                        }
+                        
+                    });
+                    $('#id').remove();
+                }
+            }, 'json');
+        },
+        eliminar: function (url,id,fila,formulario,otable,tipo) {
+            $.post(url, {id: id, 'accion': 'delete'}, function (respuesta) {
+                if (respuesta.success === 'exitoso') {
+                    window.parent.apprise('<span style="color:#059102;font-weight:bold">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
+                        otable.fnDeleteRow(fila);
+                        formulario.ids({otable:otable}); 
+                    });
+                }
+            }, 'json');
+        }
+    });
+   
+    
+    $.fn.tablaimage = function (tabla,fila, clase,otable,tipo) {
+        
+        var nNodes = otable.fnGetNodes();
+        var oData  = otable.fnGetData(fila);
+        var id     = nNodes[fila]['id'];
+        if (clase == 'modificar') {
+            
+            var $fila = '<input id="fila" type="hidden" value="'+fila+'" name="fila">';
+            var $id = '<input id="id" type="hidden" value="' + id + '" name="id">';
+            $('#' + tabla).append($fila);
+            $('#' + tabla).append($id);
+            
+            if(tipo == 'modulo'){
+                $btnaccion.val('Modificar');
+                var modulo   = oData[1];
+                var posicion = oData[2];
+                var estatus  = oData[3];
+              
+                $('#modulo').val(modulo.trim());
+                $('#mod_posicion').val(posicion.trim());
+                $('input:radio').attr('checked', false);
+                $('#id').val(id);
+                if (estatus.trim() == 'Inactivo') {
+                    $('input:radio#mod_inactivo').prop('checked', true);
+                    $('#l_mod_activo').removeClass('btn-success active').addClass('btn-default');
+                    $('#l_mod_inactivo').addClass('btn-danger active');
+                } else {
+                    $('input:radio#mod_activo').prop('checked', true);
+                    $('#l_mod_activo').addClass('btn-success active');
+                    $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
+                }
+            }else{
+                $('#submodulo').val(oData[3]);
+                $('#sbm_posicion').val(oData[4]);
+                $('#ruta').val(oData[7]);
+                $nommodulo.select2("enable", true);
+                $btnaccionsub.val('Modificar');
+            }
+           
+        } else {
+            $('#limpiar').trigger('click');
+            var url = urlmod;
+            var oTable = TModulo;
+            
+            if(tipo == 'submodulo'){
+                url = urlsub;
+                oTable = TSubModulo;
+            }
+            window.parent.apprise('<span style="color:#FF0000;font-weight:bold;text-align: center;display:block">&iquest;Desea Eliminar el registro?</span>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function (r) {
+                if (r) {
+                    $.eliminar(url, id, fila,$formulario,oTable,tipo);
+                }
+            });
+        }
+    };
+    
+    
+    $('.tbl-modulos').on('click', 'img.modificar,img.eliminar', function () {
+        $('#fila,#padre,#id').remove();
+
+        var $this = $(this);
+        $this.tooltip('hide');
+        var padre = this.parentNode.parentNode
+        var tabId  = $this.closest('table').attr('id');
+        var aPos   = TModulo.fnGetPosition(padre);
+        var otable = TModulo;
+        var tipo   = 'modulo';
+        if (tabId == 'tabla_submodulo') {
+            aPos = TSubModulo.fnGetPosition(padre);
+            otable = TSubModulo;
+            tipo  = 'submodulo';
+        }
+        var clase = $(this).attr('class');
+        $(this).tablaimage(tabId, aPos, clase, otable, tipo);
+    });
+    
+    //$formulario.ids({otable:TModulo}); 
     
     $('input:radio[name="mod_estatus"]').change(function() {
         var valor = $(this).val();
@@ -92,7 +342,6 @@ $(document).ready(function() {
         }
     });
 
-    var letras = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]{2,20}$/;
     var letra  = ' abcdefghijklmnñopqrstuvwxyzáéíóú';
     var entero = '1234567890';
 
@@ -127,168 +376,22 @@ $(document).ready(function() {
                 var lastRow   = TModulo.fnGetData(ToltalRow - 1);
                 var codigo    = parseInt(lastRow[0]) + 1;
 
-                var $cod_modulo = '<input type="hidden" id="cod_modulo"  value="' + codigo + '" name="cod_modulo">';
-                $($cod_modulo).prependTo($formulario);
-
-                $.post(urlmod, $formulario.serialize(), function(data) {
-                    var cod_msg = parseInt(data.cod_msg);
-                    var mensaje = data.msg;
-                    var accion = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
-                    accion += '&nbsp;&nbsp;<img class="eliminar"  title="Eliminar"  style="cursor: pointer" src="../../imagenes/datatable/eliminar.png"  width="18" height="18" alt="Eliminar" />';
-
-                    if (cod_msg === 21) {  
-                        var estatus = $("input[name='mod_estatus']:checked")[0].nextSibling.nodeValue;
-                        window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + mensaje + '</span>', {'textOk': 'Aceptar'}, function() {
-                            
-                            var nuevaFila =  TModulo.fnAddData([codigo, $modulo.val(), $mod_posicion.val(), estatus, accion]);
-                            
-                            var id = data.id;
-                            var oSettings = TModulo.fnSettings();
-                            var nTr = oSettings.aoData[ nuevaFila[0] ].nTr;
-                            nTr.setAttribute('id', id);
-                            $('#id').val(parseInt(id)+1);
-                            
-                            var option = "<option value=" + codigo + ">" + $modulo.val() + "</option>";
-                            $('select#nommodulo').append(option);
-                            limpiar($formulario);
-                            /*window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                setTimeout(function(){window.parent.location.reload();},1000);
-                            });*/
-                        });
-
-                    } else if (cod_msg === 15) {
-                        window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
-                            $div_modulo.addClass('has-error');
-                            $modulo.focus();
-                        });
-
-                    } else if (cod_msg === 16) {
-                        window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
-                            $div_modposicion.addClass('has-error');
-                            $mod_posicion.focus();
-                        });
-
-                    }
-                }, 'json');
+                $.save(urlmod,$formulario,'modulo',codigo,TModulo);
+                
 
             } else {
-
                 window.parent.apprise('<div class="msj-danger">&iquest;Desea Modificar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
                     if (r) {
-
-                        $.post(urlmod, $formulario.serialize(), function(data) {
-                            var cod_msg = parseInt(data.error_codmensaje);
-                            var mensaje = data.error_mensaje;
-                            window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
-                                if (cod_msg === 22) {
-                                  
-                                    var estatus = $("input[name='mod_estatus']:checked")[0].nextSibling.nodeValue;
-                                    var fila = $("#fila").val();
-
-                                    var tr_fila = $("#tabla_modulo tbody").children('tr').eq(fila).children('td');
-                                    tr_fila.eq(1).html($modulo.val());
-                                    tr_fila.eq(2).html($mod_posicion.val());
-                                    tr_fila.eq(3).html(estatus);
-                                    var cod_modulo = $('#cod_modulo').val();
-                                    $("select#nommodulo option[value='" + cod_modulo + "']").text($modulo.val());
-                                    
-                                    $('input:radio').attr('checked', false);
-                                    $('input:radio#mod_activo').prop('checked', true);
-                                    $('#l_mod_activo').addClass('btn-success active');
-                                    $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-                                    $('#btnaccion').val('Guardar');
-                                    limpiar($formulario);
-                                    window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                        setTimeout(window.parent.location.reload(),1000);
-                                    });
-                                }
-                            });
-
-                        }, 'json');
+                        $.update(urlmod,$formulario,'modulo',TModulo);
                     } else {
                         limpiar($formulario);
                     }
                 });
             }
-
         }
-
     });
-
-    // Cuando presiona la imagen modificar en modulos
-    $tabla_modulo.on('click', 'img.modificar', function() {
-
-        var aPos   = TModulo.fnGetPosition(this.parentNode.parentNode);
-        var nNodes = TModulo.fnGetNodes();
-        var oData  = TModulo.fnGetData(aPos);
-        var id     = nNodes[aPos]['id'];
-
-        var modulo   = oData[1];
-        var posicion = oData[2];
-        var estatus  = oData[3];
-
-       /*$btnlistar.fadeOut(1000, function() {
-            $btnaccion.fadeIn(1000);
-        });*/
-        /*var valor_lim = $btnlimpiar.val();
-        if (valor_lim == 'Restablecer') {
-            $btnlimpiar.val('Limpiar');
-        }*/
-
-
-        $btnaccion.text('Modificar');
-        $('#accion').val('update');
-        $('#id').val(id);
-        $('#fila').val(aPos);
-        $('#cod_modulo').val(id);
-        $('#modulo').val(modulo.trim());
-        $('#mod_posicion').val(posicion.trim())
-       console.log(estatus)
-        $('input:radio').attr('checked', false);
-       if (estatus.trim() == 'Inactivo') {
-            $('input:radio#mod_inactivo').prop('checked', true);
-            $('#l_mod_activo').removeClass('btn-success active').addClass('btn-default');
-            $('#l_mod_inactivo').addClass('btn-danger active');
-        } else {
-            $('input:radio#mod_activo').prop('checked', true);
-            $('#l_mod_activo').addClass('btn-success active');
-            $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-        }
-
-    });
-
-    // Cuando presiona la imagen eliminar en modulos
-    $tabla_modulo.on('click', 'img.eliminar', function() {
-        
-        limpiar($formulario);
-        $btnaccion.val('Guardar');
-        var padre      = $(this).closest('tr');
-        var cod_modulo = padre.children('td:eq(0)').html();
-        var nRow       = padre[0];
-        window.parent.apprise('<div class="msj-danger">&iquest;Desea Eliminar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
-            if (r) {
-                $.post(urlmod, {cod_modulo: cod_modulo, accion: 'Eliminar'}, function(data) {
-
-                    var cod_msg = parseInt(data.error_codmensaje);
-                    var mensaje = data.error_mensaje;
-
-                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'},function(){
-                        if (cod_msg === 23) {
-                            TModulo.fnDeleteRow(nRow);
-                        
-                            window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                setTimeout(function(){window.parent.location.reload();},0);
-                            });
-                        }  
-                    });
-                    
-                }, 'json');
-            } else {
-                limpiar($formulario);
-            }
-        });
-    });
-
+    
+    
     $tabla_modulo.find('tr').on('click', 'td:lt(4)', function() {
         if ($btnlistar.is(':hidden')) {
             $btnaccion.fadeOut(700, function() {
@@ -296,46 +399,30 @@ $(document).ready(function() {
             });
         }
 
+        var padre = $(this).closest('tr');
+        var modulo_id = padre.children('td:eq(0)').html();
+        var modulo = padre.children('td').eq(1).html();
+        var posicion = padre.children('td').eq(2).text().trim();
+        $('#modulo_id').select2('val',modulo_id);
+        /*var $codigo = '<input type="hidden" id="hmodulo_id"  value="' + modulo_id + '" name="hmodulo_id">';
 
-        var padre      = $(this).closest('tr');
-        var cod_modulo = padre.children('td:eq(0)').html();
-        var modulo     = padre.children('td').eq(1).html();
+        $($codigo).appendTo('input:button#btnaccionsub');*/
 
-        var $codigo  = '<input type="hidden" id="cod_modulo"  value="' + cod_modulo + '" name="cod_modulo">';
-        var $hmodulo = '<input type="hidden" id="hmodulo"  value="' + modulo + '" name="hmodulo">';
-
-        $($codigo).appendTo('input:button#btnaccionsub');
-        $($hmodulo).appendTo('input:button#btnaccionsub');
-
-        $('#cod_modulo').val(cod_modulo);
-        $mod_posicion.val('');
-        $('#hmodulo').val(modulo);
+        $mod_posicion.val(posicion);
         $btnlimpiar.val('Restablecer');
         $modulo.val(modulo).prop('disabled', true);
         $mod_posicion.prop('disabled', true);
     });
-
-    $btnlimpiar.on("click", function() {
-        $btnlistar.fadeOut(1000, function() {
-            $btnaccion.fadeIn(1000);
-        });
-        var este = $(this);
-        var valor = este.val();
-        if (valor == 'Restablecer') {
-            este.val('Limpiar');
-        }
-        $btnaccion.val('Guardar');
-        limpiar($formulario);
-    });
-
-    /*
+    
+    
+     /*
      * Fin de Modulo
      */
 
     /*
      * Sub Modulos
      */
-
+    
     // Tabla SubModulo
     var TSubModulo = $('#tabla_submodulo').dataTable({
         "iDisplayLength": 5,
@@ -344,37 +431,38 @@ $(document).ready(function() {
         "aLengthMenu": [5, 10, 20, 30, 40, 50],
         "oLanguage": {"sUrl": "../../librerias/js/es.txt"},
         "aoColumns": [
+            {"sClass": "details-control", "sWidth": "10%"},
             {"sClass": "center", "sWidth": "10%"},
             {"sClass": "center"},
             {"sClass": "center"},
             {"sClass": "center", "sWidth": "10%"},
             {"sClass": "center", "sWidth": "10%"},
-            {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+            {"sWidth": "4%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false},
+            {"sClass": "none", "sWidth": "10%"}
         ]
     });
-
+    
     var $frmsubmodulo   = $('form#frmsubmodulo');
-    var $div_submodulo  = $frmsubmodulo.find('div#div_submodulo');
-    var $nommodulo      = $frmsubmodulo.find('select#nommodulo');
+    var $nommodulo      = $frmsubmodulo.find('select#modulo_id');
     var $sub_modulo     = $frmsubmodulo.find('input:text#submodulo');
     var $sbmposicion    = $frmsubmodulo.find('input:text#sbm_posicion');
     var $ruta           = $frmsubmodulo.find('input:text#ruta');
     var $btnaccionsub   = $frmsubmodulo.find('input:button#btnaccionsub');
     var $btnlimpiarsub  = $frmsubmodulo.find('input:button#btnlimpiarsub');
     var $btnrestablecer = $frmsubmodulo.find('input:button#btnrestablecer');
-    var $div_ruta       = $frmsubmodulo.find('div#div_ruta');
 
     $nommodulo.select2();
 
-    var rutas = /^[a-zA-Z\.0-9/\-_]{4,50}$/;
+//    var rutas = /^[a-zA-Z\.0-9/\-_]{4,50}$/;
     var num   = '1234567890';
     var ruta  = 'abcdefghijklmnopqrstuvwxyz/._-1234567890';
 
     $ruta.validar(ruta);
     $sbmposicion.validar(num);
-    $('#img_nommodulo').tooltip({
+    
+     $('#img_nommodulo').tooltip({
         html: true,
-        placement: 'right',
+        placement: 'top',
         title: '<span class="requerido">Requerido</span><br/>Debe Seleccionar un <span class="alerta">modulo</span>'
     });
 
@@ -390,11 +478,12 @@ $(document).ready(function() {
         title: '<span class="requerido">Requerido</span><br/>la Ruta no debe estar en <span class="alerta">blanco</span>,<br/>solo acepta (<span class="alerta">/_-.</span>)'
     });
 
+    
+    
     $sub_modulo.validar(letra);
     // Evento para buscar todos los SubModulos
     var urlsub = '../../controlador/seguridad/submodulo.php';
-
-
+    
     $('input:radio[name="sbmod_estatus"]').change(function() {
         var valor = $(this).val();
 
@@ -410,269 +499,46 @@ $(document).ready(function() {
             $('#l_sbmod_activo').removeClass('btn-success active').addClass('btn-default');
         }
     });
-
+    
     $btnlistar.on('click', function() {
 
-        var cod_modulo = $('#cod_modulo').val();
-        var nommodulo = $('#hmodulo').val();
-
-        $nommodulo.select2("val", cod_modulo);
+        var id = $nommodulo.find('option').filter(':selected').val();
+        var nommodulo = $nommodulo.find('option').filter(':selected').text();
+        $nommodulo.select2("val", id);
         $nommodulo.select2("enable", false);
         $('div#divmodulo').slideUp(1500);
         $('div#divsubmodulo').slideDown(1500);
 
-        var modificar = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
-        var eliminar = '<img class="eliminar"  title="Eliminar"  style="cursor: pointer" src="../../imagenes/datatable/eliminar.png"  width="18" height="18" alt="Eliminar" />';
-
+        
         TSubModulo.fnClearTable();
 
-        $('#hcod_submodulo').remove();
-        $.post(urlsub, {cod_modulo: cod_modulo, accion: 'BuscarSubModulos'}, function(respuesta) {
-            var datos = respuesta.split('/');
-            var cod_submodulo = datos[0];
-            if (datos.length == 2) {
+        $.post(urlsub, {id_mod: id, accion: 'BuscarSubModulos'}, function (resposnse) {
+            if (resposnse.existe != 'no') {
+                $.each(resposnse, function (i, item) {
+                    var modificar = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
+                    var eli = '<img class="eliminar" width="18" height="18" alt="Eliminar" src="../../imagenes/datatable/eliminar.png" style="cursor: pointer" title="" data-original-title="Eliminar">';
 
-                var count_submodulos = datos[1].split(',');
-                for (var i = 0; i < count_submodulos.length; i++) {
-                    var eli = eliminar;
-                    var inf_submodulos = count_submodulos[i].split(';');
                     var estatus = 'Activo';
-                    if (inf_submodulos[3] == 0) {
+                    if (item.estatus == 0) {
                         estatus = 'Inactivo';
                     }
-                    if (inf_submodulos[0] <= 5) {
-                        eli = '';
+                    if (item.id <= 5) {
+                        var eli = '';
                     }
                     var accion = modificar + eli;
-                    TSubModulo.fnAddData([inf_submodulos[0], nommodulo, inf_submodulos[1], inf_submodulos[2], estatus, accion]);
-                }
-            } else {
-                cod_submodulo = respuesta;
-            }
-
-            var $ult_submodulo = '<input type="hidden" id="cod_submodulo"  value="' + cod_submodulo + '" name="cod_submodulo">';
-            $($ult_submodulo).appendTo($frmsubmodulo);
-        });
-    });
-
-    $btnaccionsub.on("click", function() {
-
-        $('#accion').remove();
-        if ($sub_modulo.val() === null || $sub_modulo.val().length === 0 || /^\s+$/.test($sub_modulo.val())) {
-            $div_submodulo.addClass('has-error');
-            $sub_modulo.focus();
-        } else if (!letras.test($sub_modulo.val())) {
-            $div_submodulo.addClass('has-error');
-            $sub_modulo.focus();
-        } else if ($ruta.val() === null || $ruta.val().length === 0 || /^\s+$/.test($ruta.val())) {
-            $div_ruta.addClass('has-error');
-            $ruta.focus();
-        } else if (!rutas.test($ruta.val())) {
-            $div_ruta.addClass('has-error');
-            $ruta.focus();
-        } else {
-            $div_modulo.removeClass('has-error');
-            $div_ruta.removeClass('has-error');
-
-            var nommodulo = $('#hmodulo').val();
-
-            var accion = $(this).val();
-            var $accion = '<input type="hidden" id="accion"  value="' + accion + '" name="accion">';
-
-            $($accion).appendTo($frmsubmodulo);
-            if ($(this).val() == 'Guardar') {
-
-                var codigo = 0;
-                codigo = $('#cod_submodulo').val();
+                    var nuevaFila =  TSubModulo.fnAddData(['', item.id, nommodulo, item.sub_modulo, item.posicion, estatus, accion, item.ruta]);
   
-                $.post(urlsub, $frmsubmodulo.serialize(), function(data) {
-                    var cod_msg = parseInt(data.error_codmensaje);
-                    var mensaje = data.error_mensaje;
-
-                    var accion = '<img class="modificar" title="Modificar" style="cursor: pointer" src="../../imagenes/datatable/modificar.png" width="18" height="18" alt="Modificar"/>';
-                    accion += '<img class="eliminar"  title="Eliminar"  style="cursor: pointer" src="../../imagenes/datatable/eliminar.png"  width="18" height="18" alt="Eliminar" />';
-
-                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'},function(){
-                        if (cod_msg == 21) {
-                            var estatus = 'Activo';
-                            var check_estatus = $('input:radio[name="sbmod_estatus"]:checked').val();
-                            if (check_estatus == 0) {
-                                estatus = 'Inactivo';
-                            }
-
-                            var posicion = $('#sbm_posicion').val();
-
-
-                            TSubModulo.fnAddData([codigo, nommodulo, $sub_modulo.val(), posicion, estatus, accion]);
-                            $('input:text#sbm_posicion,input:text#submodulo,input:text#ruta').val('');
-                            TSubModulo.fnDraw();
-                            $('input:radio').attr('checked', false);
-                            $('input:radio#sbmod_activo').prop('checked', true);
-                            $('#l_sbmod_activo').addClass('btn-success active');
-                            $('#l_sbmod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-                            codigo = $('#cod_submodulo').val();
-                            codigo = parseInt(codigo)+1;
-                            $('#cod_submodulo').val(codigo);
-                            //$('input:radio[name="sbmod_estatus",vale="1"]').attr('checked', true);
-                            $('#accion').remove();
-                            window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                 setTimeout(function(){window.parent.location.reload();},1000);
-                            });
-                        }
-                    });
-                }, 'json');
-            } else {
-                window.parent.apprise('<div class="msj-danger">&iquest;Desea Modificar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
-                    if (r) {
-                        $('#cod_modulo').remove();
-                        $.post(urlsub, $frmsubmodulo.serialize(), function(data) {
-
-                            var cod_modulo_new = $nommodulo.find('option').filter(':selected').val();
-                            var cod_msg = parseInt(data.error_codmensaje);
-                            var mensaje = data.error_mensaje;
-
-                            var cod_modulo_old = $('#cod_modulo_old').val();
-                            var estatus = 'Activo';
-                            var check_estatus = $('input:radio[name="sbmod_estatus"]:checked').val();
-                            if (check_estatus == 0) {
-                                estatus = 'Inactivo';
-                            }
-                            window.parent.apprise(mensaje, {'textOk': 'Aceptar'},function(){
-                                if (cod_msg === 22) {
-                                    var fila = parseInt($("#fila").val());
-                                    if (cod_modulo_new != cod_modulo_old) {
-                                        TSubModulo.fnDeleteRow(nRow);
-                                    } else {
-                                        $("#tabla_submodulo tbody").children('tr').eq(fila).children('td').eq(2).html($sub_modulo.val());
-                                        $("#tabla_submodulo tbody").children('tr').eq(fila).children('td').eq(3).html($sbmposicion.val());
-                                        $("#tabla_submodulo tbody").children('tr').eq(fila).children('td').eq(4).html(estatus);
-                                    }
-
-                                    $('input:text').val('');
-
-                                    $('input:radio').attr('checked', false);
-                                    $('input:radio#sbmod_activo').prop('checked', true);
-                                    $('#l_sbmod_activo').addClass('btn-success active');
-                                    $('#l_sbmod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-
-                                    //$('input:radio[name="sbmod_estatus",vale="1"]').attr('checked', true);
-                                    $('#accion').remove();
-                                    $nommodulo.select2("val", cod_modulo_old);
-                                    $nommodulo.select2("enable", false);
-                                    window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                        setTimeout(function(){window.parent.location.reload();},1000);
-                                    });
-                                }
-                            });
-                            
-                        }, 'json');
-                    }
+                    var id = item.id;
+                    var oSettings = TSubModulo.fnSettings();
+                    var nTr = oSettings.aoData[ nuevaFila[0] ].nTr;
+                    nTr.setAttribute('id', id);
+                    $('td', nTr)[2].setAttribute('id', item.modulo_id);
                 });
             }
-        }
+        },'json');
     });
-
-    var nRow = '';
-    // Cuando presiona la imagen modificar en submodulos
-    $('#tabla_submodulo').on('click', 'img.modificar', function() {
-
-        $('#fila').remove();
-        $('#cod_submodulo').remove();
-        $('#nrow').remove();
-        $('#hcod_modulo').remove();
-
-        $nommodulo.select2("enable", true);
-        var padre         = $(this).closest('tr');
-        var fila          = padre.index();
-        var cod_submodulo = padre.children('td:eq(0)').html();
-        var modulo        = padre.children('td:eq(1)').html();
-        var sub_modulo    = padre.children('td').eq(2).html();
-        var posicion      = padre.children('td').eq(3).html();
-        var sub_estatus   = padre.children('td').eq(4).html();
-
-
-        $('input:radio[name="sbmod_estatus"]').attr('checked', false);
-        if (sub_estatus == 'Inactivo') {
-            $('input:radio#sbmod_inactivo').prop('checked', true);
-            $('#l_sbmod_activo').removeClass('btn-success active').addClass('btn-default');
-            $('#l_sbmod_inactivo').addClass('btn-danger active');
-        } else {
-            $('input:radio#sbmod_activo').prop('checked', true);
-            $('#l_sbmod_activo').addClass('btn-success active');
-            $('#l_sbmod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-        }
-
-        nRow = padre[0];
-
-        var cod_modulo_old = $('#cod_modulo').val();
-        var $cod_submodulo = '<input type="hidden" id="cod_submodulo"  value="' + cod_submodulo + '" name="cod_submodulo">';
-
-        $($cod_submodulo).appendTo($btnaccionsub);
-
-        var $fila = '<input type="hidden" id="fila"  value="' + fila + '" name="fila">';
-        $($fila).appendTo($btnaccionsub);
-
-        var $modulo = '<input type="hidden" id="hcod_modulo"  value="' + modulo + '" name="hcod_modulo">';
-        $($modulo).appendTo($btnaccionsub);
-
-        var $cod_modulo_old = '<input type="hidden" id="cod_modulo_old"  value="' + cod_modulo_old + '" name="cod_modulo_old">';
-        $($cod_modulo_old).appendTo($btnaccionsub);
-
-        $.post(urlsub, {cod_submodulo: cod_submodulo, accion: 'BuscarRuta'}, function(data) {
-            $ruta.val(data);
-        });
-
-
-        $('#cod_submodulo').val(cod_submodulo);
-        $sub_modulo.val(sub_modulo);
-        $sbmposicion.val(posicion);
-
-        $btnaccionsub.val('Modificar');
-    });
-
-    // Cuando presiona la imagen eliminar en submodulos
-    $('#tabla_submodulo').on('click', 'img.eliminar', function() {
-
-        var padre = $(this).closest('tr');
-        var cod_submodulo = padre.children('td:eq(0)').html();
-        var nRow = padre[0];
-        $('input:text').val('');
-        $btnaccionsub.val('Guardar');
-        window.parent.apprise('<div class="msj-danger">&iquest;Desea Eliminar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
-            if (r) {
-
-                $.post(urlsub, {cod_submodulo: cod_submodulo, accion: 'Eliminar'}, function(data) {
-
-                    var cod_msg = parseInt(data.error_codmensaje);
-                    var mensaje = data.error_mensaje;
-
-                    window.parent.apprise(mensaje, {'textOk': 'Aceptar'},function(){
-                        if (cod_msg === 23) {
-                            TSubModulo.fnDeleteRow(nRow);
-                            window.parent.apprise('<span style="color:#FF0000;fotn-wight:bold">La Aplicaci&oacute;n se va refrescar para realizar los cambios</span>', {'textOk': 'Aceptar'}, function() {
-                                 setTimeout(function(){window.parent.location.reload();},1000);
-                            });
-                        }
-                    });
-                    
-                }, 'json');
-            } else {
-                limpiar($formulario);
-            }
-        });
-    });
-
-    $btnlimpiarsub.on("click", function() {
-        var cod_modulo = $('#cod_modulo').val();
-        $('input:text#submodulo,input:text#sbm_posicion,input:text#ruta').val('');
-        $btnaccionsub.val("Guardar");
-        $nommodulo.select2("val", cod_modulo);
-        $nommodulo.select2("enable", false);
-        $('#cod_modulo_old').remove();
-    });
-
+ 
     $btnrestablecer.on("click", function() {
-
         TSubModulo.fnDraw();
         TSubModulo.fnClearTable();
         $('div#divmodulo').slideDown(3000);
@@ -681,32 +547,52 @@ $(document).ready(function() {
         });
         $sub_modulo.val('');
         $btnaccionsub.val('Guardar');
-        $('#cod_modulo_old').remove();
+    });
+    
+    
+    
+    var letras = /^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]{2,20}$/;
+    var rutas = /^[a-zA-Z\.0-9/\-_]{4,50}$/;
+    $btnaccionsub.on("click", function() {
 
+        if ($sub_modulo.val() === null || $sub_modulo.val().length === 0 || /^\s+$/.test($sub_modulo.val())) {
+            $sub_modulo.parent('div').addClass('has-error');
+            $sub_modulo.focus();
+        } else if (!letras.test($sub_modulo.val())) {
+            $sub_modulo.parent('div').addClass('has-error');
+            $sub_modulo.focus();
+        } else if ($sbmposicion.val().length < 1) {
+            $sbmposicion.parent('div').addClass('has-error');
+            $sbmposicion.focus();
+        } else if ($ruta.val() === null || $ruta.val().length === 0 || /^\s+$/.test($ruta.val())) {
+            $ruta.parent('div').addClass('has-error');
+            $ruta.focus();
+        } else if (!rutas.test($ruta.val())) {
+            $ruta.parent('div').addClass('has-error');
+            $ruta.focus();
+        } else {
+            $('div').removeClass('has-error');
+            
+            if ($(this).val() == 'Guardar') {
+                var ToltalRow = TSubModulo.fnGetData().length;
+                var lastRow = TSubModulo.fnGetData(ToltalRow - 1);
+                var codigo = parseInt(lastRow[0]) + 1;
+                $nommodulo.select2("enable", true);
+                $.save(urlsub, $frmsubmodulo, 'sub_modulo', codigo, TSubModulo);
+                $nommodulo.select2("enable", false);
+            }else{
+                window.parent.apprise('<div class="msj-danger">&iquest;Desea Modificar el Registro?</div>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function(r) {
+                    if (r) {
+                        $nommodulo.select2("enable", true);
+                        $.update(urlsub,$frmsubmodulo,'sub_modulo',TSubModulo);
+                        $nommodulo.select2("enable", false);
+                    } else {
+                        limpiar($formulario);
+                    }
+                });
+            }
+
+        }
     });
 
 });
-
-/***
- *
- * @Modulo
- */
-
-function limpiar(formulario) {
-    $("div").removeClass('has-error');
-    $("div").find('span').css('display','none');
-    $('input:radio').attr('checked', false);
-    $('input:radio#inactivo').prop('checked', true);
-    $('#l_mod_activo').addClass('btn-success active');
-    $('#l_mod_inactivo').removeClass('btn-danger active').addClass('btn-default');
-    ;
-    $('input:radio#mod_activo').prop('checked', true);
-
-    formulario.find('input:text').val('').prop('disabled', false);
-    //formulario.find('input:button#btnaccion').val('Guardar').prop('disabled', false);
-    //formulario.find('input:button#btnlistar').fadeOut(1000);
-    //formulario.find('input:button#btnlimpiar').val('Limpiar');
-    $('#accion').remove();
-    $('#fila').remove();
-    $('#cod_modulo').remove();
-}
