@@ -56,11 +56,14 @@ class Fallas extends Seguridad
                 $data['condicion'] = 'b.usuariof_id=uf.id AND uf.departamento_id=' . $datos['id'];
 
                 $result = $this->select($data, 'ASSOC');
-                $resultado = array();
-                for ($i = 0; $i < count($result); $i++) {
-                    $response_data[] = array('id'=>$result[$i]['id'],'numero_bien'=>$result[$i]['numero_bien'],'nombre_bien'=>$result[$i]['nombre_bien']);
+                if(!is_array($result)){
+                    $response_data = 0;
+                }else{                   
+                    $resultado = array();
+                    for ($i = 0; $i < count($result); $i++) {
+                        $response_data[] = array('id'=>$result[$i]['id'],'numero_bien'=>$result[$i]['numero_bien'],'nombre_bien'=>$result[$i]['nombre_bien']);
+                    }
                 }
-
             break;
             case 'usuario':
                 $data      = array(
@@ -90,23 +93,29 @@ class Fallas extends Seguridad
                 $this->_table        = 'fallas_resuelta';
                 $this->autoIncrement($this->_table);
                 
-                $dato['id']          = $this->auto_increment;
-                $dato['num_falla']   = $datos['num_falla'];
-                $dato['descripcion'] = $datos['descripcion'];
-                $dato['usuario_id']  = $datos['usuario_id'];
-                $dato['fecha']       = date("Y-m-d");
-                $dato['accion']      = 'save';
-                $this->_datos        = $dato;
-                $this->add();
-                /*$this->_table = 'fallas';
-                $num_falla = $datos['num_falla'];
-                $id = $this->get($this->_table, 'id', 'num_falla='.$num_falla);
+                $data['id']          = $this->auto_increment;
+                $data['num_falla']   = $datos['num_falla'];
+                $data['descripcion'] = $datos['descripcion'];
+                $data['usuario_id']  = $datos['usuario_id'];
+                $data['fecha']       = date("Y-m-d");
+                $data['accion']      = 'save';
+                $this->_datos        = $data;
+
+                $resultado = $this->add();
+                if($resultado['success'] == 'exitoso'){
+                    $this->_table = 'fallas';
+                    $num_falla = $datos['num_falla'];
+                    $id = $this->get($this->_table, 'id', 'num_falla='.$num_falla);
+
+                    $dato['id']         = $id;
+                    $dato['id_estatus'] = $datos['estatus'];
+                    $dato['accion']     = 'update';
+                    $this->_datos       = $dato;
+                    $response_data      = $this->mod();
+                }else{
+                    $response_data = 0;
+                }
                 
-                $dato['id']         = $id;
-                $dato['id_estatus'] = 3;
-                $dato['accion']     = 'update';
-                $this->_datos       = $dato;
-                $response_data      = $this->mod();*/
             break;
         }
         return $response_data;

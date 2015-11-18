@@ -70,17 +70,12 @@ $pdf->Cell($w_departamento, $row_height, 'Departamento', 1, 0, 'C', 1);
 $pdf->Cell($w_estatus, $row_height, 'Estatus', 1, 1, 'C', 1);
 
 $sql = "SELECT 
-        f.id_falla,
-        f.num_falla,
-        d.nombre_departamento,
-        e.estatus,
-        su.usuario
-        FROM
-        fallas AS f 
-        INNER JOIN departamento AS d ON f.id_departamento = d.id_departamento 
-        INNER JOIN estatus_fallas AS e ON f.id_estatus = e.id_estatus 
-        INNER JOIN s_usuario AS su ON f.id_usuario=su.id_usuario
-        ORDER BY num_falla DESC";
+f.id, f.num_falla,concat(uf.nombre,' ',uf.apellido) as usuario,d.nombre_departamento,e.estatus
+FROM fallas AS f 
+INNER JOIN estatus_fallas AS e ON f.id_estatus = e.id 
+INNER JOIN usuario_f AS uf ON uf.id=f.usuario_fa_id
+INNER JOIN departamento AS d ON uf.departamento_id = d.id
+ORDER BY d.nombre_departamento DESC";
 
 $resultado   = $obj->ex_query($sql);
 

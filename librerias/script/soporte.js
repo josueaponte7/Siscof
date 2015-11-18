@@ -38,15 +38,18 @@ $(document).ready(function () {
     });
     
     $('#cerrar').click(function () {
-        $('#num_falla').prop('disabled',false);
+       $('#num_falla').prop('disabled',false);
         var data_send     = $('#frmfallas').serialize() + '&' + $.param({accion: 'cerrar'});
         $('#num_falla').prop('disabled',true);
         $.post('../../controlador/fallas/fallas.php', data_send, function (respuesta) {
             if (respuesta.success == 'exitoso') {
                 var fila = $('#fila').val();
+                
                 window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + respuesta.msg + '</span>', {'textOk': 'Aceptar'}, function () {
-                    TFallasAsignar.fnUpdate('<span style="color: #016305;font-weight: bold;">CERRAR</span>', parseInt(fila), 3);
+                    TFallasAsignar.fnUpdate('<span style="color: #FF0000;font-weight: bold;">CERRADO</span>', parseInt(fila), 3);
                 });
+                $('#num_falla,#descripcion,#fila').val('')
+                $('#estatus').select2('val',0);
             }
         }, 'json');
     });

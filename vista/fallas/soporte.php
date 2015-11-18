@@ -13,8 +13,10 @@ if (isset($_GET['modulo'])) {
     $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
     $_SESSION['cod_modulo'] = $_GET['modulo'];
 }
+
 $usuario    = $_SESSION['usuario'];
 $id_usuario = $_SESSION['id_usuario'];
+$id_perfil  = $_SESSION['perfil'];
 
 $img_mod  = _img_dt . _img_dt_mod;
 $img_del  = _img_dt . _img_dt_del;
@@ -71,7 +73,7 @@ $img_acep = _img_dt . _img_dt_acep;
     </head>
     <body>
         <div id="contenedor" class="panel panel-default animated slideInDown" style="width : 90%;margin: auto;height: auto;position: relative; top:25px;">
-            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Asignar Fallas</div>
+            <div class="panel-heading" style="font-weight: bold;font-size: 12px;">Fallas Asignadas</div>
             <div class="panel-body">
                 <div class="row" style="margin:auto;width:95%">
                     <fieldset>
@@ -91,6 +93,12 @@ $img_acep = _img_dt . _img_dt_acep;
                         </thead>
                         <tbody>
                             <?php
+                            $where = '';
+                            if($id_perfil != 2){
+                                $where = "WHERE fa.usuariof_id=(SELECT uf.id FROM usuario_f AS uf
+                                    INNER JOIN s_usuario AS su ON uf.usuario_id=su.id
+                                    WHERE su.id=$id_usuario);";
+                            }
                             $sql = "SELECT
                                         CONCAT(uf.nombre,' ',uf.apellido) AS usuario_falla,
                                         fa.num_falla,
@@ -102,9 +110,7 @@ $img_acep = _img_dt . _img_dt_acep;
                                     INNER JOIN usuario_f AS uf ON f.usuario_fa_id=uf.id
                                     INNER JOIN departamento AS d on uf.departamento_id=d.id
                                     INNER JOIN estatus_fallas AS ef ON f.id_estatus=ef.id
-                                    WHERE fa.usuariof_id=(SELECT uf.id FROM usuario_f AS uf
-                                    INNER JOIN s_usuario AS su ON uf.usuario_id=su.id
-                                    WHERE su.id='".$id_usuario."');";
+                                    $where;";
                             $result   = $objmod->ex_query($sql);
                             $es_array = is_array($result) ? TRUE : FALSE;
                             if ($es_array === TRUE) {
@@ -132,6 +138,10 @@ $img_acep = _img_dt . _img_dt_acep;
                                               ?>
                                                 <span class="estatus">CERRAR</span> 
                                             <?php
+                                            }else{
+                                                ?>
+                                                <span style="color: #FF0000">CERRADO</span>
+                                                 <?php
                                             }
                                             ?>                                           
                                         </td>                                              

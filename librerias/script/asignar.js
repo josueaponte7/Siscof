@@ -23,11 +23,11 @@ $(document).ready(function () {
         "oLanguage": {"sUrl": "../../librerias/js/es.txt"},
         "order": [[1, "desc"]],
         "aoColumns": [
-            {"sClass": "center", "sWidth": "25%"},
             {"sClass": "center", "sWidth": "20%"},
             {"sClass": "center", "sWidth": "20%"},
             {"sClass": "center", "sWidth": "20%"},
-            {"sWidth": "8%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
+            {"sClass": "center", "sWidth": "20%"},
+            {"sWidth": "20%", "bSortable": false, "sClass": "center sorting_false", "bSearchable": false}
         ]
     });
     

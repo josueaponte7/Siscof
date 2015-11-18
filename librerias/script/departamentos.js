@@ -128,7 +128,7 @@ $(document).ready(function () {
             $('#direccion_departamento').val(oData[3].trim());
             $('#guardar').text('Modificar');
         } else {
-            $('#limpiar').trigger('click');
+            //$('#limpiar').trigger('click');
             window.parent.apprise('<span style="color:#FF0000;font-weight:bold;text-align: center;display:block">&iquest;Desea Eliminar el registro?</span>', {'verify': true, 'textYes': 'Aceptar', 'textNo': 'Cancelar'}, function (r) {
                 if (r) {
                     $.borrar(url, id, fila);

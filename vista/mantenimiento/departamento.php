@@ -77,7 +77,7 @@ $img_del = _img_dt . _img_dt_del;
                         </div>
                         <div class="form-group col-xs-8">
                             <label>Nombre Departamento:</label>
-                            <input type="text"  style="width: 74%;" class="form-control input-sm" id="nombre_departamento" name="nombre_departamento" value="" maxlength="100" />
+                            <input type="text"  style="width: 74%;text-transform: uppercase" class="form-control input-sm" id="nombre_departamento" name="nombre_departamento" value="" maxlength="100" />
                         </div>                        
                     </div>
                     <br/>
@@ -85,7 +85,7 @@ $img_del = _img_dt . _img_dt_del;
                     <br/>
                     <div class="form-inline col-xs-12">
                         <label>Descripci&oacute;n:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                        <textarea class="form-control input-sm"  style="width: 85%;resize: none" id="direccion_departamento" name="direccion_departamento" maxlength="150" ></textarea>    
+                        <textarea class="form-control input-sm"  style="width: 85%;resize: none;text-transform: uppercase" id="direccion_departamento" name="direccion_departamento" maxlength="150" ></textarea>    
                     </div> 
                     <br/>
                     <br/>

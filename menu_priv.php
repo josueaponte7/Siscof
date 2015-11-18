@@ -80,9 +80,9 @@ $result_modulos      = $obj_submodulo->getModulo($datos);
                 /*;width: 100%;height: 100%;min-height: 550px;max-height: 900px;*/
             }
             #contenedor{
-                -moz-animation-duration: 5s;
-                -webkit-animation-duration: 5s;
-                -o-animation-duration: 5s;
+                -moz-animation-duration: 2s;
+                -webkit-animation-duration: 2s;
+                -o-animation-duration: 2s;
             }
         </style>
         <script type="text/javascript">

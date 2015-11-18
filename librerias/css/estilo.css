@@ -1,9 +1,9 @@
 body{
     font-size: 13px !important; 
 }
-/*input[type='text']:not(.select2-input),textarea{
+input[type='text']:not(.select2-input),textarea{
     text-transform: uppercase;
-}*/
+}
 textarea{
     resize:none;
 }

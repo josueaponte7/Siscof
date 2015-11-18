@@ -166,7 +166,6 @@ $(document).ready(function() {
         var oData  = TPerfil.fnGetData(aPos);
         var nNodes = TPerfil.fnGetNodes();
         var id     = nNodes[aPos]['id'];
-
         var perfil      = oData[1];
         var $id = ' <input type="hidden" id="id" name="id" value="' + id + '" />';
         $($id).prependTo($btnaccion);
@@ -342,7 +341,7 @@ $(document).ready(function() {
     $btnaccpriv.click(function() {
         
         $('#activados').remove();
-        var cod_perfil = $('#cod_perfil').val();
+        var cod_perfil = $('#id').val();
 
         var $accion = '<input type="hidden" id="accion"  value="AgregarPrivilegios" name="accion">';
         var $cod_perfil = '<input type="hidden" id="cod_perfil"  value="' + cod_perfil + '" name="cod_perfil">';
@@ -399,7 +398,7 @@ $(document).ready(function() {
             var cod_msg = parseInt(data.error_codmensaje);
             var mensaje = data.error_mensaje;
             if(cod_msg == 21){
-                window.parent.apprise(mensaje, {'textOk': 'Aceptar'}, function() {
+                window.parent.apprise('<span style="color:#059102;font-weight:bold;display:block">' + mensaje+ '</span>', {'textOk': 'Aceptar'}, function() {
                     $("div.btn-group > label", nodos).removeClass('btn-success active');
                     $("div.btn-group > label", nodos).addClass('btn-primary');
                     $('div.btn-group > label > span', nodos).text('NO');

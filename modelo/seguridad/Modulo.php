@@ -171,6 +171,7 @@ class Modulo extends Seguridad
         }else{
             $data   = array('tabla' => 's_modulo','campos'=>$this->_campos);
         }
+        
         $result = parent::select($data, FALSE);
         return $result;
     }
@@ -189,7 +190,7 @@ class Modulo extends Seguridad
         if(!empty($datos['campos'])){
             $this->_campos = $datos['campos'];
         }
-  
+        
         $result =  $this->getModulos();
         return $result;
     }

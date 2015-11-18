@@ -66,7 +66,7 @@ class Seguridad extends Bitacora
     protected function add()
     {
         $this->_accion = 'save';
-
+        unset($this->_datos['accion']);
         $resultados  = parent::insert($this->_table, $this->_datos);
         if($resultados['success'] == 'ok'){
             $resultado = $this->mensajes($resultados);
@@ -80,6 +80,7 @@ class Seguridad extends Bitacora
         
         $this->_accion = 'update';
         $this->where = 'id ='.$this->_datos['id'];
+        unset($this->_datos['accion']);
         unset($this->_datos['id']);
         $resultados  = parent::update($this->_table, $this->_datos,  $this->where);
 
@@ -94,6 +95,8 @@ class Seguridad extends Bitacora
     {
         $this->_accion = 'delete';
         $this->where = 'id ='.$this->_datos['id'];
+        unset($this->_datos['accion']);
+        unset($this->_datos['id']);
         $resultados   = parent::delete($this->_table, $this->where);
         if ($resultados['delete'] == 'ok') {
             $resultado = $this->mensajes($resultados);
@@ -210,8 +213,7 @@ class Seguridad extends Bitacora
         date_default_timezone_set('America/Caracas');
         $buscar               = '/';
         $pos                  = stripos($url, $buscar, 1);
-        $ruta                 = substr($url, $pos + 1);
-        echo $ruta;
+        echo $ruta                 = substr($url, $pos + 1);
         $_SESSION['url']      = $ruta;
         $_SESSION['s_modulo'] = $modulo;
         $_SESSION['start']    = strtotime(date("Y-m-d H:i"));

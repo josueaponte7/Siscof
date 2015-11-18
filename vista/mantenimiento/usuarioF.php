@@ -12,7 +12,7 @@ $objdep = new Departamento();
 
 if (isset($_GET['modulo'])) {
     $_SESSION['cod_modulo'] = $_GET['modulo'];
-    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
 }
 
 $img_mod = _img_dt . _img_dt_mod;
@@ -57,6 +57,9 @@ $_SESSION['perfil'];
                 -moz-animation-duration: 5s;
                 -webkit-animation-duration: 5s;
                 -o-animation-duration: 5s;
+            }
+            #nombre,#apellido{
+                text-transform: uppercase;
             }
         </style>
     </head>
