@@ -3,17 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/var/www/Siscof/vista/mantenimiento/departamento.php</file>
             <file>file:/var/www/Siscof/modelo/seguridad/Perfil.php</file>
-            <file>file:/var/www/Siscof/modelo/seguridad/Bitacora.php</file>
-            <file>file:/var/www/Siscof/vista/fallas/soporte.php</file>
-            <file>file:/var/www/Siscof/librerias/script/departamentos.js</file>
-            <file>file:/var/www/Siscof/modelo/seguridad/SubModulo.php</file>
+            <file>file:/var/www/Siscof/vista/reportes/fallas.php</file>
+            <file>file:/var/www/Siscof/vista/mantenimiento/usuarioF.php</file>
+            <file>file:/var/www/Siscof/vista/reportes/tcpdf/MyClass.php</file>
             <file>file:/var/www/Siscof/modelo/seguridad/Conexion.php</file>
-            <file>file:/var/www/Siscof/controlador/seguridad/submodulo.php</file>
-            <file>file:/var/www/Siscof/modelo/seguridad/Seguridad.php</file>
-            <file>file:/var/www/Siscof/librerias/script/perfil.js</file>
-            <file>file:/var/www/Siscof/controlador/seguridad/perfil.php</file>
-            <file>file:/var/www/Siscof/modelo/seguridad/Modulo.php</file>
+            <file>file:/var/www/Siscof/vista/reportes/bienes.php</file>
         </group>
     </open-files>
 </project-private>

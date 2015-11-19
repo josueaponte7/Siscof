@@ -12,7 +12,7 @@ $objdep = new Departamento();
 
 if (isset($_GET['modulo'])) {
     $_SESSION['cod_modulo'] = $_GET['modulo'];
-    $objmod->url($_SERVER['SCRIPT_FILENAME'], $_GET['modulo']);
+    $objmod->url($_SERVER['SCRIPT_NAME'], $_GET['modulo']);
 }
 
 $img_mod = _img_dt . _img_dt_mod;

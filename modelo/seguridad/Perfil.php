@@ -181,9 +181,9 @@ class Perfil extends Seguridad
             $this->_campos = $datos['campos'];
         }
         if(isset($datos['tabla'])){
-            $this->table = $datos['tabla'];
+            $this->_table = $datos['tabla'];
         }
-        
+    
         $result = $this->getPerfiles();
         return $result;
     }
