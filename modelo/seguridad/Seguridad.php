@@ -213,7 +213,7 @@ class Seguridad extends Bitacora
         date_default_timezone_set('America/Caracas');
         $buscar               = '/';
         $pos                  = stripos($url, $buscar, 1);
-        echo $ruta                 = substr($url, $pos + 1);
+        $ruta                 = substr($url, $pos + 1);
         $_SESSION['url']      = $ruta;
         $_SESSION['s_modulo'] = $modulo;
         $_SESSION['start']    = strtotime(date("Y-m-d H:i"));
